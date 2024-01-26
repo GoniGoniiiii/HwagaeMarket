@@ -1,0 +1,32 @@
+@charset "UTF-8";
+        body {
+            height: 100vh; /* 화면 전체 높이를 차지하도록 설정 */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 0; /* body의 기본 마진 제거 */
+            overflow: hidden;
+        }
+        .custom-link {
+            color: #007bff; /* 링크 색상 */
+            text-decoration: none; /* 링크 밑줄 제거 */
+            font-size: 50px; /* 폰트 크기 */
+            font-weight: bold; /* 폰트 굵기 */
+            transition: color 0.3s; /* 색상 변화에 대한 부드러운 전환 효과 */
+         text-align: center;
+         
+            /* 마우스 호버 시 색상 변화 */
+            &:hover {
+                color: #0056b3; /* 호버 시의 링크 색상 */
+               text-decoration: none; /* 링크 밑줄 제거 */
+            }
+        }
+        section {
+            border: 1px solid gray;
+            padding: 70px 30px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
