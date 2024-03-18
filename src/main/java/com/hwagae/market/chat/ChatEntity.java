@@ -28,4 +28,12 @@ public class ChatEntity {
     private String chatTime;
 
 
+
+    @Transient // 데이터베이스에 저장하지 않을 속성을 지정할 때 사용합니다.
+    private String toNick;
+
+    // 대상 사용자의 닉네임 설정 메서드
+    public void setToNick(String toNick) {
+        this.toNick = toNick;
+    }
 }

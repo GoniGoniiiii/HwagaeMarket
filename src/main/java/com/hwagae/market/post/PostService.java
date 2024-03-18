@@ -2,7 +2,6 @@ package com.hwagae.market.post;
 
 import com.hwagae.market.file.FileEntity;
 import com.hwagae.market.file.FileRepository;
-import com.hwagae.market.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -58,7 +57,37 @@ public class PostService {
         }
     }
 
-    public long edit(PostDTO postDTO) throws IOException {
+
+    public void update(PostDTO postDTO) throws IOException {
+        if (postDTO.getPost_upLoadFile().isEmpty()) {
+            PostEntity postEntity = PostEntity.toSaveEntity(postDTO);
+            postRepository.save(postEntity);
+
+
+        } else {
+            PostEntity postEntity = PostEntity.toSaveFileEntity(postDTO);
+            Integer postNum = postRepository.save(postEntity).getPostNum();
+            PostEntity post = postRepository.findById(postNum).get();
+            postEntity.getFileEntityList().clear();
+
+            for (MultipartFile postFile : postDTO.getPost_upLoadFile()) {
+                String originalFilename = postFile.getOriginalFilename();
+
+                if (originalFilename != null && !originalFilename.isEmpty()) {
+                    String file_url = System.currentTimeMillis() + "_" + originalFilename;
+                    String savePath = "C:/image/" + file_url;
+                    postFile.transferTo(new File(savePath));
+                    FileEntity fileEntity = FileEntity.toFileEntity(post, file_url);
+                    fileRepository.save(fileEntity);
+                } else {
+                    System.out.println("파일이 입력되지않았습니다~" + originalFilename);
+                }
+            }
+        }
+    }
+
+
+    public long stateEdit(PostDTO postDTO) throws IOException {
         if (postDTO.getPost_upLoadFile().isEmpty()) {
             PostEntity postEntity = PostEntity.toSaveEntity(postDTO);
             postRepository.save(postEntity);
@@ -83,6 +112,8 @@ public class PostService {
         }
         return postDTO.getPost_num();
     }
+
+
 
     @Transactional
 

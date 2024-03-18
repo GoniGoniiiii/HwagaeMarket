@@ -108,15 +108,14 @@ public class PostEntity {
         postEntity.setPostHits(postDTO.getPost_hits());
         postEntity.setPostLike(postDTO.getPost_like());
         postEntity.setPostProductState(postDTO.getPost_productState());
-/*        postEntity.setUserEntity(postEntity.getUserEntity());
-        postEntity.setCategoryEntity(postEntity.getCategoryEntity());*/
+        postEntity.setUserEntity(postEntity.getUserEntity());
+        postEntity.setCategoryEntity(postEntity.getCategoryEntity());
         postEntity.setFileAttached(0); //파일 없음
         return postEntity;
     }
 
     public static PostEntity toSaveFileEntity(PostDTO postDTO) {
         PostEntity postEntity = new PostEntity();
-
         UserEntity userEntity = new UserEntity();
         userEntity.setUserNum(postDTO.getUser_num()); // 유저 번호 설정
         postEntity.setUserEntity(userEntity); // 유저 엔티티 설정

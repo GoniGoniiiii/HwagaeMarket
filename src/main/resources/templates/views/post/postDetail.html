@@ -118,7 +118,7 @@
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">상태 변경하기</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <form action="/post/edit" method="post" onsubmit="updateDate()"  enctype="multipart/form-data">
+                            <form action="/post/stateEdit" method="post" onsubmit="updateDate()"  enctype="multipart/form-data">
                                 <div class="modal-body">
                                     <select class="form-select" name="post_saleState" aria-label="Default select example">
                                         <option th:selected="${detail.post_saleState == '판매중'}">판매중</option>

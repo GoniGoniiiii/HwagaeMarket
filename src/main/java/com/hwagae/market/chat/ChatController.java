@@ -121,6 +121,8 @@ public class ChatController {
 
 
 
+// ChatController.java
+
     @GetMapping("/chat/list")
     public String getChatList(Model model, HttpSession session) {
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
@@ -131,14 +133,25 @@ public class ChatController {
 
         // 사용자 닉네임을 기반으로 채팅 목록 조회
         List<ChatEntity> chatList = chatService.getChatListByID(userNum);
+
+        // 각 채팅에 대한 대상 사용자의 닉네임을 가져와서 설정
+        for (ChatEntity chat : chatList) {
+            String toNum = chat.getToNum(); // 대상 사용자의 고유 번호
+            UserEntity toUser = userRepository.findByUserNum(Integer.valueOf(toNum)); // 대상 사용자 엔티티 가져오기
+            if (toUser != null) {
+                String toNick = toUser.getUserNick(); // 대상 사용자의 닉네임
+                chat.setToNick(toNick); // 대상 사용자의 닉네임을 chat 엔티티에 설정
+            }
+        }
+
         // 조회된 채팅 목록을 모델에 추가하여 chatList.html로 전달
         model.addAttribute("chatList", chatList);
-        System.out.println("채팅리스트트트트트트트 " + chatList);
+        System.out.println("채팅리스트트트트트트 " + chatList);
         System.out.println("몯데데데데데ㅔㄷㄹ" + model);
 
         if(userDTO != null){
             return "views/user/chatList";
-        }else {
+        } else {
             return "views/user/login";
         }
     }

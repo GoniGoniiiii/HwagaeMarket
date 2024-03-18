@@ -70,58 +70,34 @@ public class PostController {
         return "redirect:/post/" + firstPostNum;
     }
 
-    @PostMapping("/post/edit")
+    @PostMapping("/post/stateEdit")
     public String edit(@ModelAttribute PostDTO postDTO, HttpSession session) throws IOException {
+        ///상태만 변경하는 매핑
 
-        postService.save(postDTO);
-        System.out.println("이거ㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓ = " + postDTO);
+        // 게시물 저장
+        postService.update(postDTO);
         //세이브 된 글 번호로 리다이렉트하기
-        String post_num = String.valueOf(postService.edit(postDTO));
-        System.out.println("savedPostNum = " + post_num);
+        String post_num = String.valueOf(postService.stateEdit(postDTO));
+        System.out.println("받아오니....? " + post_num);
         return "redirect:/post/"+post_num;
     }
 
-/*
 
-    @GetMapping("/post/saleList/{userNick}")
-    public String Sale(@PathVariable("userNick") String userNick, Model model, HttpSession session){
+    @PostMapping("/post/update")
+    public String postUpdate(@ModelAttribute PostDTO postDTO, HttpSession session) throws IOException {
 
-        //get요청을 한 nick네임값
-        System.out.println("클릭한 닉네임"+userNick);
-        //세션값 불러오기
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
-
-        //일단 모든 게시물을 불러온다
-        List<PostDTO> postDTOList = postService.findAll();
-
-
-        //db에 저장된 닉네임 불러오기
-        String user_nick = String.valueOf(userDTO.getUser_num());
-        System.out.println("user_num으로 변환 = " + user_nick);
-
-        List<PostDTO> userPostList = new ArrayList<>();
-        for (PostDTO postDTO : postDTOList) {
-            //db에 저장된 일련번호 불러오기
-            String postUserNum = String.valueOf(postDTO.getUser_num());
-            System.out.println("포스트넘?? = " + postUserNum);
-
-            if (postUserNum.equals(user_nick)) {
-                userPostList.add(postDTO);
-                System.out.println("게시물 = " + postDTO);
-            }
-        }
-
-        model.addAttribute("postList", userPostList);
-        System.out.println("model = " + model);
-
-        if(userNick.equals(userDTO.getUser_nick())){
-        System.out.println("판매내역");
-            return "views/myPage/saleList";
-        }else {
-            return "views/user/login";
-        }
+        // 게시물 저장
+        postService.update(postDTO);
+        System.out.println("저장됐나.....? " + postDTO);
+        Integer postNum = postDTO.getPost_num();
+        //세이브 된 글 번호로 리다이렉트하기
+        return "redirect:/post/"+postNum;
     }
-*/
+
+
+
+
+
 
     // saleList 2트 및 페이징
     @GetMapping("/post/saleList")
@@ -251,49 +227,7 @@ public class PostController {
         return "views/post/postEdit";
     }
 
-/*
 
-    @GetMapping("/post/category/{categoryNum}")
-    public String Category(@PathVariable("categoryNum") Integer categoryNum, Model model, HttpSession session){
-
-        //get요청을 한 category_num
-        System.out.println("카테고리 번호 : "+categoryNum);
-
-        //일단 모든 게시물을 불러온다
-        List<PostDTO> postDTOList = postService.findAll();
-        System.out.println("22222222222");
-
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
-
-        List<PostDTO> userPostList = new ArrayList<>();
-        List<LikeDTO> likesList = new ArrayList<>();
-
-        for (PostDTO postDTO : postDTOList) {
-            // db에 저장된 category_num 불러오기
-            Integer postCategoryNum = postDTO.getCategory_num();
-            System.out.println("category_num?? = " + postCategoryNum);
-            if (postCategoryNum.equals(categoryNum)) {
-                userPostList.add(postDTO);
-                System.out.println("게시물 = " + postDTO);
-            }
-        }
-
-        model.addAttribute("category", userPostList);
-        System.out.println("model = " + model);
-
-        // 좋아요 정보를 담을 리스트
-        if (userDTO != null) {
-            for (PostDTO post : userPostList) {
-                LikeDTO likeDTO = likeService.findByPostNum(post.getPost_num(), userDTO);
-                likesList.add(likeDTO);
-            }
-            model.addAttribute("likesList", likesList);
-            model.addAttribute("user", userDTO);
-        }
-
-        return "views/post/postCategory";
-    }
-*/
 
     //카테고리 넘기기 2트
     @GetMapping("/post/category/{categoryNum}")
