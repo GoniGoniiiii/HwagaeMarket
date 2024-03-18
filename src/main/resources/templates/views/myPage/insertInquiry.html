@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+
+        .title {
+            /* 1:1문의 */
+            border-bottom: 1px solid #FF7A6B;
+            color:#FF7A6B;
+        }
+
+        .custom-grid .col-2 { /* grid간격(이름, 문의제목 ,문의내용 오른쪽 간격 조절한거임)**/
+            margin-left: 13%;
+            padding-left:5%;
+        }
+
+    </style>
+
+</head>
+<body>
+<header th:include="/views/header.html"></header>
+<section><br>
+
+    <div class="text-center py-4 pb-3 mb-5 title">
+        <p class="fs-3 fw-bold">1:1문의</p>
+        <div class="">
+            <div class="text-secondary"><small>AM 09:30 ~ PM 18:20 (점심시간 1:20 ~ 2:30)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;DAY OFF(토/일/공휴일 휴무)</small></div>
+        </div>
+    </div>
+    <p class="text-center pb-3">문의하신 사항은 확인 후 영업일 2-5일 이내 순차적으로 답변 드리겠습니다.^D^</p>
+    <form action="/myPage/insertInquiry" method="post">
+        <div class="container py-4"><!--신고내용 container-->
+            <div class="row my-4 custom-grid"><!--이름-->
+                <div class="col-2 text-start col-form-label" name="user_name">이름</div>
+                <div class="col-7">
+                    <input type="text" class="form-control" th:value="${session.user.user_name}" name="user_name" readonly></input>
+                </div>
+            </div><!--이름 끝-->
+
+            <div class="row my-4 custom-grid"><!--문의 제목-->
+                <div class="col-2 text-start col-form-label" name="qna_title">문의 제목</div>
+                <div class="col-7">
+                    <input type="text" class="form-control" name="qna_title" placeholder="문의 제목을 입력해주세요"></input>
+                </div>
+            </div><!--문의 제목 끝-->
+
+            <div class="row my-4 custom-grid"><!--문의 내용-->
+                <div class="col-2 text-start col-form-label pt-5" name="qna_content">문의 내용</div>
+                <div class="col-7">
+                    <textarea class="form-control" name="qna_content" placeholder="문의 내용을 입력해주세요" rows="7"></textarea>
+                </div>
+                <input type="text"  th:value="${session.user.user_num}" name="user_num">
+            </div><!--문의 내용 끝-->
+            <div class="d-flex justify-content-center py-3">
+                <button type="submit" class="btn btn-secondary btn-lg mx-3">문의하기</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" onclick="List()">목록보기</button>
+            </div>
+
+        </div><!--container끝(신고내용container)-->
+    </form>
+
+</section>
+<footer th:include="/views/footer"></footer>
+
+<script type="text/javascript">
+    const List=()=>{
+        location.href="/myPage/inquiryList";
+    }
+
+</script>
+</body>
+</html>

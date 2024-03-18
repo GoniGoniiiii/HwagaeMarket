@@ -1,0 +1,18 @@
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
+<!-- 채팅 목록 렌더링 -->
+<th:block th:each="chat : ${chatList}">
+    <a th:href="@{/chat/{userNum}(userNum=${chat.toNum})}">
+        <img src="/img/default.png" style="width: 60px; height: 60px; border-radius: 100px; float: left; margin-right: 20px;">
+        <div style="box-shadow: 0px 1px 1px -1px; height: 80px;">
+            <div style="margin-bottom: 10px;">
+                <span id="toNum"  th:text="${chat.toNick}" style="font-size: 20px;"></span>
+                <span th:text="${chat.chatTime}" style="color: gray; font-size: 12px;"></span>
+            </div>
+            <span th:text="${chat.chatContent}" style="font-size: 18px; color: darkgray;"></span>
+        </div>
+    </a><br>
+</th:block>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript">
+
+    </script>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+        .title {
+            /* 공지사항 */
+            border-bottom: 1px solid #FF7A6B;
+            color: #FF7A6B;
+        }
+        .btn-submit {
+            outline: 2px solid var(--bs-danger-border-subtle);
+            font-weight: bold;
+            margin-right: 15px;
+            width: 80px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header th:include="/views/header.html"></header>
+
+<section><br>
+
+    <div class="fs-3 fw-bold mt-5 py-3 px-3 title">화개장터 사기 조회</div>
+    <p class="small my-5">판매자의 휴대폰번호,계좌번호, 메신저ID,이메일로<br>피해 사례 조회를 이용해보세요! </p>
+    <form action="" method="post">
+        <div class="container pb-5">
+            <select class="form-select" name="select">
+                <option value="phone">휴대폰번호</option>
+                <option value="account">계좌번호</option>
+                <option value="id">ID</option>
+            </select>
+            <div class="row g-3 my-1">
+                <div class="col">
+                    <label for="search" class="visually-hidden">search</label>
+                    <!-- input 요소에 th:field 추가 -->
+                    <input type="text" class="form-control"  name="" id="search" placeholder="-는 빼고 입력해주세요.">
+
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-submit mb-3">&nbsp;&nbsp;&nbsp;조회&nbsp;&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+<header th:include="/views/footer.html"></header>
+
+</body>
+</html>
+
+<!--cheatSeacr 조회누르면 modal 뜨게???-->

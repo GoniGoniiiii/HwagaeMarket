@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>찜한 상품</title>
+    <link rel="stylesheet" href="/css/myPage/like.css">
+</head>
+<body>
+<div th:include="/views/header.html"></div>
+
+<section>
+<div th:include="/views/sidebar.html"></div>
+    <div style="width: 1100px; height: 1000px; float: right;">
+
+        <div style="width:100%; height: 1000px; overflow: auto">
+
+        <div class="container px-4 mt-5 px-lg-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-start">
+                <div class="mb-5 col posts" th:if="${likedPosts}!=null" th:each="post : ${likedPosts}">
+                    <div class="card h-100 card_wrap">
+                        <a th:href="@{/post/{postNum}(postNum=${post.post_num})}">
+                        <!-- Product image-->
+                            <div class="img_wrap">
+                                <img class="card-img-top" th:src="@{|/upload/${post.file_url[0]}|}" height="200" alt="..."/>
+                            </div>
+                            <!-- like svg -->
+                            <input type="hidden" class="postNum" th:value="${post.post_num}">
+
+                            <!-- Product details-->
+                            <div class="p-4 card-body">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 th:text="${post.post_title}"></h5>
+                                    <!-- Product price-->
+                                    <h6 th:text="'가격 : '+${post.post_price}" class="fw-bolder"></h6>
+                                    <span id="location2" th:text="${post.post_location2}"></span>
+                                    <span>|</span>
+                                    <span id="regdate" th:text="${post.post_regdate}"></span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="svg_wrap" id="like_wrap">
+                            <!-- 좋아요 정보 -->
+                            <div th:if="${session.user != null}">
+                                <button id="liked"
+                                        onclick="likeProc(this)" th:attr="post_num=${post.post_num}"
+                                        style="background:none; border: none">
+                                    <i class="bi bi-heart-fill" style="font-size: 22px; color: red"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h2 th:unless="${likedPosts}!=null" th:text="찜 목록이 없습니다."></h2>
+            </div>
+        </div>
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<div th:include="/views/footer"></div>
+
+
+
+<script th:inline="javascript">
+    // 토스트를 보여주는 함수
+    function showToast(message) {
+        // 메시지 내용 변경
+        $('.toast .toast-body').text(message);
+
+        // 토스트 보여주기
+        $('.toast').toast('show');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const likeProc = (button) => {
+            const postNum = button.getAttribute("post_num");
+            console.log("postNum : " + postNum);
+            $.ajax({
+                type: "post",
+                url: "/like",
+                data: {
+                    "postNum": postNum
+                },
+                success: function (res) {
+                    console.log("res.postNum : " + res.postNum);
+                    console.log("res.userNum : " + res.userNum);
+                    console.log("res.likeNum : " + res.likeNum);
+
+                    showToast("좋아요를 취소했습니다.");
+                    setTimeout(function() {
+                        window.location.href = "/myPage/like";
+                    }, 600); // 600ms(0.6초) 후에 페이지 리다이렉트
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        }
+
+        // 각각의 좋아요 버튼에 이벤트 리스너 추가
+        var likeButtons = document.querySelectorAll('.svg_wrap button');
+        likeButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                likeProc(this);
+            })
+        });
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const locationElements = document.querySelectorAll('#location2');
+
+        locationElements.forEach(function (element) {
+            var location = element.textContent;
+            // 띄어쓰기를 기준으로 문자열을 분리하여 두 번째 단어를 추출
+            var words = location.split(' ');
+            var secondWord = words.slice(1).join(' '); // 두 번째 단어부터 다시 문자열로 합침
+            element.textContent = secondWord;
+        });
+    });
+
+    function formatDate(dateString) {
+        const now = new Date();
+        const date = new Date(dateString);
+        const diff = now - date;
+        const minutes = Math.floor(diff / (1000 * 60));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
+        const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 30 * 12));
+
+        if (minutes < 60) {
+            return minutes + '분 전';
+        } else if (hours < 24) {
+            return hours + '시간 전';
+        } else if (days < 30) {
+            return days + '일 전';
+        } else if (months < 12) {
+            return months + '달 전';
+        } else {
+            return years + '년 전';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const regdateElements = document.querySelectorAll('#regdate');
+
+        regdateElements.forEach(function (element) {
+            var regdate = element.textContent;
+            // 날짜 형식 변환 함수 호출
+            var formattedDate = formatDate(regdate);
+            element.textContent = formattedDate;
+        });
+    });
+</script>
+
+</body>
+</html>

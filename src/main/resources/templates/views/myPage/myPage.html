@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <style type="text/css">
+        section {
+            width: 1400px;
+            height: 1500px;
+            margin: auto;
+        }
+
+        #mypage {
+            width: 850px;
+            height: 210px;
+            box-shadow: 0px 0px 3px 1px #FF7A6B;
+            border-radius: 20px;
+            padding: 30px 50px;
+            margin: auto;
+        }
+
+        #mypage img {
+            width: 150px;
+            height: 150px;
+            border-radius: 100%;
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+
+        .card_wrap {
+            position: relative;
+        }
+
+        .svg_wrap {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 7px 10px 10px;
+        }
+
+        .img_wrap {
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .img_wrap:hover {
+            transform: scale(1.04);
+        }
+
+        .text-center h5 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+        }
+
+        .condition-dropbox ul {
+            list-style-type: none;
+            padding: 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .condition-dropbox li {
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .condition-dropbox li a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .condition-dropbox li:hover {
+            background-color: #f1f1f1;
+        }
+
+        .condition-dropbox ul li:nth-child(1),
+        .condition-dropbox ul li:nth-child(2) {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .condition-dropbox {
+            width: 150px;
+            text-align: center;
+            position: absolute;
+            right: 10px;
+            top: 50px;
+            background-color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+<div th:include="/views/header.html"></div>
+<section>
+    <div th:include="/views/sidebar.html"></div>
+
+    <div style="width: 1100px; height: auto; float: right;">
+
+        <div id="mypage">
+
+            <div style="float: left;">
+                <img th:src="@{|/upload/${session.user.user_photo}|}">
+            </div>
+
+            <div style="text-align: center; font-size: 26px;">
+                <span>닉네임</span>
+                <span style="margin-left: 20px; font-size: 24px; font-weight: 900;"
+                      th:text="${session.user.user_nick}"></span>
+                <span style="margin-left: 30px;">활동지역</span>
+                <span style="margin-left: 20px; font-size: 24px; font-weight: 900;"
+                      th:text="${session.user.user_location2}"></span>
+
+                <div th:with="totalChatCount=${#lists.size(postList)}" style="display: inline-flex;">
+                    <div style="margin: 35px 45px 0 45px;">
+                        <span>판매내역</span><br>
+                        <a th:href="@{'/post/saleList/' + ${session.user.user_nick}}"><span
+                                style="color: red; font-weight: 900;" th:text="${totalChatCount}"></span> 개</a>
+                    </div>
+                    <div style="margin: 35px 45px 0 45px;">
+                        <span>구매내역</span><br>
+                        <a><span style="color: red; font-weight: 900;" th:text="${totalChatCount}"></span> 개</a>
+                    </div>
+                    <div style="margin: 35px 45px 0 45px;">
+                        <span>찜한상품</span><br>
+                        <a th:href="@{'/myPage/like'}"><span style="color: red; font-weight: 900;"
+                                                             th:text="${likeCount}"></span> 개</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div style="width: 1100px; float: right;">
+        <div style="width:100%;">
+            <div class="container px-4 mt-5 px-lg-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-start">
+                    <div class="mb-5 col" th:each="post:${saleList}">
+                        <div class="card h-100 card_wrap">
+                            <!-- Product image-->
+                            <a th:href="@{/post/{postNum}(postNum=${post.post_num})}">
+                                <!-- Product image-->
+                                <div class="img_wrap" th:if="${not #lists.isEmpty(post.file_url)}">
+                                    <img class="card-img-top" th:src="@{|/upload/${post.file_url[0]}|}" height="200"
+                                         alt="..."/>
+                                </div>
+
+                                <!-- like svg -->
+                                <input type="hidden" class="postNum" th:value="${post.post_num}">
+
+                                <!-- Product details-->
+                                <div class="p-4 card-body">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 th:text="${post.post_title}"></h5>
+                                        <!-- Product price-->
+                                        <h6 th:text="'가격 : '+${post.post_price}" class="fw-bolder"></h6>
+                                        <span id="location2" th:text="${post.post_location2}"></span>
+                                        <span>|</span>
+                                        <span id="regdate" th:text="${post.post_regdate}"></span>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <!-- 드롭박스 -->
+                            <div class="condition-dropbox" style="display: none;">
+                                <ul>
+                                    <li><a href="#">상품수정</a></li>
+                                    <li><a href="#">상태변경</a></li>
+                                    <li><a th:href="@{'/post/delete/'+${post.post_num}}">상품삭제</a></li>
+                                </ul>
+                            </div>
+                            <!--dot svg -->
+                            <div class="svg_wrap">
+                                <svg id="dots_svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ccc"
+                                     class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path
+                                            d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 페이지네이션 -->
+            <nav aria-label="Page navigation example" th:if="${saleList.totalPages}>1">
+                <ul class="pagination justify-content-center" id="page-link">
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/post/saleList(page=1)}">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="${saleList.first} ? '#' : @{/myPage(page=${saleList.number})}">Prev</a>
+                    </li>
+                    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+<!--
+                <li class="page-item"><span class="page-link active" th:if="${page == searchList.number + 1}" th:text="${page}"></span></li>
+-->
+                <li class="page-item page-link active" th:if="${page == saleList.number + 1}" th:text="${page}"></li>
+                <li class="page-item" th:unless="${page == saleList.number + 1}"><a class="page-link" th:href="@{/myPage(page=${page})}" th:text="${page}"></a></li>
+                        <!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
+            </span>
+                    <li class="page-item">
+                        <a class="page-link" th:href="${saleList.last} ? '#' : @{/myPage(page=${saleList.number + 2})}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/myPage(page=${saleList.totalPages})}">Last</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+</section>
+<div th:include="/views/footer"></div>
+
+
+<script>
+    // URL에서 success 매개변수를 확인하여 업데이트 성공 여부를 판단
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+
+    // 업데이트 성공 시 알림창 띄우기
+    if (success === 'true') {
+        alert('정보가 수정되었습니다.');
+    }
+
+
+    function formatDate(dateString) {
+        const now = new Date();
+        const date = new Date(dateString);
+        const diff = now - date;
+        const minutes = Math.floor(diff / (1000 * 60));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
+
+        if (minutes < 60) {
+            return minutes + '분 전';
+        } else if (hours < 24) {
+            return hours + '시간 전';
+        } else if (days < 30) {
+            return days + '일 전';
+        } else {
+            return months + '달 전';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const regdateElements = document.querySelectorAll('#regdate');
+
+        regdateElements.forEach(function (element) {
+            var regdate = element.textContent;
+            // 날짜 형식 변환 함수 호출
+            var formattedDate = formatDate(regdate);
+            element.textContent = formattedDate;
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const locationElements = document.querySelectorAll('#location2');
+
+        locationElements.forEach(function (element) {
+            var location = element.textContent;
+            // 띄어쓰기를 기준으로 문자열을 분리하여 두 번째 단어를 추출
+            var words = location.split(' ');
+            var secondWord = words.slice(1).join(' '); // 두 번째 단어부터 다시 문자열로 합침
+            element.textContent = secondWord;
+        });
+    });
+
+</script>
+
+
+</body>
+</html>

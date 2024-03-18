@@ -1,0 +1,37 @@
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #FF7A6B;
+    color: white;
+}
+.Menu li{
+    margin: 12px;
+}
+
+
+.bottomHeader,
+.bottomHeader{
+
+    margin: 0 auto;
+    display: flex;
+}
+
+
+/* bottomeaderMenu  h o v e r    기   능 */
+.bottomHeaderMenu a {
+    text-decoration: none; /* 초기에는 밑줄이 없도록 설정 */
+    position: relative; /* 포지션을 상대적으로 설정 */
+    z-index: 1;
+}
+
+.bottomHeader a::after {
+    content: ""; /* 가상 요소를 생성하여 밑줄 역할을 수행 */
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 2px; /* 밑줄의 두께 설정 */
+    background-color: #FF7A6B; /* 밑줄 색상 설정 */
+    transition: width 0.5s ease-in-out; /* 트랜지션 효과 추가 */
+}
+
+.bottomHeaderMenu a:hover::after {
+    width: 100%; /* 마우스 호버 시 밑줄이 전체 폭으로 나타나도록 설정 */
+}

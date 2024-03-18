@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅창</title>
+
+
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+        .profile_name{
+            width:100%;
+            padding: 10px;
+            border-bottom: 5px solid #FF7A6B;
+        }
+        .chat_section{
+            padding: 15px;
+            height: 600px;
+            overflow-y: auto;
+        }
+        .send{
+            width: 320px;
+            margin: 10px;
+            float: right;
+            clear: both;
+        }
+        .send_msg{
+            background: #ebebeb;
+            color: #000000;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-wrap: break-word;
+        }
+
+        .receive {
+            width: 320px;
+            margin: 10px;
+            float: left;
+            clear: both;
+        }
+
+        .receive_msg{
+            background: #FF7A6B;
+            color: #ffffff;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-wrap: break-word;
+        }
+
+        .time_date {
+            color: #747474;
+            display: block;
+            font-size: 12px;
+            margin: 8px 0 0;
+        }
+
+        .type_msg {
+            border-top: 1px solid #c4c4c4;
+            position: relative;
+        }
+
+        .input_msg_write input {
+            border: medium none;
+            color: #4c4c4c;
+            font-size: 15px;
+            min-height: 48px;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .msg_send_btn {
+            background: #05728f none repeat scroll 0 0;
+            border: medium none;
+            border-radius: 50%;
+            color: #fff;
+            cursor: pointer;
+            font-size: 17px;
+            height: 33px;
+            position: absolute;
+            right: 0;
+            top: 11px;
+            width: 33px;
+        }
+
+    </style>
+</head>
+<body>
+<div th:include="/views/header.html"></div>
+<section>
+
+    <div style="width: 600px; margin: 60px auto; box-shadow: 0px 0px 28px -5px gray; border-radius: 8px;padding: 8px;">
+
+        <div class="profile_name" th:text="${toNick}">
+            &nbsp;&nbsp;&nbsp;&nbsp;<i class="bi bi-chat-left-dots"></i> &nbsp;&nbsp; 채팅방
+        </div>
+        <div class="chat_section" id="chatMessages">
+
+        </div>
+        <div class="type_msg">
+            <div class="input_msg_write">
+                <input type="text" id="toNum" th:value="${toNum}" style="display:none;">
+                <input name="chatContent" id="chatContent" type="text" class="write_msg" placeholder="메시지를 입력하세요" onkeydown="if (event.keyCode == 13 && !event.shiftKey) sendMessage();" />
+                <button id="chat-send" onclick="sendMessage()" class="msg_send_btn" type="submit"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+</section>
+<footer th:include="/views/footer"></footer>
+
+
+<script th:inline="javascript">
+    function getCurrentDateTime() {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = String(now.getMonth() + 1).padStart(2, '0');
+        var day = String(now.getDate()).padStart(2, '0');
+        var hours = String(now.getHours()).padStart(2, '0');
+        var minutes = String(now.getMinutes()).padStart(2, '0');
+        var seconds = String(now.getSeconds()).padStart(2, '0');
+        return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+    }
+
+    function sendMessage(){
+        var fromNum = /*[[${session.user.user_num}]]*/ ''; // 세션에 저장된 사용자의 user_num을 가져옴
+        var toNum = $("#toNum").val();
+        var chatContent = $("#chatContent").val();
+        var chatTime = getCurrentDateTime();
+        console.log("로그인 된 유저 닉네임 : "+ fromNum);
+        console.log("받는사람 : " + toNum);
+
+        $.ajax({
+            type: "post",
+            url: "/chat/send",
+            data: {
+                fromNum : encodeURIComponent(fromNum),
+                toNum : encodeURIComponent(toNum),
+                chatContent : chatContent,
+                chatTime : chatTime,
+            },
+            success : function () {
+                // 메시지를 전송한 후에도 새로운 채팅 리스트를 불러옵니다.
+                loadChatRecord();
+                console.log()
+            }
+        });
+        $("#chatContent").val('');
+        findLastMessage();
+    }
+
+    function loadChatRecord() {
+        var fromNum = /*[[${session.user.user_num}]]*/ ''; // 세션에 저장된 사용자의 user_num을 가져옴
+        var toNum = $("#toNum").val(); // 대화 상대방의 ID를 가져옵니다.
+
+        $.ajax({
+            type: "POST",
+            url: "/chat/record",
+            data: {
+                fromNum: encodeURIComponent(fromNum),
+                toNum: encodeURIComponent(toNum),
+            },
+            success: function (data) {
+                if (data.length === 0) return;
+                $('#chatMessages').empty();
+
+                for (var i = 0; i < data.length; i++) {
+                    if(data[i].fromNum == fromNum){
+                        data[i].fromNum = '나';
+                        console.log("보내는 사람 : " + data[i].fromNum);
+                        console.log("받는사람 : " + data[i].toNum);
+                        console.log("시간 : "+  data[i].chatTime);
+
+                    }
+                    addChat(data[i].fromNum, data[i].chatContent, data[i].chatTime);
+                }
+            }
+        });
+
+    }
+
+    function addChat(chatName, chatContent, chatTime){
+        if(chatName == '나') {
+            $('#chatMessages').append(
+                '<div class="send">'+
+                '<p class="send_msg">'+
+                chatContent +
+                '</p>'+
+                '<span class="time_date">' +
+                chatName + ' | ' + chatTime +
+                '</span>'+
+                '</div>'
+
+            );
+        }else {
+            $('#chatMessages').append(
+                '<div class="receive">'+
+                '<p class="receive_msg">'+
+                chatContent +
+                '</p>'+
+                '<span class="time_date">' +
+                chatName + ' | ' + chatTime +
+                '</span>'+
+                '</div>'
+            );
+        }
+        findLastMessage();
+    }
+
+    function getList(){
+        setInterval(function (){
+            loadChatRecord();
+        },2000);
+    }
+
+    $(document).ready(function (){
+        loadChatRecord();
+        findLastMessage();
+    })
+
+    const findLastMessage = () => {
+        var chatContainer = document.getElementById("chatMessages");
+        chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+    }
+</script>
+
+</body>
+</html>

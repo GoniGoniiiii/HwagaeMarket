@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 2.1rem;
+            font-size: 15px;
+        }
+
+        .main {
+            width: 85%;
+        }
+
+        .title {
+            color: #FF7A6B;
+        }
+
+        .container {
+            padding: 2vh;
+            width: 100%;
+
+        }
+
+        .form-label {
+            color: #FF7A6B;
+            font-weight: bold;
+        }
+
+        .form-control {
+            box-shadow: 0 0 5px #FF7A6B; /* box-shadow 색상 및 다른 속성 */
+        }
+
+        .form-control :hover {
+            --bs-linked-hover-color: var(--bs-success-border-subtle);
+        }
+
+        .btn-submit {
+            outline: 2px solid var(--bs-danger-border-subtle);
+            font-weight: bold;
+            margin-right: 15px;
+            width: 80px;
+        }
+
+        .btn-reset {
+            outline: 2px solid var(--bs-success-border-subtle);
+            font-weight: bold;
+            width: 80px;
+        }
+
+        th {
+            font-size: 17px;
+            First prev 1 2 next Last
+        }
+        .pagination{
+            color:#FF7A6B;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+<header th:include="/views/header.html"></header>
+<section><br>
+
+<div th:include="views/admin/adminSidebar.html"></div>
+<div class="main mx-auto">
+    <header class="py-4 my-4 mb-4 pb-3 border-bottom">
+        <p class="fs-2 fw-bold  text-center title">문의 리스트</p>
+    </header>
+    <div class="container">
+        <section class="section  mx-auto">
+            <table class="table">
+                <thead class="table-danger">
+                <tr>
+                    <th scope="col">문의번호</th>
+                    <th scope="col">문의제목</th>
+                    <th scope="col">회원아이디</th>
+                    <th scope="col">회원이름</th>
+                    <th scope="col">회원전화번호</th>
+
+                    <th scope="col">처리여부</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="inquiry : ${inquiryList}">
+                    <td>
+                        <a th:href="@{/myPage/inquiry/{qna_num}(qna_num=${inquiry.qna_num})}"
+                           th:text="${inquiry.qna_num}"></a>
+                    </td>
+                    <td>
+                        <div th:text="${inquiry.qna_title}"></div>
+                    </td>
+                    <td>
+                        <div th:text="${inquiry.user_id}"></div>
+                    </td>
+                    <td>
+                        <div th:text="${inquiry.user_name}"></div>
+                    </td>
+                    <td>
+                        <div th:text="${inquiry.user_phone}"></div>
+                    </td>
+                    <td>
+                        <div th:if="${inquiry.qna_status==1}" th:text="'완료'" class="text-danger"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- 첫번째 페이지로 이동 -->
+            <!-- /board/paging?page=1 -->
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{/admin/inquiryManage/paging(page=1)}" tabindex="-1"
+                       aria-disabled="true">First</a>
+                </li>
+
+                <li class="page-item" th:class="${inquiryList.number == 0} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/admin/inquiryManage/paging(page=${inquiryList.number})}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                    <li class="page-item" th:class="${page == inquiryList.number + 1} ? 'active' : ''">
+                        <a th:if="${page == inquiryList.number + 1}" class="page-link">
+                            <span th:text="${page}"></span>
+                        </a>
+                        <a th:unless="${page == inquiryList.number + 1}" th:href="@{/admin/inquiryManage/paging(page=${page})}"
+                           class="page-link" th:text="${page}"></a>
+                    </li>
+                </span>
+
+                <li class="page-item" th:class="${!inquiryList.hasNext()} ? 'disabled' : ''">
+                    <a class="page-link" th:if="${inquiryList.hasNext()}"
+                       th:href="@{/admin/inquiryManage/paging(page=${inquiryList.number + 2})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link"
+                       th:href="@{/admin/inquiryManage/paging(page=${inquiryList.totalPages})}">Last</a>
+                </li>
+            </ul>
+            <!--        </nav>-->
+            <!--            <a th:href="@{/admin/inquiryManage/paging(page=1)}">First</a>-->
+            <!--            &lt;!&ndash; 이전 링크 활성화 비활성화 &ndash;&gt;-->
+            <!--            &lt;!&ndash; boardList.getNumber() 사용자:2페이지 getNumber()=1 &ndash;&gt;-->
+            <!--            <a th:href="${inquiryList.first} ? '#' : @{/admin/inquiryManage/paging(page=${inquiryList.number})}">prev</a>-->
+
+            <!-- 페이지 번호 링크(현재 페이지는 숫자만)
+                    for(int page=startPage; page<=endPage; page++)-->
+            <!--            <span th:each="page: ${#numbers.sequence(startPage, endPage)}">-->
+            <!--&lt;!&ndash; 현재페이지는 링크 없이 숫자만 &ndash;&gt;-->
+            <!--    <span th:if="${page == inquiryList.number + 1}" th:text="${page}"></span>-->
+            <!--                &lt;!&ndash; 현재페이지 번호가 아닌 다른 페이지번호에는 링크를 보여줌 &ndash;&gt;-->
+            <!--    <span th:unless="${page == inquiryList.number + 1}">-->
+            <!--        <a th:href="@{/admin/inquiryManage/paging(page=${page})}" th:text="${page}"></a>-->
+            <!--    </span>-->
+            <!--</span>-->
+
+            <!--            &lt;!&ndash; 다음 링크 활성화 비활성화-->
+            <!--                사용자: 2페이지, getNumber: 1, 3페이지&ndash;&gt;-->
+            <!--            <a th:href="${inquiryList.last} ? '#' : @{/admin/inquiryManage/paging(page=${inquiryList.number + 2})}">next</a>-->
+            <!--            &lt;!&ndash; 마지막 페이지로 이동 &ndash;&gt;-->
+            <!--            <a th:href="@{/admin/inquiryManage/paging(page=${inquiryList.totalPages})}">Last</a>-->
+            <!--            &lt;!&ndash;<div th:include="footer.html"></div>&ndash;&gt;-->
+
+        </section>
+    </div>
+
+</div>
+
+</section>
+<footer th:include="/views/footer"></footer>
+
+
+</body>
+</html>

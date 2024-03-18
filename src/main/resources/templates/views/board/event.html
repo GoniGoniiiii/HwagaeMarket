@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이벤트</title>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0 auto;
+        }
+
+        .section {
+            /*헤더 밑 푸터 전체 구역 */
+            min-height: calc(100% - (100px + 500px));
+            max-width: 1024px;
+            padding: 0 35px 0 35px;
+        }
+
+        .title {
+            /* 공지사항 */
+            border-bottom: 1px solid #FF7A6B;
+            color: #FF7A6B;
+        }
+
+        .btn-update{
+            outline: 2px solid var(	--bs-danger-border-subtle);
+            font-weight: bold;
+            margin-right:15px;
+            width:80px;
+        }
+        .btn-delete{
+            outline: 2px solid var(--bs-success-border-subtle);
+            font-weight: bold;
+            width:80px;
+        }
+    </style>
+</head>
+<body>
+<div th:include="/views/header.html"></div>
+<section>
+    <div class="fs-3 fw-bold text-center py-4 pb-5 title">EVENT</div>
+    <div th:each="event: ${event}">
+        <p th:text="${event.event_title}"></p>
+        <div class="container w-100 mx-auto" style="display: block">
+            <div th:each="fileName: ${event.file_url}">
+                <!-- 파일 이름이 여러개라 반복문 돌려서 storedFileName에 하나씩 접근할 수 있는 변수 -->
+                <img th:src="@{|/upload/${fileName}|}" alt="" style="width:100%; height:500px;">
+            </div>
+            <p th:text="${event.event_content}" ></p>
+        </div>
+    </div>
+    <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-update" th:attr="data-updateNum=${event.event_num}" onclick="updateEvent(this)">수정</button>
+    <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-delete" th:attr="data-deleteNum=${event.event_num}" onclick="deleteEvent(this)">삭제</button>
+</section>
+<footer th:include="/views/footer"></footer>
+
+
+<script th:inline="javascript">
+    const updateEvent = (button) => {
+        const num = button.getAttribute('data-updateNum');
+        location.href = "/admin/updateEvent/" + num;
+    }
+
+    const deleteEvent = (button) => {
+        const num = button.getAttribute('data-deleteNum');
+        location.href = "/admin/deleteEvent/" + num;
+    }
+</script>
+
+
+</body>
+</html>

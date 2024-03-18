@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section {
+            width: 1400px;
+            margin: auto;
+        }
+
+        .title {
+            /* 1:1문의 */
+            border-bottom: 1px solid #FF7A6B;
+            color: #FF7A6B;
+        }
+
+        .custom-grid .col-2 { /* grid간격(이름, 문의제목 ,문의내용 오른쪽 간격 조절한거임)**/
+            margin-left: 13%;
+            padding-left: 5%;
+        }
+
+        tr {
+            margin-left: 30px;
+            height: 100px;
+        }
+
+        th {
+            padding-left: 100px;
+            width: 200px;
+        }
+
+        tr:nth-child(3) {
+            height: 200px;
+        }
+
+        .comment {
+            border-top: 1px solid #FF7A6B;
+        }
+    </style>
+
+</head>
+<body>
+<header th:include="/views/header.html"></header>
+<section><br>
+
+    <div class="text-center py-4 pb-5 mb-5 title">
+        <p class="fs-3 fw-bold">1:1문의</p>
+        <div class="">
+            <div class="text-secondary"><small>AM 09:30 ~ PM 18:20 (점심시간 1:20 ~ 2:30)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;DAY
+                OFF(토/일/공휴일 휴무)</small></div>
+        </div>
+    </div>
+
+    <table class="table align-middle my-2 mb-5 qnaTable">
+        <tbody>
+        <tr>
+            <th scope="row" class="pl-5">문의번호</th>
+            <td name="qna_num" th:text="${inquiry.qna_num}"></td>
+        </tr>
+        <tr>
+            <th scope="row" class="pl-5">이름</th>
+            <td name="user_name" th:text="${inquiry.user_name}"></td>
+        </tr>
+        <tr>
+            <th scope="row">문의제목</th>
+            <td name="qna_title" th:text="${inquiry.qna_title}"></td>
+        </tr>
+        <tr>
+            <th scope="row">문의내용</th>
+            <td name="qna_content" th:text="${inquiry.qna_content}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="comment-write" class="py-3 pb-5 mb-5 border-bottom">
+        <div class="d-flex justify-content-between my-2">
+            <input type="text" id="commentWriter" class="border-0 my-2" th:value="${session.user != null ? session.user.user_id : ''}">
+            <button id="comment-write-btn" onclick="commentWrite()" class="btn btn-outline-secondary">댓글 작성</button>
+        </div>
+        <textarea rows="4" id="commentContents" class="form-control w-100 " placeholder="내용을 입력하세요!"></textarea>
+    </div>
+    <!--    &lt;!&ndash; 댓글 출력&ndash;&gt;-->
+    <!--    <div id="comment-list" th:each="comment : ${commentList}" class="border-top my-3 py-3">-->
+    <!--        <div th:text="${comment.comment_writer}" class="fw-bold mx-4 my-1"></div>-->
+    <!--        <div th:text="${comment.comment_content}" class="mx-4 my-1"></div>-->
+    <!--    </div>-->
+    <!--댓글 출력-->
+    <div id="comment-list">
+        <table class="table align-middle w-100">
+            <tr th:each="comment:${commentList}">
+                <td th:text="${comment.comment_num}"></td>
+                <td th:text="${comment.comment_writer}"></td>
+                <td th:text="${comment.comment_content}"></td>
+                <td th:text="${#dates.format(comment.comment_date, 'yyyy.MM.dd HH:mm:ss')}"></td>
+            </tr>
+        </table>
+    </div>
+</section>
+<footer th:include="/views/footer"></footer>
+
+<script th:inline="javascript">
+    let commentWrite = () => {
+        const writer = document.getElementById("commentWriter").value;
+        const commentContents = document.getElementById("commentContents");
+        const contents = commentContents.value;
+
+        if (contents === null || contents.trim() === '') {
+            alert("답변 내용을 입력하세요!");
+            commentContents.focus();
+            return;
+        }
+        console.log("작성자", writer);
+        console.log("내용: ", contents);
+        const id = [[${inquiry.qna_num}]];
+        if (id !== undefined) {
+            console.log("id : ", id);
+            $.ajax({
+                //요청방식: post, 요청주소 : myPage/inquiry ,요청데이터 : 작성자, 작성내용, 문의번호
+                type: "post",
+                url: "/myPage/inquiry",
+                data: {
+                    "comment_writer": writer,
+                    "comment_content": contents,
+                    "qna_num": id
+                },
+                success: function (res) {
+                    console.log("요청성공", res);
+                    let output = "<table>";
+                    for (let i in res) {
+                        output += "<tr>";
+                        output += "<td>" + res[i].comment_num + "</td>";
+                        output += "<td>" + res[i].comment_writer + "</td>";
+                        output += "<td>" + res[i].comment_content + "</td>";
+                        // 날짜 포맷 변경
+                        // const commentDate = new Date(res[i].comment_date);
+                        // const formattedDate = commentDate.toLocaleString(); // 또는 다른 형식으로 변경 가능
+
+                        output += "<td>" + res[i].comment_date+ "</td>";
+                        output += "</tr>";
+                    }
+                    output += "</table>";
+                    document.getElementById('comment-list').innerHTML = output;
+                    document.getElementById('commentWriter').value = '';
+                    document.getElementById('commentContents').value = '';
+
+                },
+                error: function (err) {
+                    console.log("요청실패", err);
+                }
+            });
+        } else {
+            console.log("id 값이 없습니다.");
+            // id 값이 없을 때의 처리
+        }
+    }
+</script>
+
+</body>
+</html>

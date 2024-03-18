@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .section {
+            /*헤더 밑 푸터 전체 구역 */
+            min-height: calc(100% - (100px + 500px));
+            max-width: 1024px;
+            padding: 0 35px 0 35px;
+        }
+
+        .title {
+            /* 공지사항 */
+            border-bottom: 1px solid #FF7A6B;
+            color: #FF7A6B;
+        }
+
+
+        /* 활성화된 아코디언 헤더의 배경 색상을 변경하지 않음 */
+        .accordion-item:not(.active) .accordion-button {
+            background-color: inherit;
+            color: inherit;
+        }
+        .btn-update{
+            outline: 2px solid var(   --bs-danger-border-subtle);
+            font-weight: bold;
+            margin-right:15px;
+            width:80px;
+        }
+        .btn-delete{
+            outline: 2px solid var(--bs-success-border-subtle);
+            font-weight: bold;
+            width:80px;
+        }
+    </style>
+</head>
+<body>
+<div th:include="/views/header.html"></div>
+<section class="section mt-5 mx-auto mb-5 text-center">
+    <div class="fs-3 fw-bold text-center py-4 pb-5 title">공지사항</div>
+
+    <div th:each="notice, noticeList : ${noticeList}" class="accordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+
+                <button class="accordion-button collapsed" type="button"
+                        th:attr="data-bs-toggle='collapse', data-bs-target='#collapse' + ${noticeList.index}, aria-expanded='false', aria-controls='collapse' + ${noticeList.index}">
+                    <p class="my-2" th:text="${notice.notice_title}"></p></button>
+            </h2>
+            <div th:id="'collapse' + ${noticeList.index}" class="accordion-collapse collapse bg-light py-4">
+                <div class="accordion-body">
+                    <div class="container w-100 mx-auto" style="display: block">
+                        <div th:each="fileName: ${notice.file_url}">
+                            <!-- 파일 이름이 여러개라 반복문 돌려서 storedFileName에 하나씩 접근할 수 있는 변수 -->
+                            <img th:src="@{|/upload/${fileName}|}" alt="" style="width:85%; height:400px;">
+                        </div>
+                        <div class="row py-5 px-5 ">
+                            <div class="col-12 px-5 "
+                                 th:utext="${#strings.replace(notice.notice_content, '\n', '<br>')}"></div>
+                            <br><br><br>
+                            <small> (작성일 : <span th:text="${#dates.format(notice.notice_regdate, 'yyyy-MM-dd')}"></span>)</small>
+                        </div>
+                        <input type="hidden" id="notice_num" th:value="${notice.notice_num}">
+                        <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-update" th:attr="data-updateNum=${notice.notice_num}" onclick="updateEvent(this)">수정</button>
+                        <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-delete"  th:attr="data-deleteNum=${notice.notice_num}" onclick="deleteEvent(this)">삭제</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<footer th:include="/views/footer"></footer>
+
+
+<script th:inline="javascript">
+    const updateEvent = (button) => {
+        const num = button.getAttribute('data-updateNum');
+        console.log(num);
+        location.href = "/admin/updateNotice/" + num;
+    }
+
+    const deleteEvent = (button) => {
+        const num = button.getAttribute('data-deleteNum');
+        console.log(num);
+        location.href = "/admin/deleteNotice/" + num;
+    }
+</script>
+</body>
+</html>

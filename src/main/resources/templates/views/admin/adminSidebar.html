@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        .flex-shrink-0 {
+            margin-left: 2%;
+            width: 320px;
+            min-height: 100%;
+        }
+
+        .btn-toggle {
+            padding: .25rem .5rem;
+            background-color: transparent;
+            font-size: 20px;
+            letter-spacing: 5px;
+        }
+
+        .btn-toggle:hover,
+        .btn-toggle:focus {
+            color: rgba(var(--bs-emphasis-color-rgb), .85);
+            background-color: var(--bs-tertiary-bg);
+        }
+
+        .btn-toggle::before {
+            width: 1.25em;
+            line-height: 0;
+            content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+            transition: transform .35s ease;
+            transform-origin: .5em 50%;
+            margin-right: 5px;
+        }
+
+        [data-bs-theme="dark"] .btn-toggle::before {
+            content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+        }
+
+        .btn-toggle[aria-expanded="true"] {
+            color: #FF7A6B;
+        }
+
+        .btn-toggle[aria-expanded="true"]::before {
+            transform: rotate(90deg);
+        }
+
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 2.25rem;
+            font-size: 18px;
+        }
+
+        .btn-toggle-nav a:hover,
+        .btn-toggle-nav a:focus {
+        }
+    </style>
+</head>
+<body>
+<div class="flex-shrink-0 px-5 pt-4 my-4 ">
+    <img src="/img/logo2.png" width="150px" class="pb-3 mb-2 pt-1 mx-1" onclick="location.href='/'">
+    <ul class="list-unstyled  ps-0">
+        <li class="my-2 mb-3 mx-2">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#member-collapse" aria-expanded="true">
+                회원관리
+            </button>
+            <div class="collapse" id="member-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/admin/userList"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">회원목록</a></li>
+                    <li><a href="/admin/reportUserList"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">제재 회원 관리</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="my-4 mx-2">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#notice-collapse" aria-expanded="false">
+                공지사항
+            </button>
+            <div class="collapse" id="notice-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/board/notice"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">현재 공지사항</a></li>
+                    <li><a href="/admin/insertNotice"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">공지사항 입력</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="my-4 mx-2">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#event-collapse" aria-expanded="false">
+                이벤트
+            </button>
+            <div class="collapse" id="event-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/board/eventList"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">진행중인 이벤트</a></li>
+                    <li><a href="/admin/insertEvent"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">이벤트 입력</a></li>
+                    <!--					<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">이벤트 수정</a></li>-->
+                    <!--					<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">이벤트 삭제</a></li>-->
+                </ul>
+            </div>
+        </li>
+
+        <li class="my-4 mx-2">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#qna-collapse" aria-expanded="false">
+                1:1문의
+            </button>
+            <div class="collapse" id="qna-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/admin/inquiryAllManage/paging"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">전체문의 </a></li>
+                </ul>
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/admin/inquiryManage/paging"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">미답변 문의</a></li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="my-4 mx-2">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#report-collapse" aria-expanded="false">
+                신고확인
+            </button>
+            <div class="collapse" id="report-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/admin/reportAllConfirm/paging"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">전체신고내역</a>
+                    </li>
+                    <li><a href="/admin/reportConfirm/paging"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">미답변 신고내역</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="my-4 mx-2">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    aria-expanded="false" onclick="location.href='/admin/adminMenu'">
+                관리자 메인
+            </button>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="text/javascript">
+    /* global bootstrap: false */
+    (() => {
+        'use strict'
+        const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.forEach(tooltipTriggerEl => {
+            new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    })()
+
+</script>
+</html>

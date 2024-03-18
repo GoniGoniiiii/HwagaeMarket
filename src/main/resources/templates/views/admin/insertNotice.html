@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+            display: flex;
+        }
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 2.1rem;
+            font-size: 15px;
+        }
+
+        .title {
+            color: #FF7A6B;
+        }
+
+        .container {
+            padding: 2vh;
+            width: 100%;
+
+        }
+
+        .form-label {
+            color: #FF7A6B;
+            font-weight: bold;
+        }
+
+        .form-control {
+            box-shadow: 0 0 5px #FF7A6B; /* box-shadow 색상 및 다른 속성 */
+        }
+
+        .form-control :hover {
+            --bs-linked-hover-color: var(--bs-success-border-subtle);
+        }
+
+        .btn-submit {
+            outline: 2px solid var(--bs-danger-border-subtle);
+            font-weight: bold;
+            margin-right: 15px;
+            width: 80px;
+        }
+
+        .btn-reset {
+            outline: 2px solid var(--bs-success-border-subtle);
+            font-weight: bold;
+            width: 80px;
+        }
+    </style>
+</head>
+
+<body>
+<header th:include="/views/header.html"></header>
+
+<section><br>
+
+<div th:include="views/admin/adminSidebar.html"></div>
+<div class="main w-75">
+    <header class="py-4 my-5 mb-4 pb-3 border-bottom">
+        <p class="fs-2 fw-bold  text-center title">공지사항 입력 </p>
+    </header>
+    <div class="container">
+        <section class="section w-75 mx-auto">
+            <form action="/admin/insertNotice" method="post" enctype="multipart/form-data">
+                <div class="px-5">
+                    <div class="my-3">
+                        <label for="notice_title" class="form-label ">공지 제목</label>
+                        <input type="text" class="form-control" name="notice_title" id="notice_title" value="[공지사항] ">
+                    </div>
+                    <div class="mb-3">
+                        <label for="notice_content" class="form-label">공지 내용</label>
+                        <textarea class="form-control" name="notice_content" id="notice_content" rows="10"></textarea>
+                    </div>
+                    <div class="mb-5">
+                        <label for="notice_upLoadFile" class="form-label">파일 첨부</label>
+                        <input type="file" name="notice_upLoadFile" id="notice_upLoadFile" multiple
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <button class="btn btn-submit" type="submit">입력</button>
+                    <button class="btn btn-reset" type="reset">취소</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+</div>
+
+</section>
+<footer th:include="/views/footer"></footer>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var notice_title = $("#notice_title");
+        var notice_content = $("#notice_content");
+        var notice_upLoadFile = $("#notice_upLoadFile");
+
+        // 제출 버튼을 눌렀을 때
+        $("form").submit(function(event) {
+            if (notice_title.val().trim().length === 0 || notice_title.val().trim().length < 7) {
+                alert('공지 제목을 입력하세요!');
+                notice_title.focus();
+                event.preventDefault(); // 기본 제출 동작을 막음
+            } else if (notice_content.val().trim().length === 0) {
+                alert("공지 내용을 입력해주세요!");
+                notice_content.focus();
+                event.preventDefault(); // 기본 제출 동작을 막음
+            } else if (notice_upLoadFile.val().trim().length === 0) {
+                var confirmUpload = confirm("파일을 첨부하지 않으시겠습니까?");
+                if (!confirmUpload) {
+                    // 파일 첨부를 원하면 추가적인 처리를 수행할 수 있습니다.
+                    // 여기에 파일 첨부 처리 코드를 추가하세요.
+                    event.preventDefault(); // 기본 제출 동작을 막음
+                }
+            }
+            // 여기에 제출 버튼을 눌렀을 때의 처리 코드를 추가하세요.
+        });
+    });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+.chatButton {
+    display: block;
+    width: 300px;
+    height: 40px;
+    margin: 12px 0 0 120px;
+    border: 1px solid #FF7A6B;
+    border-radius: 10px;
+    text-align: center;
+    padding: 7px;
+    color: black;
+    background-color: white;
+    cursor: pointer;
+}
+
+.chatButton:hover {
+    color: white;
+    background-color: #FF7A6B;
+    border-color: #FF7A6B;
+    cursor: pointer;
+}
+
+.chatButton:hover a {
+    color: white;
+    background-color: #FF7A6B;
+    border-color: #FF7A6B;
+    cursor: pointer;
+}
+
+ .toast {
+     position: fixed; /* 화면에 고정 */
+     top: auto; /* 위쪽 위치 자동 해제 */
+     bottom: 8%; /* 화면 하단에서 20% 떨어진 곳에 위치 */
+     left: 50%; /* 화면의 가로 중앙에 위치 */
+     transform: translateX(-50%); /* 정확히 중앙에 오도록 조정 */
+     z-index: 9999; /* 다른 요소들 위에 위치하도록 z-index 설정 */
+ }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+
+        .title {
+            /* 1:1문의 */
+            border-bottom: 1px solid #FF7A6B;
+            color:#FF7A6B;
+        }
+        .inquiryBox{
+            height:300px;
+            line-height: 300px;
+        }
+        .inquiryBox{
+            height:200px;
+            line-height: 200px;
+        }
+
+
+        .footer{
+            height:500px;
+        }
+
+    </style>
+
+</head>
+<body>
+<header th:include="/views/header.html"></header>
+<section><br>
+
+    <div class="text-center py-4 pb-3 mb-5 title">
+        <p class="fs-3 fw-bold">1:1문의</p>
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="text-secondary"><small>AM 09:30 ~ PM 18:20 (점심시간 1:20 ~ 2:30)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;DAY OFF(토/일/공휴일 휴무)</small></div>
+            <button type="button" class="btn btn-light border mx-3"><a href="/myPage/insertInquiry" class="text-decoration-none"> 1:1문의</a></button>
+        </div>
+    </div>
+    <div class="border text-center fw-bold inquiryBox" th:if="${inquiryList.isEmpty()}">
+        등록된 1:1문의가 없습니다.
+    </div>
+
+    <div th:if="${not inquiryList.isEmpty()}" class="inquiryBox2 py-2">
+        <!-- 여기에 사용자의 문의 리스트를 표시하는 코드를 추가하세요 -->
+        <div th:each="inquiry : ${inquiryList}">
+            <div class="card my-3">
+                <div class="card-body">
+                    <div th:if="${#strings.isEmpty(inquiry.qna_answer)}" class="text-secondary">[답변대기중]</div>
+                    <div th:if="${inquiry.qna_answer != null and not #strings.isEmpty(inquiry.qna_answer)}" class="text-secondary">[답변완료]</div>
+                    <a th:href="@{/myPage/inquiry/{qna_num}(qna_num=${inquiry.qna_num})}"><h5 class="card-title" th:text="${inquiry.qna_title}"></h5></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<footer th:include="/views/footer"></footer>
+
+</body>
+</html>

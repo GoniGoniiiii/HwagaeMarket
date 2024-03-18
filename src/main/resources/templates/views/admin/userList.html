@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }}
+
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 2.1rem;
+            font-size: 15px;
+        }
+
+        .main{
+            width:85%;
+        }
+
+        .title {
+            color: #FF7A6B;
+        }
+        .container{
+            padding:2vh;
+            width:100%;
+
+        }
+
+        th{
+            font-size:16px;
+
+        }
+    </style>
+</head>
+<body>
+
+<header th:include="/views/header.html"></header>
+
+<section><br>
+
+<div th:include="views/admin/adminSidebar.html"></div>
+<div class="main mx-auto">
+    <header class="py-4 my-4 mb-4 pb-3 border-bottom">
+        <p class="fs-2 fw-bold  text-center title">회원 리스트 </p>
+    </header>
+    <div class="container">
+        <section class="section  mx-auto">
+            <table class="table">
+                <thead class="table-danger">
+                <tr>
+                    <th scope="col">회원 일련번호</th>
+                    <th scope="col">회원 ID</th>
+                    <th scope="col">회원 비밀번호</th>
+                    <th scope="col">회원 닉네임</th>
+                    <th scope="col">회원 전화번호</th>
+                    <th scope="col">회원 Email</th>
+                    <th scope="col">회원 생일</th>
+                    <th scope="col">회원 이름</th>
+                    <th scope="col">회원 가입일</th>
+                    <th scope="col">회원 프로필</th>
+                    <th scope="col">회원 주소</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+</div>
+
+</section>
+<header th:include="/views/footer.html"></header>
+
+<script type="text/javascript">
+    /* global bootstrap: false */
+    (() => {
+        'use strict'
+        const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.forEach(tooltipTriggerEl => {
+            new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    })()
+
+</script>
+</body>
+</html>
