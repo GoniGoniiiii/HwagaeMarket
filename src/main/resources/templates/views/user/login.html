@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+        #submit {
+            background: #FF7A6B;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px 0;
+            border-radius: 0.375rem;
+            border: 1px solid #FF7A6B;
+        }
+        #submit:hover {
+            background-color: #FF7A6B;
+            color: white;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div th:include="/views/header.html"></div>
+<section class="container mt-3">
+    <div style="width:560px; height: auto; margin: 0 auto; background-color: white;">
+        <div style="text-align: center;">
+            <img src="/img/logo3.png" style="width: 220px; height: 100px; display: block; margin: 0 auto;">
+        </div><br><br><br><br>
+        <form action="/user/login" method="post">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input type="text" name="user_id" class="form-control" placeholder="아이디를 입력해주세요." required>
+                </div>
+            </div><br>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input type="password" name="user_pw" class="form-control" placeholder="비밀번호를 입력해주세요." required>
+                </div>
+            </div>
+            <div>
+                <p><a href="/user/find"><span style="float: right; color: #999999;"> 아이디/비밀번호 찾기</span></a></p>
+            </div><br><br>
+            <div class="d-grid">
+                <input id="submit" type="submit" value="로그인"><br>
+            </div>
+            <p style="text-align: center;">
+                <span>아직 계정이 없다면? <a href="/user/join" style="color: #FF7A6B;"> 회원가입</a></span>
+            </p><br>
+        </form>
+    </div>
+</section><br><br><br><br><br><br>
+<footer th:include="/views/footer"></footer>
+
+<script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var success = urlParams.get('success');
+    if (success === 'true') {
+        alert('회원가입에 성공했습니다. 로그인 해주세요.');
+    }
+</script>
+
+<script th:if="${param.loginFailed}">
+    alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+</script>
+
+</body>
+</html>

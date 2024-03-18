@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 2.1rem;
+            font-size: 15px;
+        }
+
+        .main{
+            width:85%;
+        }
+
+        .title {
+            color: #FF7A6B;
+        }
+        .container{
+            padding:2vh;
+            width:100%;
+
+        }
+        .form-label{
+            color:#FF7A6B;
+            font-weight: bold;
+        }
+        .form-control {
+            box-shadow: 0 0 5px #FF7A6B; /* box-shadow 색상 및 다른 속성 */
+        }
+        .form-control :hover{
+            --bs-linked-hover-color: var(--bs-success-border-subtle);
+        }
+
+        .btn-submit{
+            outline: 2px solid var(	--bs-danger-border-subtle);
+            font-weight: bold;
+            margin-right:15px;
+            width:80px;
+        }
+        .btn-reset{
+            outline: 2px solid var(--bs-success-border-subtle);
+            font-weight: bold;
+            width:80px;
+        }
+        th{
+            font-size:17px;
+
+        }
+    </style>
+</head>
+
+<body>
+
+<header th:include="/views/header.html"></header>
+
+<section><br>
+
+<div th:include="views/admin/adminSidebar.html"></div>
+<div class="main mx-auto">
+    <header class="py-4 my-5 mb-4 pb-3 border-bottom">
+        <p class="fs-2 fw-bold  text-center title">신고내역</p>
+    </header>
+    <div class="container">
+        <section class="section  mx-auto">
+            <table class="table">
+                <thead class="table-danger">
+                <tr>
+                    <th scope="col">제재회원 일련번호</th>
+                    <th scope="col">제재회원 ID</th>
+                    <th scope="col">제재회원 이름</th>
+                    <th scope="col">제재회원 전화번호</th>
+                    <th scope="col">제재회원 계좌번호</th>
+                    <th scope="col">제재사유</th>
+                    <th scope="col">신고횟수</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="res :${resUserDTO}">
+                    <td th:value="${res.res_num}"></td>
+                    <td th:value="${res.res_uid}"></td>
+                    <td th:value="${res.res_uname}"></td>
+                    <td th:value="${res.res_uphone}"></td>
+                    <td th:value="${res.res_account}"></td>
+                    <td th:value="${res.res_reason}"></td>
+                    <td th:value="${res.report_coount}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+</div>
+
+
+</section>
+<header th:include="/views/footer.html"></header>
+
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

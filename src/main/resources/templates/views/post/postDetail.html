@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>글목록</title>
+    <link rel="stylesheet" href="/css/post/postDetail.css">
+</head>
+<body>
+
+<div th:include="/views/header.html"></div>
+<section style="width: 1400px; margin: auto; justify-content: center" th:each="detail : ${postDetail}">
+
+    <div style="width: 100%; height: 650px;">
+
+        <div style="width: 700px; height: 700px; float: left; border-radius: 15px;">
+
+            <div th:if="${detail.post_saleState == '판매중'}"
+                 style="width: 700px; height: 500px; float: left; border-radius: 15px; margin-bottom: 30px;">
+                <div id="extend" style="width: 700px; height: 500px; background-size: contain; background-repeat: no-repeat; background-position: center; border-radius: 15px;">
+                </div>
+            </div>
+
+            <div th:if="${detail.post_saleState == '예약중'}"
+                 style="width: 700px; height: 500px; float: left; border-radius: 15px; margin-bottom: 30px;">
+                <div id="extend" style="width: 700px; height: 500px; background-size: contain; background-repeat: no-repeat; background-position: center; border-radius: 15px;">
+                    <div style="width: 700px; height: 500px; text-align: center; padding: 130px; background-color: rgba(0, 0, 0, 0.7); color:white; border-radius: 15px;">
+                        <i class="bi bi-check-circle" style="font-size: 100px;"></i><br>
+                        <span style="font-size: 40px;">예약중</span>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${detail.post_saleState == '판매완료'}"
+                 style="width: 700px; height: 500px; float: left; border-radius: 15px; margin-bottom: 30px;">
+                <div id="extend" style="width: 700px; height: 500px; background-size: contain; background-repeat: no-repeat; background-position: center; border-radius: 15px;">
+                    <div style="width: 700px; height: 500px; text-align: center; padding: 130px; background-color: rgba(0, 0, 0, 0.7); color:white; border-radius: 15px;">
+                        <i class="bi bi-check-circle" style="font-size: 100px;"></i><br>
+                        <span style="font-size: 40px;">판매완료</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width: 700px; display: flex; justify-content: center">
+                <div th:each="index : ${#numbers.sequence(0, detail.file_url.size() - 1)}">
+                    <img th:id="'thumbnail_' + ${index}" th:src="@{|/upload/${detail.file_url[__${index}__]}|}"
+                         style="width: 80px; height: 80px; margin: 15px; box-shadow: 0px 0px 8px -1px;
+                          border-radius: 8px; cursor: pointer" th:onclick="'extend('+ ${index} +')'" th:onmouseover="'extend('+ ${index} +')'">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div style="width: 640px; height: 500px; float: right;">
+            <div style="margin-bottom: 30px;">
+
+                <div style="width: 604px; margin: auto;">
+                    <span>홈</span> > <a th:href="@{'/post/category/'+${detail.category_num}}"><span
+                        th:text="${detail.categoryName}"></span></a>
+                </div>
+                <br>
+
+                <div style="width: 604px; height:200px; margin: auto;">
+                    <h1 th:text="${detail.post_title}"></h1>
+                    <p style="font-size: 30px;" th:text="${detail.post_price} +'원' "></p>
+                </div>
+
+                <div style="width: 604px; margin: auto; color: gray" th:if="${detail.post_update != null}">
+                    <i class="bi bi-clock-fill"></i> <span id="regdate" th:text="${detail.post_update}"></span>&nbsp; |
+                    &nbsp;<i class="bi bi-eye-fill"></i> &nbsp;<span th:text="${detail.post_hits}"></span>&nbsp; |
+                    &nbsp;<i class="bi bi-heart-fill"></i> &nbsp;<span class="likeCounts" th:text="${countLike}"></span>
+                </div>
+
+                <div style="width: 604px; margin: auto; color: gray" th:if="${detail.post_update == null}">
+                    <i class="bi bi-clock-fill"></i> <span id="regdate" th:text="${detail.post_regdate}"></span>&nbsp; |
+                    &nbsp;<i class="bi bi-eye-fill"></i> &nbsp;<span th:text="${detail.post_hits}"></span>&nbsp; |
+                    &nbsp;<i class="bi bi-heart-fill"></i> &nbsp;<span class="likeCounts" th:text="${countLike}"></span>
+                </div>
+
+                <div style="display: flex; font-size: 20px; text-align: center; width: 604px; height:100px; margin: auto;">
+                    <div style="margin: 25px 20px 0 20px;">
+                        <span>제품상태</span><br>
+                        <span style="color: #FF7A6B; font-weight: 700;" th:text="${detail.post_productState}"></span>
+                    </div>
+                    <div style="margin: 25px 20px 0 20px;">
+                        <span>거래방식</span><br>
+                        <span style="color: #FF7A6B; font-weight: 700;" th:text="${detail.post_way}"></span>
+                    </div>
+                    <div style="margin: 25px 20px 0 20px; cursor: pointer" id="locationView" data-bs-toggle="offcanvas"
+                         data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                        <span>거래지역</span><br>
+                        <span style="color: #FF7A6B; font-weight: 700;" th:text="${detail.post_location2}"></span>
+                        <input id="location" type="hidden" th:value="${detail.post_location}">
+                    </div>
+                    <div id="modal" style="margin: 25px 20px 0 20px;">
+                        <span id="sale_state">판매상태</span><br>
+                        <span style="color: #FF7A6B; font-weight: 700;" th:text="${detail.post_saleState}"></span>
+                    </div>
+                </div>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample"
+                     aria-labelledby="offcanvasExampleLabel" style="width: 500px;">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasExampleLabel" onclick="initializeMap()">거래지역</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body" id="map" style="width: 100%;  height: 100%; padding: 5px;">
+                    </div>
+                    <div style="padding: 20px; border-radius: 15px 15px 0 0; box-shadow: 0px 0px 5px -1px; background-color: white; width: 499px; z-index: 20; position: fixed; bottom: 0px;">
+                        <span th:text="${detail.post_location2}" style="font-size: 18px; font-weight: bold"></span>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">상태 변경하기</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="/post/edit" method="post" onsubmit="updateDate()"  enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    <select class="form-select" name="post_saleState" aria-label="Default select example">
+                                        <option th:selected="${detail.post_saleState == '판매중'}">판매중</option>
+                                        <option th:selected="${detail.post_saleState == '예약중'}">예약중</option>
+                                        <option th:selected="${detail.post_saleState == '판매완료'}">판매완료</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">저장</button>
+                                </div>
+
+                                <div style="display: none">
+                                    <input type="file" name="post_upLoadFile" id="post_upLoadFile" multiple>
+                                    <div th:each="index : ${#numbers.sequence(0, detail.file_url.size() - 1)}">
+                                        <img th:id="'thumbnail_' + ${index}" th:src="@{|/upload/${detail.file_url[__${index}__]}|}">
+                                    </div>
+                                    <input type="text" name="post_title" th:value="${detail.post_title}">
+                                    <input type="text" name="category_num" th:value="${detail.category_num}">
+                                    <input type="text" name="post_content" th:value="${detail.post_content}">
+                                    <input type="text" name="post_price" th:value="${detail.post_price}">
+                                    <input type="text" name="post_productState" th:value="${detail.post_productState}">
+                                    <input type="text" name="post_way" th:value="${detail.post_way}">
+                                    <input type="text" name="post_location" th:value="${detail.post_location}">
+                                    <input type="text" name="post_location2" th:value="${detail.post_location2}">
+                                    <input type="text" name="post_num" th:value="${detail.post_num}">
+                                    <input type="text" name="post_regdate" th:value="${detail.post_regdate}">
+                                    <input type="text" name="post_update" id="post_update">
+                                    <input type="text" name="post_hits" th:value="${detail.post_hits}">
+                                    <input type="text" name="user_num" th:value="${detail.user_num}">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div th:if="${session.user != null}">
+                    <div th:if="${detail.post_saleState == '판매중'}" style="width: 604px; margin: auto; padding: 20px;">
+                        <i th:if="${like.likeNum==0}" th:attr="post_num=${detail.post_num}"
+                           style="font-size: 40px; float: left; color: #FF7A6B" class="bi bi-heart iconHeart"></i>
+                        <i th:unless="${like.likeNum==0}" th:attr="post_num=${detail.post_num}"
+                           style="font-size: 40px; float: left; color: #FF7A6B" class="bi bi-heart-fill iconHeart"></i>
+                        <a id="link" class="chatButton" th:href="@{'/chat/'+${detail.user_num}}">
+                            채팅하기
+                        </a>
+                    </div>
+                    <div id="edit" th:if="${detail.post_saleState == '예약중'}"
+                         style="width: 604px; margin: auto; padding: 20px;" disabled>
+                        <i th:if="${like.likeNum==0}" th:attr="post_num=${detail.post_num}"
+                           style="font-size: 40px; float: left; color: #FF7A6B" class="bi bi-heart iconHeart"></i>
+                        <i th:unless="${like.likeNum==0}" th:attr="post_num=${detail.post_num}"
+                           style="font-size: 40px; float: left; color: #FF7A6B" class="bi bi-heart-fill iconHeart"></i>
+                        <a id="link" class="chatButton" th:href="@{'/chat/'+${detail.user_num}}">
+                            채팅하기
+                        </a>
+                    </div>
+                    <div id="edit" th:if="${detail.post_saleState == '판매완료'}"
+                         style="width: 604px; margin: auto; padding: 20px;" disabled>
+                        <i th:if="${like.likeNum==0}" th:attr="post_num=${detail.post_num}"
+                           style="font-size: 40px; float: left; color: #FF7A6B" class="bi bi-heart iconHeart"></i>
+                        <i th:unless="${like.likeNum==0}" th:attr="post_num=${detail.post_num}"
+                           style="font-size: 40px; float: left; color: #FF7A6B" class="bi bi-heart-fill iconHeart"></i>
+                        <a id="link" class="chatButton" th:href="@{'/chat/'+${detail.user_num}}">
+                            채팅하기
+                        </a>
+                    </div>
+                </div>
+
+                <div th:if="${session.user == null}">
+                    <div th:if="${detail.post_saleState == '판매중'}" style="width: 604px; margin: auto; padding: 20px;">
+                        <i style="font-size: 40px; float: left; color: #FF7A6B" class="bi bi-heart iconHeart"></i>
+                        <a id="link" class="chatButton"  th:href="@{'/chat/'+${detail.user_num}}">
+                            채팅하기
+                        </a>
+                    </div>
+                    <div id="edit" th:if="${detail.post_saleState == '예약중'}"
+                         style="width: 604px; margin: auto; padding: 20px;" disabled>
+                        <i style="font-size: 40px; float: left; color: #FF7A6B" class="bi bi-heart iconHeart"></i>
+                        <a id="link" class="chatButton" th:href="@{'/chat/'+${detail.user_num}}">
+                            채팅하기
+                        </a>
+                    </div>
+                    <div id="edit" th:if="${detail.post_saleState == '판매완료'}"
+                         style="width: 604px; margin: auto; padding: 20px;" disabled>
+                        <i style="font-size: 40px; float: left; color: #FF7A6B" class="bi bi-heart iconHeart"></i>
+                        <a id="link" class="chatButton"  th:href="@{'/chat/'+${detail.user_num}}">
+                            채팅하기
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="width: 600px; margin: auto">
+                <span style=" font-size: 20px;">가게정보</span>
+                <hr>
+                <a th:href="@{'/userPage/'+ ${detail.user_nick}}">
+                    <div style="width: 400px; height: 80px; border-radius: 10px; box-shadow: 0px 0px 4px -2px; padding: 10px; margin: auto;">
+                        <span th:text="${detail.user_nick}"
+                              style="float: left; font-size: 24px; font-weight: bold; margin: 12px auto;"></span>
+                        <img th:src="@{|/upload/${detail.user_photo}|}"
+                             style="width: 60px; height: 60px; border-radius: 100%; float: right">
+                    </div>
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+    <br><br><br><br>
+
+    <div style="width: 1200px; height: auto; margin: auto; font-size: 20px;">
+        상품정보
+        <hr>
+        <div th:text="${detail.post_content}">
+
+        </div>
+    </div>
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+        </div>
+    </div>
+</section>
+<br><br><br><br><br><br><br><br><br><br><br>
+<div th:include="/views/footer.html"></div>
+
+<!-- 날짜형식 변경 스크립트 -->
+<script>
+    function formatDate(dateString) {
+        const now = new Date();
+        const date = new Date(dateString);
+        const diff = now - date;
+        const minutes = Math.floor(diff / (1000 * 60));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
+        const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 30 * 12));
+
+        if (minutes < 60) {
+            return minutes + '분 전';
+        } else if (hours < 24) {
+            return hours + '시간 전';
+        } else if (days < 30) {
+            return days + '일 전';
+        } else if (months < 12) {
+            return months + '달 전';
+        } else {
+            return years + '년 전';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const regdateElements = document.querySelectorAll('#regdate');
+
+        regdateElements.forEach(function (element) {
+            var regdate = element.textContent;
+            // 날짜 형식 변환 함수 호출
+            var formattedDate = formatDate(regdate);
+            element.textContent = formattedDate;
+        });
+    });
+</script>
+
+<!-- 지도 스크립트 -->
+<script>
+    // 페이지 로드 시 initMap 함수 실행
+    window.onload = function () {
+        initializeMap();
+    };
+    // 지도 관련 함수
+    var map; // 지도 객체를 저장하는 변수
+    var marker; // 마커 객체를 저장하는 변수
+
+    // 주소를 검색하여 지도에 표시하는 함수
+    function initializeMap() {
+        var addr = document.getElementById('location').value; // 입력된 주소 가져오기
+        var geocoder = new kakao.maps.services.Geocoder(); // 주소 검색 객체 생성
+
+
+        // 주소 검색 요청
+        geocoder.addressSearch(addr, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                // 검색된 주소의 좌표로 지도 초기화
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 지도 옵션 설정
+                var mapContainer = document.getElementById('map');
+                var mapOptions = {
+                    center: coords, // 지도 중심 좌표 설정
+                    level: 5// 지도 확대 수준 설정
+                };
+                // 지도 객체 생성
+                map = new kakao.maps.Map(mapContainer, mapOptions);
+
+                // 새로운 마커 생성
+                marker = new kakao.maps.Marker({
+                    position: coords,
+                    map: map
+                });
+            }
+        });
+    }
+</script>
+
+<!--채팅하기/수정하기버튼 변경 스크립트-->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var sessionInfo = /*[[${session.user}]]*/ {};
+    /*]]>*/
+    console.log("세션정보 : " + sessionInfo);
+
+    /*<![CDATA[*/
+    var postInfo = /*[[${postDetail}]]*/ {};
+    /*]]>*/
+    console.log("게시물 정보 : " + postInfo);
+
+    var editButtons = document.getElementsByClassName('chatButton');
+    for (var i = 0; i < editButtons.length; i++) {
+        var buttonText = editButtons[i].innerText;
+        console.log("ddddddddddddddd"+buttonText);
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // user_num 속성만을 포함하는 배열 생성
+        const userNumArray = postInfo.map(function (post) {
+            return post.user_num;
+        });
+        console.log("배열에서 유저번호 가져오기 : " + userNumArray);
+
+        // post_num 속성만을 포함하는 배열 생성
+        const postNumArray = postInfo.map(function (post) {
+            return post.post_num;
+        });
+        console.log("배열에서 포스트번호 가져오기 : " + postNumArray);
+
+        var link = '/post/edit/' + postNumArray;
+        console.log(link);
+
+        // userNumArray와 sessionInfo 각각의 요소를 비교하여 일치하는지 확인
+        const isUserInSession = userNumArray.some(function (userNum) {
+            return userNum === sessionInfo.user_num;
+        });
+
+        // 조건이 맞다면 'chatButton'의 innerText를 수정하기로 변경
+        if (isUserInSession) {
+            document.getElementById('sale_state').innerText = "상태 변경";
+            document.getElementById('modal').setAttribute('data-bs-toggle', 'modal');
+            document.getElementById('modal').setAttribute('data-bs-target', '#exampleModal');
+            document.getElementById('modal').style.cursor = "pointer";
+            var chatButtons = document.getElementsByClassName('chatButton');
+            for (var i = 0; i < chatButtons.length; i++) {
+                chatButtons[i].innerText = "수정하기";
+            }
+            document.getElementById('link').href = link;
+            document.getElementById('edit').removeAttribute('disabled');
+        }
+
+    });
+</script>
+
+<!-- 좋아요버튼 스크립트 -->
+<script th:inline="javascript">
+    var likeIcons = document.getElementsByClassName('iconHeart');
+
+    // 토스트를 보여주는 함수
+    function showToast(message) {
+        // 메시지 내용 변경
+        $('.toast .toast-body').text(message);
+
+        // 토스트 보여주기
+        $('.toast').toast('show');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        Array.from(likeIcons).forEach(function (icon) {
+            icon.addEventListener('click', function () {
+                const postNum = this.getAttribute('post_num');
+                console.log("postNum : " + postNum);
+
+                //let countLike = parseInt(this.getAttribute('countLike'));
+                let countLikeElement = document.querySelector('.likeCounts');
+                let countLike = parseInt(countLikeElement.innerText);
+                $.ajax({
+                    type: "post",
+                    url: "/like",
+                    data: {
+                        "postNum": postNum
+                    },
+                    success: (res) => {
+                        console.log("res.postNum : " + res.postNum);
+                        console.log("res.userNum : " + res.userNum);
+                        console.log("res.likeNum : " + res.likeNum);
+
+                        let isLiked = res.likeNum;
+
+                        if (isLiked === 0) {
+                            this.className = "bi bi-heart"; // `this`는 클릭된 아이콘을 참조합니다.
+                            countLike-=1;
+                            showToast("좋아요를 취소했습니다.");
+                        } else {
+                            this.className = "bi bi-heart-fill";
+                            countLike+=1;
+                            showToast("찜 목록에 추가되었습니다.");
+                        }
+                        this.setAttribute("countLike",countLike);
+                        //countLike 업데이트
+                        var likeCountElement = document.querySelector('.likeCounts');
+                        if(likeCountElement){
+                            likeCountElement.innerText = countLike;
+                        }
+                    },
+
+
+                    error: function (err) {
+                        console.log(err)
+                    }
+                });
+            })
+        });
+    })
+</script>
+
+<script th:inline="javascript">
+    $(document).ready(function (){
+        extend(0);
+    })
+
+    function extend(index) {
+        var thumbnail = document.getElementById('thumbnail_' + index);
+        console.log(thumbnail);
+        var extend = document.getElementById('extend');
+        console.log(extend);
+
+        // 썸네일 이미지의 src 가져오기
+        var thumbnailSrc = thumbnail.getAttribute('src');
+        console.log(thumbnailSrc);
+
+        // extend 요소의 background-image 변경
+        extend.style.backgroundImage = "url('" + thumbnailSrc + "')";
+    }
+
+</script>
+
+<!-- 상태변경 스크립트 -->
+<script>
+    function updateDate() {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = String(now.getMonth() + 1).padStart(2, '0');
+        var day = String(now.getDate()).padStart(2, '0');
+        var hours = String(now.getHours()).padStart(2, '0');
+        var minutes = String(now.getMinutes()).padStart(2, '0');
+        var seconds = String(now.getSeconds()).padStart(2, '0');
+        // return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+
+        document.getElementById("post_update").value = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+    }
+</script>
+</body>
+</html>

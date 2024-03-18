@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>판매내역</title>
+    <link rel="stylesheet" href="/css/myPage/list.css">
+</head>
+<body>
+<div th:include="/views/header.html"></div>
+<section>
+    <div th:include="/views/sidebar.html"></div>
+    <div style="width: 1100px; height: auto; float: right;">
+        <div style="width:100%; height: 800px;">
+            <div class="container px-4 mt-5 px-lg-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-start">
+                    <div class="mb-5 col" th:each="post:${saleList}">
+                        <div class="card h-100 card_wrap">
+                            <!-- Product image-->
+                            <a th:href="@{/post/{postNum}(postNum=${post.post_num})}">
+                                <!-- Product image-->
+                                <div class="img_wrap" th:if="${not #lists.isEmpty(post.file_url)}">
+                                    <img class="card-img-top" th:src="@{|/upload/${post.file_url[0]}|}" height="200"
+                                         alt="..."/>
+                                </div>
+
+                                <!-- like svg -->
+                                <input type="hidden" class="postNum" th:value="${post.post_num}">
+
+                                <!-- Product details-->
+                                <div class="p-4 card-body">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 th:text="${post.post_title}"></h5>
+                                        <!-- Product price-->
+                                        <h6 th:text="'가격 : '+${post.post_price}" class="fw-bolder"></h6>
+                                        <span id="location2" th:text="${post.post_location2}"></span>
+                                        <span>|</span>
+                                        <span id="regdate" th:text="${post.post_regdate}"></span>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <!-- 드롭박스 -->
+                            <div class="condition-dropbox" style="display: none;">
+                                <ul>
+                                    <li><a th:href="@{'/post/edit/'+${post.post_num}}">상품수정</a></li>
+                                    <li><a href="#">상태변경</a></li>
+                                    <li><a th:href="@{'/post/delete/'+${post.post_num}}" onclick="return confirm('정말 삭제하시겠습니까?')">상품삭제</a></li>
+                                </ul>
+                            </div>
+                            <!--dot svg -->
+                            <div class="svg_wrap">
+                                <svg id="dots_svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ccc"
+                                     class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path
+                                            d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 페이지네이션 -->
+            <nav aria-label="Page navigation example" th:if="${saleList.totalPages}>1">
+                <ul class="pagination justify-content-center" id="page-link">
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/post/saleList(page=1)}">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                           th:href="${saleList.first} ? '#' : @{/post/saleList(page=${saleList.number})}">Prev</a>
+                    </li>
+                    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+<!--
+                <li class="page-item"><span class="page-link active" th:if="${page == searchList.number + 1}" th:text="${page}"></span></li>
+-->
+                <li class="page-item page-link active" th:if="${page == saleList.number + 1}" th:text="${page}"></li>
+                <li class="page-item" th:unless="${page == saleList.number + 1}"><a class="page-link"
+                                                                                    th:href="@{/post/saleList(page=${page})}"
+                                                                                    th:text="${page}"></a></li>
+                        <!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
+            </span>
+                    <li class="page-item">
+                        <a class="page-link"
+                           th:href="${saleList.last} ? '#' : @{/post/saleList(page=${saleList.number + 2})}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/post/saleList(page=${saleList.totalPages})}">Last</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+<div th:include="/views/footer"></div>
+
+<script>
+    function applyScriptToElement(element) {
+        const dropboxItems = element.querySelectorAll('.condition-dropbox ul li');
+
+        dropboxItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+                const href = item.querySelector('a').getAttribute('href');
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        });
+
+        const dotsSvg = element.querySelector('.svg_wrap svg');
+        const originalSvg = dotsSvg.cloneNode(true);
+        const newSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                </svg>`;
+        let isClicked = false;
+        let isDropdownOpen = false;
+
+        dotsSvg.addEventListener('click', function () {
+            if (isClicked) {
+                //드롭박스 기본 컨디션 정의
+                dotsSvg.innerHTML = originalSvg.innerHTML;
+                element.querySelector('.condition-dropbox').style.display = 'none';
+                isDropdownOpen = false;
+            } else {
+                // 다른 카드들의 드롭다운 닫기
+                const allCards = document.querySelectorAll('.card_wrap');
+                allCards.forEach(function (card) {
+                    const svg = card.querySelector('.svg_wrap svg');
+                    const dropdown = card.querySelector('.condition-dropbox');
+                    if (svg !== dotsSvg && dropdown.style.display === 'block') {
+                        svg.innerHTML = originalSvg.innerHTML;
+                        dropdown.style.display = 'none';
+                    }
+                });
+
+                // 현재 카드의 드롭다운 열기
+                dotsSvg.innerHTML = newSvg;
+                element.querySelector('.condition-dropbox').style.display = 'block';
+                isDropdownOpen = true;
+            }
+            isClicked = !isClicked;
+        });
+        // 다른 곳을 클릭했을 때 드롭다운 닫기
+        document.addEventListener('click', function (event) {
+            if (isDropdownOpen && !element.contains(event.target)) {
+                dotsSvg.innerHTML = originalSvg.innerHTML;
+                element.querySelector('.condition-dropbox').style.display = 'none';
+                isDropdownOpen = false;
+                isClicked = false;
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const elements = document.querySelectorAll('.card_wrap');
+        elements.forEach(function (element) {
+            applyScriptToElement(element);
+        });
+    });
+</script>
+
+
+<script th:inline="javascript">
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const locationElements = document.querySelectorAll('#location2');
+        locationElements.forEach(function (element) {
+            var location = element.textContent;
+            // 띄어쓰기를 기준으로 문자열을 분리하여 두 번째 단어를 추출
+            var words = location.split(' ');
+            var secondWord = words.slice(1).join(' '); // 두 번째 단어부터 다시 문자열로 합침
+            element.textContent = secondWord;
+        });
+    });
+
+    function formatDate(dateString) {
+        const now = new Date();
+        const date = new Date(dateString);
+        const diff = now - date;
+        const minutes = Math.floor(diff / (1000 * 60));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
+        const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 30 * 12));
+        if (minutes < 60) {
+            return minutes + '분 전';
+        } else if (hours < 24) {
+            return hours + '시간 전';
+        } else if (days < 30) {
+            return days + '일 전';
+        } else if (months < 12) {
+            return months + '달 전';
+        } else {
+            return years + '년 전';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const regdateElements = document.querySelectorAll('#regdate');
+        regdateElements.forEach(function (element) {
+            var regdate = element.textContent;
+            // 날짜 형식 변환 함수 호출
+            var formattedDate = formatDate(regdate);
+            element.textContent = formattedDate;
+        });
+    });
+</script>
+</body>
+</html>

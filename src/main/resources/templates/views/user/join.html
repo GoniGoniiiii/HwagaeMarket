@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+
+    <link rel="stylesheet" href="/css/user/join.css">
+
+</head>
+<body>
+<div th:include="/views/header.html"></div>
+<section>
+    <div style="width:560px; height: auto; margin: 0 auto; background-color: white;">
+        <form action="/user/join" method="post" onsubmit="setJoinDate()">
+            <div class="form-group" style="position: relative;">
+                <label class="form-label">이름</label>
+                <input type="text" name="user_name" class="form-control" placeholder="이름을 입력해주세요." required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label class="form-label">아이디</label>
+                <div class="input-group">
+                    <input type="text" name="user_id" id="user_id" class="form-control"
+                           style="width: calc(100% - 90px);" placeholder="아이디를 입력해주세요." required>
+                    <button type="button" class="btn btn-primary" style="width: 90px;" onclick="idCheck()">중복확인</button>
+                </div>
+                <span id="id_info"></span>
+            </div>
+            <br>
+
+            <div class="form-group">
+                <label class="form-label">비밀번호</label>
+                <div class="input-group">
+                    <input id="pw" type="password" name="user_pw" class="form-control" style="width: calc(100% - 40px);"
+                           placeholder="비밀번호를 입력해주세요." required>
+                    <button id="pwToggle" type="button" class="btn btn-outline-secondary" style="width: 40px;"
+                            onclick="togglePassword()">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+                <label class="form-label">비밀번호 확인</label>
+                <div class="input-group">
+                    <input id="repw" type="password" class="form-control" style="width: calc(100% - 40px);"
+                           placeholder="비밀번호를 다시 입력해주세요." required>
+                    <button id="repwToggle" type="button" class="btn btn-outline-secondary" style="width: 40px;"
+                            onclick="togglerePassword()">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <br>
+
+
+            <div class="form-group">
+                <label class="form-label">이메일</label>
+                <div class="input-group">
+                    <input type="text" name="user_email" id="user_email" class="form-control"
+                           style="width: calc(100% - 130px);" placeholder="이메일을 입력해주세요." required>
+                    <button type="button" class="token1" id="emailToken" onclick="mailCheck()">인증번호 전송</button>
+                </div>
+            </div>
+            <br>
+
+            <div class="form-group" style="right: 0px; position: relative; display: none;" id="emailConfirmNum">
+                <div class="input-group">
+                    <input class="form-control" id="emailAuthKey"
+                           style="width: calc(100% - 120px); color: #FF7A6B;"></input>
+                    <button type="button" class="token2" id="emailFinish" onclick="emailAuthFinish()"
+                            style="width: 120px;" disabled>인증 확인
+                    </button>
+                    <div id="timer1"
+                         style="font-size: 18px; color: gray; position: absolute; right: 138px; top: 5px; z-index: 5;"></div>
+                </div>
+            <br>
+            </div>
+
+            <div class="form-group" style="position: relative;">
+                <label class="form-label">닉네임</label>
+                <div class="input-group">
+                    <input type="text" name="user_nick" id="user_nick" class="form-control"
+                           style="width: calc(100% - 90px);" placeholder="닉네임을 입력해주세요." required>
+                    <button type="button" class="btn btn-primary" style="width: 90px;" onclick="nickCheck()">중복확인
+                    </button>
+                </div>
+                <span id="nick_info"></span>
+            </div>
+            <br>
+
+            <div class="form-group">
+                <label class="form-label">생일</label>
+                <input type="date" name="user_birth" class="form-control" min="1900-1-1" max="2500-12-31">
+            </div>
+            <br>
+
+
+            <div class="form-group" style="position: relative;">
+                <label class="form-label">전화번호</label>
+                <div class="input-group">
+                    <input type="tel" class="form-control" name="user_phone" id="user_phone"
+                           onkeyup="phone(this);"
+                           placeholder="휴대폰 번호를 입력해주세요." maxlength="13" required>
+                </div>
+            </div>
+            <br>
+
+
+            <div class="form-group">
+                <input type="hidden" name="user_joindate" class="form-control" id="user_joindate">
+                <input type="hidden" name="user_photo" class="form-control" id="user_photo" value="default.png">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">활동지역</label>
+                <input type="hidden" name="user_location" class="form-control" id="user_location"
+                       onclick="openZipSearch();" placeholder="활동지역 추가하기">
+                <input type="text" name="user_location2" class="form-control" id="user_location2"
+                       onclick="openZipSearch();" placeholder="활동지역 추가하기">
+            </div>
+            <br>
+
+            <div id="map" style="width:560px; height:400px;">
+                <img src="/img/my.png"
+                     style="z-index: 5; right: 25px; bottom: 35px; width: 40px; height: 40px; position: absolute; box-shadow: 0px 0px 12px -1px; border-radius: 100px; cursor: pointer;"
+                     onclick="current()">
+            </div>
+            <br><br>
+
+            <button type="submit" class="btn btn-outline-primary" id="joinButton">회원가입</button>&nbsp;&nbsp;
+            <a class="btn btn-outline-danger" href="#" onclick="confirmed()">취소</a>
+        </form>
+
+    </div>
+
+</section>
+<br><br><br><br><br><br>
+<footer th:include="/views/footer"></footer>
+
+
+<script type="text/javascript">
+    //URL에서 success 매개변수를 확인하여 업데이트 성공 여부를 판단
+    var urlParams = new URLSearchParams(window.location.search);
+    var success = urlParams.get('success');
+    if (success === 'false') {
+        alert('인증이 완료되지 않았습니다');
+    }
+</script>
+
+
+<script src="/js/user/join.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 2.1rem;
+            font-size: 15px;
+        }
+
+        .title {
+            /* 공지사항 */
+            /*border-bottom: 1px solid #FF7A6B;*/
+            color: #FF7A6B;
+        }
+
+        .container {
+            padding: 2vh;
+            width: 100%;
+
+        }
+
+        .form-label {
+            color: #FF7A6B;
+            font-weight: bold;
+        }
+
+        .form-control {
+            box-shadow: 0 0 5px #FF7A6B; /* box-shadow 색상 및 다른 속성 */
+        }
+
+        .form-control :hover {
+            --bs-linked-hover-color: var(--bs-success-border-subtle);
+        }
+
+        .btn-submit {
+            outline: 2px solid var(--bs-danger-border-subtle);
+            font-weight: bold;
+            margin-right: 15px;
+            width: 80px;
+        }
+
+        .btn-reset {
+            outline: 2px solid var(--bs-success-border-subtle);
+            font-weight: bold;
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+
+<header th:include="/views/header.html"></header>
+<section><br>
+
+<div th:include="views/admin/adminSidebar.html"></div>
+<div class="main w-75">
+    <header class="py-4 my-5 mb-4 pb-3 border-bottom">
+        <p class="fs-2 fw-bold  text-center title">이벤트 수정</p>
+    </header>
+    <div class="container">
+        <section class="section w-75 mx-auto">
+            <form action="/admin/updateEvent" method="post" enctype="multipart/form-data">
+                <div class="px-5">
+                    <div class="my-3">
+                        <label for="event_title" class="form-label ">이벤트 제목</label>
+                        <input type="hidden" name="event_num" th:value="${eventUpdate.event_num}">
+                        <input type="text" class="form-control"  id="event_title" name="event_title"
+                               th:value="${eventUpdate.event_title} ">
+                    </div>
+                    <div class="mb-3">
+                        <label for="event_content" class="form-label">이벤트 내용</label>
+                        <textarea class="form-control" name="event_content" id="event_content" rows="5"
+                                  th:text="${eventUpdate.event_content}"></textarea>
+                    </div>
+                    <div class="mb-2 py-1">
+                        <label for="event_upLoadFile" class="form-label">파일 첨부 : </label>
+                        <input type="file" name="event_upLoadFile" id="event_upLoadFile" multiple class="form-control">
+                        <label class="form-label py-3">현재 파일 이미지 경로 :<br>
+                            <span th:each="fileName, iterStat : ${eventUpdate.file_url}">
+                            <span th:text="${fileName}"></span>
+                            <span th:if="${!iterStat.last}"> <br> </span>
+                             </span></label>
+                    </div>
+                    <label class="form-label">
+                        현재 이미지 : <span th:text value="${noticeUpdate.file_url"></span>
+                    </label>
+                    <div th:each="fileName: ${eventUpdate.file_url}">
+                        <!-- 파일 이름이 여러개라 반복문 돌려서 storedFileName에 하나씩 접근할 수 있는 변수 -->
+                        <img th:src="@{|/upload/${fileName}|}" alt="" style="width:100%; height:400px;">
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <button class="btn btn-submit" type="submit">수정</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+</section>
+<footer th:include="/views/footer"></footer>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var event_title = $("#event_title");
+        var event_content = $("#event_content");
+        var event_upLoadFile = $("#event_upLoadFile");
+
+// 제출 버튼을 눌렀을 때
+        $("form").submit(function (event) {
+            confirm("수정을 완료하시겠습니까?");
+        });
+    });
+</script>
+</body>
+</html>

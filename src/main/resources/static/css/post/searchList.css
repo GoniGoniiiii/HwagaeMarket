@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+section{
+    width: 1400px;
+    margin: auto;
+}
+.card_wrap {
+    position: relative;
+}
+
+.svg_wrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 7px 10px 10px;
+    border: none;
+}
+
+.img_wrap {
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.img_wrap:hover {
+    overflow: hidden;
+    transform: scale(1.04);
+}
+
+.text-center h5 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.toast {
+    position: fixed; /* 화면에 고정 */
+    top: auto; /* 위쪽 위치 자동 해제 */
+    bottom: 8%; /* 화면 하단에서 20% 떨어진 곳에 위치 */
+    left: 50%; /* 화면의 가로 중앙에 위치 */
+    transform: translateX(-50%); /* 정확히 중앙에 오도록 조정 */
+    z-index: 9999; /* 다른 요소들 위에 위치하도록 z-index 설정 */
+}

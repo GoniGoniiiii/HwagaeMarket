@@ -1,0 +1,40 @@
+section{
+    width: 1400px;
+    margin: auto;
+}
+
+.token1 {
+    width: 120px;
+    height: 40px;
+    font-size: 16px;
+    background-color: white;
+    color: #FF7A6B;
+    border: 1px solid #FF7A6B;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.token1[disabled] {
+    background-color: #f2f2f2;
+    border: 1px solid #d2d2d2;
+    color: #d2d2d2;
+    border-radius: 5px;
+
+    cursor: not-allowed;
+}
+.token2 {
+    width: 120px;
+    height: 40px;
+    font-size: 16px;
+    background-color: #FF7A6B;
+    color: white;
+    border: 1px solid #FF7A6B;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.token2[disabled] {
+    background-color: #f2f2f2;
+    border: 1px solid #d2d2d2;
+    color: #d2d2d2;
+    border-radius: 5px;
+    cursor: not-allowed;
+}

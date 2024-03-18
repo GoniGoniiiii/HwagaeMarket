@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이벤트 목록</title>
+
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+
+        .title {
+            /* 자주 묻는 질문 faq */
+            border-bottom: 1px solid #FF7A6B;
+            color: #FF7A6B;
+        }
+
+        .underline {
+            border-bottom: 1px solid #FF7A6B;
+            padding-left: 0;
+        }
+
+        img {
+            width: 400px;
+            height: 200px;
+        }
+
+        .footer {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+<header th:include="/views/header.html"></header>
+
+<section><br>
+
+    <div class="fs-1 fw-bold text-center mt-5 py-3 pb-5 px-3 mb-5 title">EVENT</div>
+    <div class="container">
+        <div th:each="event, eventStat : ${eventList}" class="row my-5 pb-5" th:if="${eventStat.index % 2 == 0}">
+            <!-- 첫 번째 열 -->
+            <div class="col-6">
+                <div class="text-center">
+                    <div th:if="${not #lists.isEmpty(event.file_url)}">
+                        <!-- 파일 이름이 여러개일 때 첫 번째 파일만 표시 -->
+                        <a th:href="@{|/board/event/${event.event_num}|}">
+                            <img th:src="@{|/upload/${event.file_url[0]}|}" alt="" style="width:95%; height:200px;">
+                        </a>
+                    </div>
+                    <h5 class="my-2 mt-4 fw-bold" th:text="${event.event_title}"></h5>
+                    <small class="fw-bold text-secondary" th:text="${event.event_regdate}"> ~ </small>
+                    <small class="fw-bold text-secondary" th:text="${event.event_regdate}"></small>
+                </div>
+            </div>
+            <!-- 두 번째 열 -->
+            <div class="col-6">
+                <div class="text-center" th:if="${eventStat.index + 1 &lt; eventList.size()}">
+                    <div th:if="${not #lists.isEmpty(eventList[eventStat.index + 1].file_url)}">
+                        <!-- 파일 이름이 여러개일 때 첫 번째 파일만 표시 -->
+                        <a th:href="@{|/board/event/${eventList[eventStat.index + 1].event_num}|}">
+                            <img th:src="@{|/upload/${eventList[eventStat.index + 1].file_url[0]}|}" alt="" style="width:95%; height:200px;">
+                        </a>
+                    </div>
+                    <h5 class="my-2 mt-4 fw-bold" th:text="${eventList[eventStat.index + 1].event_title}"></h5>
+                    <small class="fw-bold text-secondary" th:text="${eventList[eventStat.index + 1].event_regdate}"> ~ </small>
+                    <small class="fw-bold text-secondary" th:text="${eventList[eventStat.index + 1].event_regdate}"></small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<header th:include="/views/footer.html"></header>
+
+</body>
+</html>

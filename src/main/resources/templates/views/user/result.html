@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>조회결과</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<div th:include="/views/header.html"></div>
+<section>
+
+    <th:block th:choose>
+        <th:block th:if="${not #strings.isEmpty(findID)}">
+            <p th:text="${findID}"></p>
+        </th:block>
+        <th:block th:if="${not #strings.isEmpty(findPW)}">
+            <p th:text="${findPW}"></p>
+        </th:block>
+    </th:block>
+
+</section><br><br><br><br><br><br><br><br>
+<footer th:include="/views/footer"></footer>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+        .title {
+            /* 1:1문의 */
+            /*border-bottom: 1px solid #FF7A6B;*/
+            color: #FF7A6B;
+        }
+
+        .custom-grid .col-2 {
+            margin-left: 13%; /* 사용자 정의 간격 설정 */
+            padding-left: 5%;
+        }
+
+        tr {
+            height: 70px;
+        }
+
+        .border-bottom {
+            border-bottom-color: #ff7a6b;
+        }
+        :root {
+            --bs-pagination-disabled-bg: none; !important;
+        }
+        #page-link li,
+        #page-link a {
+            background: #fff !important;
+            color: #000 !important;
+            transition: all 0.3s !important;
+            overflow: hidden !important;
+        }
+
+        #page-link li:hover,
+        #page-link a:hover {
+            transition: all 0.3s !important;
+            /*transform: scale(1.03) !important;*/
+            background: #FF7A6B !important;
+            color: #fff !important;
+        }
+
+        .active > .page-link {
+            border-color: #ff7a6b !important;
+            background: #FF7A6B !important;
+        }
+
+    </style>
+</head>
+
+<body>
+<header th:include="/views/header.html"></header>
+<section><br>
+
+    <div class="text-center pt-3 mx-2 ">
+        <div class="d-flex w-100 border-bottom pb-2">
+            <p class="fs-4 fw-bold text-start title">내 신고내역</p>
+            <div class="text-secondary pt-2 mx-2"><small>관리자 확인 후 신속히 제재예정이오니, 양해 부탁드립니다.</small></div>
+        </div>
+    </div>
+    <table class="table align-middle">
+        <tr th:if="${not reportList.isEmpty()}" th:each="report : ${reportList}">
+            <td th:text="${report.report_num}" class="text-center small text-secondary"></td>
+            <th><a th:href="@{/myPage/report/{report_num}(report_num=${report.report_num})}"
+                   th:utext="${report.report_title}"></a></th>
+            <td th:switch="${report.report_state}" class="text-center small text-secondary">
+                <span th:case="0">처리예정</span>
+                <span th:case="1">처리완료</span>
+            </td>
+            <td th:text="${#dates.format(report.report_date, 'yyyy-MM-dd HH:mm:ss')}"
+                class="text-center small text-secondary"></td>
+        </tr>
+    </table>
+
+
+    <!-- 첫번째 페이지로 이동 -->
+    <!-- /board/paging?page=1 -->
+    <!-- 첫번째 페이지로 이동 -->
+    <!-- /board/paging?page=1 -->
+    <ul class="pagination justify-content-center page-btn" id="page-link">
+        <li class="page-item" style="border-radius: 6px 0 0 6px;">
+            <a class="page-link" th:href="@{/myPage/reportList/paging(page=1)}" tabindex="-1"
+               aria-disabled="true">First</a>
+        </li>
+
+        <li class="page-item" th:class="${reportList.number == 0} ? 'disabled' : 'active' ">
+            <a class="page-link" th:href="@{/myPage/reportList/paging(page=${reportList.number})}"
+               aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+    <li class="page-item" th:class="${page == reportList.number + 1} ? 'active' : ''">
+        <a th:if="${page == reportList.number + 1}" class="page-link">
+            <span th:text="${page}"></span>
+        </a>
+        <a th:unless="${page == reportList.number + 1}" th:href="@{/myPage/reportList/paging(page=${page})}"
+           class="page-link" th:text="${page}"></a>
+    </li>
+</span>
+
+        <!--        <li class="page-item" th:class="${!reportList.hasNext()} ? 'disabled' : 'active' ">-->
+        <!--            <a class="page-link" th:if="${reportList.hasNext()}"-->
+        <!--               th:href="@{/myPage/reportList/paging(page=${reportList.number + 2})}" aria-label="Next">-->
+        <!--                <span aria-hidden="true">&raquo;</span>-->
+        <!--            </a>-->
+        <!--        </li>-->
+        <li class="page-item" th:class="${!reportList.hasNext()} ? 'disabled' : 'active' ">
+            <a class="page-link" th:if="${reportList.hasNext()}" th:href="@{/myPage/reportList/paging(page=${reportList.number + 2})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+            <span class="page-link" th:unless="${reportList.hasNext()}">&raquo;</span>
+        </li>
+        <li class="page-item" style="border-radius: 0 6px 6px 0">
+            <a class="page-link"
+               th:href="@{/myPage/reportList/paging(page=${reportList.totalPages})}">Last</a>
+        </li>
+    </ul>
+
+
+    <!--    <a th:href=>First</a>-->
+    <!--    &lt;!&ndash; 이전 링크 활성화 비활성화 &ndash;&gt;-->
+    <!--    &lt;!&ndash; boardList.getNumber() 사용자:2페이지 getNumber()=1 &ndash;&gt;-->
+    <!--    <a th:href="${reportList.first} ? '#' : @{/myPage/reportList/paging(page=${reportList.number})}">prev</a>-->
+
+    <!--    &lt;!&ndash; 페이지 번호 링크(현재 페이지는 숫자만)-->
+    <!--            for(int page=startPage; page<=endPage; page++)&ndash;&gt;-->
+    <!--    <span th:each=>-->
+    <!--&lt;!&ndash; 현재페이지는 링크 없이 숫자만 &ndash;&gt;-->
+    <!--    <span th:if="${page ==reportList.number + 1}" th:text="${page}"></span>-->
+    <!--        &lt;!&ndash; 현재페이지 번호가 아닌 다른 페이지번호에는 링크를 보여줌 &ndash;&gt;-->
+    <!--    <span th:unless="${page == reportList.number + 1}">-->
+    <!--        <a th:href="@{/myPage/reportList/paging(page=${page})}" th:text="${page}"></a>-->
+    <!--    </span>-->
+    <!--</span>-->
+
+    <!--    &lt;!&ndash; 다음 링크 활성화 비활성화-->
+    <!--        사용자: 2페이지, getNumber: 1, 3페이지&ndash;&gt;-->
+    <!--    <a th:href="${reportList.last} ? '#' : @{/myPage/reportList/paging(page=${reportList.number + 2})}">next</a>-->
+    <!--    &lt;!&ndash; 마지막 페이지로 이동 &ndash;&gt;-->
+    <!--    <a th:href="@{/myPage/reportList/paging(page=${reportList.totalPages})}">Last</a>-->
+
+    <!--    <div class="border text-center fw-bold inquiryBox" th:if="${inquiryList.isEmpty()}">-->
+    <!--        등록된 1:1문의가 없습니다.-->
+    <!--    </div>-->
+
+</section>
+<footer th:include="/views/footer"></footer>
+
+
+</body>
+
+</html>

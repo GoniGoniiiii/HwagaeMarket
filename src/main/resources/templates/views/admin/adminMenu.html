@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+            display: flex;
+        }
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 2.1rem;
+            font-size: 15px;
+        }
+
+        .btn-toggle-nav a:hover,
+        .btn-toggle-nav a:focus {
+        }
+
+        .title {
+            color: #FF7A6B;
+            padding-left: 35%;
+        }
+
+        .container {
+            padding: 2vh;
+            max-width: 1024px;
+        }
+
+        .box {
+            width: 400px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header th:include="/views/header.html"></header>
+<section>
+
+    <div th:include="/views/admin/adminSidebar.html"></div>
+    <div class="main">
+        <header class="py-3 my-3 mb-2 pb-1 border-bottom">
+            <p class="fs-2  title">화개장터 관리자 페이지 </p>
+        </header>
+        <div class="container">
+            <img src="/img/adminMenu_img1.png" style="width:100%; height:500px; margin-bottom: 20px;"></img>
+            <p class="fs-4">현재 처리해야할 업무</p>
+            <div class="d-flex justify-content-between mb-2">
+                <div class=" bg-danger-subtle border border-danger-subtle rounded-3 p-2 box"><!--첫 번째 박스-->
+                    <p class="text-center fw-bold fs-2 mt-5">
+                        <a href="/admin/reportConfirm/paging" th:text="${unResolveReport}"></a>
+                    </p>
+                    <p class="text-center  fs-4">신고</p>
+                </div><!--첫 번째 박스 끝-->
+                <div class=" bg-info-subtle border border-info-subtle rounded-3 mx-3 box"><!-- 두 번째 박스-->
+                    <p class="text-center fw-bold fs-2 mt-5">
+                        <a href="/admin/inquiryManage/paging" th:text="${unResolveQna}"></a>
+                    </p>
+                    <p class="text-center fs-4">문의</p>
+                </div><!--두 번째 박스 끝-->
+                <div class=" bg-success-subtle border border-success-subtle rounded-3 mx-1 box"><!--세 번째 박스-->
+                    <p class="text-center fw-bold fs-2 mt-5">0</p>
+                    <p class="text-center fs-4">문희는 포도가 먹고찌푼뎅</p>
+                </div><!--세 번째 박스-->
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:include="/views/footer"></footer>
+
+
+</body>
+</html>

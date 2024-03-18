@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Side bar</title>
+    <style type="text/css">
+        #sidebar{
+            display: flex;
+            flex-direction: column;
+            float: left;
+        }
+
+        /* bottomeaderMenu  h o v e r    기   능 */
+        #menu{
+            font-size: 20px;
+            text-decoration: none; /* 초기에는 밑줄이 없도록 설정 */
+            position: relative; /* 포지션을 상대적으로 설정 */
+            z-index: 1;
+            margin-bottom: 15px;
+            max-width: max-content;
+        }
+
+        #menu::after {
+            content: ""; /* 가상 요소를 생성하여 밑줄 역할을 수행 */
+            display: block;
+            position: absolute;
+            width: 0;
+            height: 2px; /* 밑줄의 두께 설정 */
+            background-color: #FF7A6B; /* 밑줄 색상 설정 */
+            transition: width 0.3s ease-in-out; /* 트랜지션 효과 추가 */
+        }
+
+        #menu:hover::after {
+            width: 100%; /* 마우스 호버 시 밑줄이 전체 폭으로 나타나도록 설정 */
+        }
+        a{
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="sidebar">
+        <h1 class="mb-3 font-semibold"><a href="/myPage">마이 페이지</a></h1>
+        <h2 class="mb-3 font-semibold">쇼핑 정보</h2>
+            <a th:href="@{'/myPage/purchaseList/' + ${session.user.user_nick}}" id="menu">구매내역</a>
+            <a th:href="@{'/post/saleList'}" id="menu">판매내역</a>
+            <a th:href="@{'/myPage/like'}" id="menu">찜한 상품</a>
+        <h2 class="mb-3 font-semibold">내 정보</h2>
+            <a href="/myPage/userUpdate" id="menu">수정하기</a>
+        <h2 class="mb-3 font-semibold">문의</h2>
+            <a href="/myPage/inquiryList" id="menu">문의하기</a>
+    </nav>
+
+</body>
+</html>

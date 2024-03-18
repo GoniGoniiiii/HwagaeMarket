@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            width: 1400px;
+            margin: auto;
+        }
+
+        .title {
+            /* 공지사항 */
+            color: #FF7A6B;
+        }
+
+        .underline {
+            border-bottom: 1px solid #FF7A6B;
+            padding-left: 0;
+        }
+    </style>
+</head>
+<body>
+<header th:include="/views/header.html"></header>
+<section><br>
+
+    <div class="text-center pt-3 mx-2 border-bottom">
+        <p class="fs-4 fw-bold  text-start title">신고유저 조회내역</p>
+    </div>
+    <form action="/admin/resUser" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>신고유저 일련번호</th>
+                <th>신고유저 아이디</th>
+                <th>신고유저 이름</th>
+                <th>신고유저 전화번호</th>
+                <th>신고유저 계좌번호</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="res : ${suspectList}">
+                <td th:text="${res.user_num}"></td>
+                <td th:text="${res.user_id}"></td>
+                <td th:text="${res.user_name}"></td>
+                <td th:text="${res.user_phone}"></td>
+                <td><input type="text" th:value="${account}" name="res_account"></td>
+                <td><input type="hidden" th:value="${res.user_num}" name="resUserDTO.user_num"></td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-outline-secondary" type="submit">제재회원 등록하기</button>
+    </form>
+
+</section>
+<footer th:include="/views/footer"></footer>
+
+
+</body>
+</html>
