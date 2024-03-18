@@ -1,6 +1,10 @@
 package com.hwagae.market.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,15 +32,15 @@ public class UserService {
 
     public UserDTO login(UserDTO userDTO) {
         Optional<UserEntity> id = userRepository.findByUserId(userDTO.getUser_id());
-        if (id.isPresent()){
+        if (id.isPresent()) {
             UserEntity userEntity = id.get();
-            if(userEntity.getUserPw().equals(userDTO.getUser_pw())){
+            if (userEntity.getUserPw().equals(userDTO.getUser_pw())) {
                 UserDTO dto = UserDTO.toUserDTO(userEntity);
                 return dto;
-            }else {
+            } else {
                 return null;
             }
-        }else {
+        } else {
             return null;
         }
     }
@@ -44,7 +48,7 @@ public class UserService {
 
     public String findID(UserDTO userDTO) {
         Optional<UserEntity> findID = userRepository.findByUserName(userDTO.getUser_name());
-        if(findID.isPresent()){
+        if (findID.isPresent()) {
             UserEntity userEntity = findID.get();
             if (userEntity.getUserName().equals(userDTO.getUser_name()) &&
                     userEntity.getUserEmail().equals(userDTO.getUser_email()) &&
@@ -66,21 +70,20 @@ public class UserService {
     }
 
 
-
     public UserDTO findPW(UserDTO userDTO) {
         Optional<UserEntity> findPW = userRepository.findByUserName(userDTO.getUser_name());
-        if(findPW.isPresent()){
+        if (findPW.isPresent()) {
             UserEntity userEntity = findPW.get();
             if (userEntity.getUserId().equals(userDTO.getUser_id()) &&
                     userEntity.getUserName().equals(userDTO.getUser_name()) &&
                     userEntity.getUserEmail().equals(userDTO.getUser_email()) &&
-                    userEntity.getUserPhone().equals(userDTO.getUser_phone())){
+                    userEntity.getUserPhone().equals(userDTO.getUser_phone())) {
                 UserDTO dto = UserDTO.toUserDTO(userEntity);
                 return dto;
-            }else{
+            } else {
                 return null;
             }
-        }else {
+        } else {
             return null;
         }
     }
@@ -88,16 +91,16 @@ public class UserService {
 
     public UserDTO updateForm(String myInfo) {
         Optional<UserEntity> optionalUserEntity = userRepository.findByUserId(myInfo);
-        if(optionalUserEntity.isPresent()){
+        if (optionalUserEntity.isPresent()) {
             return UserDTO.toUserDTO(optionalUserEntity.get());
-        }else {
+        } else {
             return null;
         }
     }
 
     public void updatePw(UserDTO userDTO) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(userDTO.getUser_num());
-        if(optionalUserEntity.isPresent()){
+        if (optionalUserEntity.isPresent()) {
             userDTO.setUser_id(optionalUserEntity.get().getUserId());
             userDTO.setUser_nick(optionalUserEntity.get().getUserNick());
             userDTO.setUser_phone(optionalUserEntity.get().getUserPhone());
@@ -108,7 +111,7 @@ public class UserService {
             userDTO.setUser_photo(optionalUserEntity.get().getUserPhoto());
             userDTO.setUser_location(optionalUserEntity.get().getUserLocation());
             userDTO.setUser_location2(optionalUserEntity.get().getUserLocation2());
-        }else {
+        } else {
             throw new NullPointerException("에러");
         }
         userRepository.save(UserEntity.toUserUpdateEntity(userDTO));
@@ -116,7 +119,7 @@ public class UserService {
 
     public void updateNick(UserDTO userDTO) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(userDTO.getUser_num());
-        if(optionalUserEntity.isPresent()){
+        if (optionalUserEntity.isPresent()) {
             userDTO.setUser_id(optionalUserEntity.get().getUserId());
             userDTO.setUser_pw(optionalUserEntity.get().getUserPw());
             userDTO.setUser_phone(optionalUserEntity.get().getUserPhone());
@@ -127,7 +130,7 @@ public class UserService {
             userDTO.setUser_photo(optionalUserEntity.get().getUserPhoto());
             userDTO.setUser_location(optionalUserEntity.get().getUserLocation());
             userDTO.setUser_location2(optionalUserEntity.get().getUserLocation2());
-        }else {
+        } else {
             throw new NullPointerException("에러");
         }
         userRepository.save(UserEntity.toUserUpdateEntity(userDTO));
@@ -136,7 +139,7 @@ public class UserService {
 
     public void updatePhoto(UserDTO userDTO) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(userDTO.getUser_num());
-        if(optionalUserEntity.isPresent()){
+        if (optionalUserEntity.isPresent()) {
             UserEntity userEntity = optionalUserEntity.get();
             userEntity.setUserPhoto(userDTO.getUser_photo()); // 사용자 사진 업데이트
             userRepository.save(userEntity); // 변경된 정보를 저장
@@ -147,7 +150,7 @@ public class UserService {
 
     public void updateLocation(UserDTO userDTO) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(userDTO.getUser_num());
-        if(optionalUserEntity.isPresent()){
+        if (optionalUserEntity.isPresent()) {
             userDTO.setUser_id(optionalUserEntity.get().getUserId());
             userDTO.setUser_pw(optionalUserEntity.get().getUserPw());
             userDTO.setUser_nick(optionalUserEntity.get().getUserNick());
@@ -157,7 +160,7 @@ public class UserService {
             userDTO.setUser_name(optionalUserEntity.get().getUserName());
             userDTO.setUser_joindate(optionalUserEntity.get().getUserJoindate());
             userDTO.setUser_photo(optionalUserEntity.get().getUserPhoto());
-        }else {
+        } else {
             throw new NullPointerException("에러");
         }
         userRepository.save(UserEntity.toUserUpdateEntity(userDTO));
@@ -171,10 +174,10 @@ public class UserService {
 
     public String idCheck(String userId) {
         Optional<UserEntity> byUserId = userRepository.findByUserId(userId);
-        if(byUserId.isPresent()){
+        if (byUserId.isPresent()) {
             //조회결과가 있으면 사용 불가
             return null;
-        }else {
+        } else {
             //조회결과가 없으면 사용 가능
             return "ok";
         }
@@ -182,10 +185,10 @@ public class UserService {
 
     public String nickCheck(String userNick) {
         Optional<UserEntity> byUserNick = userRepository.findByUserNick(userNick);
-        if(byUserNick.isPresent()){
+        if (byUserNick.isPresent()) {
             //조회결과가 있으면 사용 불가
             return null;
-        }else {
+        } else {
             //조회결과가 없으면 사용 가능
             return "ok";
         }
@@ -193,9 +196,9 @@ public class UserService {
 
     public String emailCheck(String userEmail) {
         Optional<UserEntity> byUserEmail = userRepository.findByUserEmail(userEmail);
-        if(byUserEmail.isPresent()){
+        if (byUserEmail.isPresent()) {
             return null;
-        }else {
+        } else {
             return "ok";
         }
     }
@@ -209,10 +212,10 @@ public class UserService {
 
     public UserDTO getUserByUserNick(String postNick) {
         Optional<UserEntity> userDTO = userRepository.findByUserNick(postNick);
-        if(userDTO.isPresent()){
+        if (userDTO.isPresent()) {
             UserEntity userEntity = userDTO.get();
             return UserDTO.toUserDTO(userEntity);
-        }else{
+        } else {
             return null;
         }
     }
@@ -233,4 +236,38 @@ public class UserService {
         return optionalUser.orElse(null); // optional에서 UserEntity 추출
     }
 
+    public void updateUserRole() {
+        userRepository.updateUserRole();
+    }
+
+    public Page<UserDTO> paging(Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        int pageLimit = 10; //한 페이지에 보여줄 글 갯수
+        // 페이지 요청
+        Page<UserEntity> userEntities = userRepository.findAll(
+                PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "userNum"))
+        );
+
+        System.out.println("reportEntities.getContent() = " + userEntities.getContent()); // 요청 페이지에 해당하는 글
+        System.out.println("reportEntities.getTotalElements() = " + userEntities.getTotalElements()); // 전체 글갯수
+        System.out.println("reportEntities.getNumber() = " + userEntities.getNumber()); // DB로 요청한 페이지 번호
+        System.out.println("reportEntities.getTotalPages() = " + userEntities.getTotalPages()); // 전체 페이지 갯수
+        System.out.println("reportEntities.getSize() = " + userEntities.getSize()); // 한 페이지에 보여지는 글 갯수
+        System.out.println("reportEntities.hasPrevious() = " + userEntities.hasPrevious()); // 이전 페이지 존재 여부
+        System.out.println("reportEntities.isFirst() = " + userEntities.isFirst()); // 첫 페이지 여부
+        System.out.println("reportEntities.isLast() = " + userEntities.isLast()); // 마지막 페이지 여부
+
+// 목록: id, writer, title, hits, createdTime
+        Page<UserDTO> userDTOs = userEntities.map(user -> new UserDTO(
+                user.getUserNum(),
+                user.getUserId(),
+                user.getUserNick(),
+                user.getUserPhone(),
+                user.getUserEmail(),
+                user.getUserName(),
+                user.getUserLocation2(),
+                user.getUserRole()
+        ));
+        return userDTOs;
+    }
 }

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>신고상세 페이지</title>
     <style>
-        section{
+        section {
             width: 1400px;
             margin: auto;
         }
@@ -32,16 +32,16 @@
             font-size: 15px;
 
         }
+
         input {
-            border:none;
+            border: none;
         }
     </style>
 </head>
 
 <body>
-<header th:include="/views/header.html"></header>
-<section><br>
-
+<div th:include="/views/header.html"></div>
+<section>
     <div class="text-center pt-3 mx-2 border-bottom">
         <p class="fs-4 fw-bold  text-start title">내 신고 상세보기</p>
     </div>
@@ -72,12 +72,14 @@
                 <span th:case="1">처리완료</span>
             </div>
         </div><!--제목 한 줄 끝-->
-        <form action="/admin/reportManage" method="post">
+        <form action="/admin/reportManage" method="post"
+              th:if="${session.user != null and session.user.user_id == 'admin'}">
             <div class="content py-5 mx-4"><!--내용 -->
                 <p class="py-3">신고한 유저 닉네임 : <input type="text" th:value="${r.report_Snick}" name="report_Snick"></p>
-                <p class="py-3">신고한 유저 계좌번호 : <input type="text" th:value="${r.report_Saccount}" name="report_Saccount"></p>
+                <p class="py-3">신고한 유저 계좌번호 : <input type="text" th:value="${r.report_Saccount}" name="report_Saccount">
+                </p>
                 <p class="py-3">신고한 유저 전화번호 : <input type="text" th:value="${r.report_Sphone}" name="report_Sphone"></p>
-                <p class="py-3">신고 내용 : <input type="text" th:value="${r.report_content}" ></p>
+                <p class="py-3">신고 내용 : <input type="text" th:value="${r.report_content}"></p>
             </div><!--내용 -->
             <button type="submit" class="btn btn-outline-secondary">신고회원조회</button>
         </form>
@@ -85,7 +87,8 @@
             <img th:src="@{|/upload/${fileName}|}" alt="" style="height:500px;" class="px-4 w-100">
         </div>
         <!-- 파일 이름 표시 -->
-        <div class="text-secondary small text-end  mx-4 my-2 py-3"> 첨부파일 : <span th:each="fileName, iterStat : ${r.file_url}">
+        <div class="text-secondary small text-end  mx-4 my-2 py-3"> 첨부파일 : <span
+                th:each="fileName, iterStat : ${r.file_url}">
             <span th:text="${fileName}"></span>
             <!-- 마지막 파일 이름이 아니면 쉼표 표시 -->
             <span th:if="${!iterStat.last}"><br></span>
@@ -94,7 +97,7 @@
     <div id="comment-write" th:if="${session.user.user_id=='admin'}" class="py-3 mx-4   border-top">
         <div class="d-flex justify-content-between my-2">
             <input type="text" id="commentWriter" class="border-0 my-2" th:value="'관리자'">
-            <button id="comment-write-btn"  onclick="commentWrite()" class="btn btn-outline-secondary">답변 작성</button>
+            <button id="comment-write-btn" onclick="commentWrite()" class="btn btn-outline-secondary">답변 작성</button>
         </div>
         <textarea rows="4" id="commentContent" class="form-control w-100 " placeholder="답변을 입력하세요"></textarea>
     </div>
@@ -104,85 +107,86 @@
         <div th:text="${comment.comment_content}" class="mx-4 my-1"></div>
     </div>
     <div class="d-flex justify-content-between">
-        <button class="btn btn-outline-secondary btn-delete mx-4"  th:attr="data-deleteNum=${report.report_num}"  onclick="deleteReport(this)">신고삭제</button>
+        <button class="btn btn-outline-secondary btn-delete mx-4" th:attr="data-deleteNum=${report.report_num}"
+                onclick="deleteReport(this)">신고삭제
+        </button>
         <button class="btn btn-danger btn-list mx-4"><a href="/myPage/reportList/paging">목록</a></button>
     </div>
+
 </section>
-<footer th:include="/views/footer"></footer>
+<div th:include="/views/footer"></div>
 
+<script th:inline="javascript">
+    const commentWrite = () => {
+        try {
+            const writer = document.getElementById("commentWriter").value;
+            const commentContent = document.getElementById("commentContent");
+            const content = commentContent.value;
 
-    <script th:inline="javascript">
-        const commentWrite = () => {
-            try {
-                const writer = document.getElementById("commentWriter").value;
-                const commentContent = document.getElementById("commentContent");
-                const content = commentContent.value;
-
-                if (content === null || content.trim() === "") {
-                    alert("답변 내용을 입력하세요!");
-                    commentContent.focus();
-                    return;
-                }
-
-                console.log("작성자 : ", writer);
-                console.log("답변내용 : ", content);
-
-                const id = [[${report.report_num}]];
-
-                if (id !== undefined) {
-                    console.log("id : ", id);
-
-                    $.ajax({
-                        type: "post",
-                        url: "/myPage/report",
-                        data: {
-                            "comment_writer": writer,
-                            "comment_content": content,
-                            "report_num": id
-                        },
-                        success: function (res) {
-                            console.log("요청 성공", res);
-
-                            let output = '';
-
-                            if (res.length > 0) {
-                                for (let i in res) {
-                                    output += "<div class='comment'>";
-                                    output += "<div>" + res[i].comment_writer + "</div>";
-                                    output += "<div>" + res[i].comment_content + "</div>";
-                                    output += "</div>";
-                                }
-                            } else {
-                                output = "<p></p>";
-                            }
-
-                            document.getElementById('comment-list').innerHTML = output;
-                            document.getElementById('commentWriter').value = '';
-                            document.getElementById('commentContent').value = '';
-                        },
-                        error: function (err) {
-                            console.log("요청 실패", err);
-                        }
-                    });
-                } else {
-                    console.log("id 값이 없습니다");
-                }
-            } catch (error) {
-                console.error("commentWrite 함수에서 오류 발생:", error);
+            if (content === null || content.trim() === "") {
+                alert("답변 내용을 입력하세요!");
+                commentContent.focus();
+                return;
             }
-            refresh()
-        }
 
-        function refresh(){
-            location.reload();
-        }
+            console.log("작성자 : ", writer);
+            console.log("답변내용 : ", content);
 
-        const deleteReport=(button)=>{
+            const id = [[${report.report_num}]];
+
+            if (id !== undefined) {
+                console.log("id : ", id);
+
+                $.ajax({
+                    type: "post",
+                    url: "/myPage/report",
+                    data: {
+                        "comment_writer": writer,
+                        "comment_content": content,
+                        "report_num": id
+                    },
+                    success: function (res) {
+                        console.log("요청 성공", res);
+
+                        let output = '';
+
+                        if (res.length > 0) {
+                            for (let i in res) {
+                                output += "<div class='comment'>";
+                                output += "<div>" + res[i].comment_writer + "</div>";
+                                output += "<div>" + res[i].comment_content + "</div>";
+                                output += "</div>";
+                            }
+                        } else {
+                            output = "<p></p>";
+                        }
+
+                        document.getElementById('comment-list').innerHTML = output;
+                        document.getElementById('commentWriter').value = '';
+                        document.getElementById('commentContent').value = '';
+                    },
+                    error: function (err) {
+                        console.log("요청 실패", err);
+                    }
+                });
+            } else {
+                console.log("id 값이 없습니다");
+            }
+        } catch (error) {
+            console.error("commentWrite 함수에서 오류 발생:", error);
+        }
+    }
+
+
+    const deleteReport = (button) => {
+        const confirmResult = confirm("신고를 삭제하시겠습니까?");
+        if (confirmResult) {
             const num = button.getAttribute("data-deleteNum");
-            location.href="/admin/deleteReport/" + num ;
+            location.href = "/admin/deleteReport/" + num;
         }
+    }
 
-    </script>
+</script>
 
 </body>
 

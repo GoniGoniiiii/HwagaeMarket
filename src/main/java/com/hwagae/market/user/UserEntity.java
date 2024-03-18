@@ -58,6 +58,9 @@ public class UserEntity {
     @Column
     private String userLocation2;
 
+    @Column
+    private String userRole;
+
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LikeEntity> likeEntityList = new ArrayList<>();
 
@@ -88,6 +91,7 @@ public class UserEntity {
         userEntity.setUserJoindate(userDTO.getUser_joindate());
         userEntity.setUserLocation(userDTO.getUser_location());
         userEntity.setUserLocation2(userDTO.getUser_location2());
+        userEntity.setUserRole(userDTO.getUser_role());
         return userEntity;
     }
 

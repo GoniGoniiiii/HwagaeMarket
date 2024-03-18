@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>이벤트 입력</title>
     <style>
-        section{
+        body {
             width: 1400px;
-            margin: auto;
+            max-width: 1400px;
+        }
+
+        .main {
             display: flex;
+            min-height: 80vh;
+        }
+
+        .title {
+            color: #FF7A6B;
+            padding-left: 35%;
         }
 
         .btn-toggle-nav a {
@@ -23,80 +32,66 @@
 
         }
 
-        .title {
+        .form-label {
             color: #FF7A6B;
-        }
-        .container{
-            padding:2vh;
-            width:100%;
-
-        }
-        .form-label{
-            color:#FF7A6B;
             font-weight: bold;
         }
+
         .form-control {
             box-shadow: 0 0 5px #FF7A6B; /* box-shadow 색상 및 다른 속성 */
         }
-        .form-control :hover{
+
+        .form-control :hover {
             --bs-linked-hover-color: var(--bs-success-border-subtle);
         }
 
-        .btn-submit{
-            outline: 2px solid var(	--bs-danger-border-subtle);
+        .btn-submit {
+            outline: 2px solid var(--bs-danger-border-subtle);
             font-weight: bold;
-            margin-right:15px;
-            width:80px;
+            margin-right: 15px;
+            width: 80px;
         }
-        .btn-reset{
+
+        .btn-reset {
             outline: 2px solid var(--bs-success-border-subtle);
             font-weight: bold;
-            width:80px;
+            width: 80px;
         }
     </style>
 </head>
 
-<body>
+<body class="mx-auto">
+<div th:include="/views/header"></div>
 
-<header th:include="/views/header.html"></header>
-<section><br>
-
-<div th:include="views/admin/adminSidebar.html"></div>
-
-<div class="main w-75">
-    <header class="py-4 my-5 mb-4 pb-3 border-bottom">
-        <p class="fs-2 fw-bold  text-center title">이벤트 입력 </p>
-    </header>
-    <div class="container">
-        <section class="section w-75 mx-auto">
-            <form action="/admin/insertEvent" method="post" enctype="multipart/form-data">
-                <div class="px-5">
-                    <!--                    <h3 class="text-center fw-bold mb-5 title">이벤트 입력</h3>-->
-                    <div class="my-3">
-                        <label for="event_title" class="form-label ">이벤트 제목</label>
-                        <input type="text" class="form-control" id="event_title" name="event_title" value=" ">
-                    </div>
-                    <div class="mb-3">
-                        <label for="event_content" class="form-label">이벤트 내용</label>
-                        <textarea class="form-control" name="event_content" id="event_content" rows="5"></textarea>
-                    </div>
-                    <div class="mb-5">
-                        <label for="event_upLoadFile" class="form-label">파일 첨부</label>
-                        <input type="file" name="event_upLoadFile" id="event_upLoadFile" multiple class="form-control">
-                    </div>
+<div class="main w-100 ">
+    <div th:include="views/admin/adminSidebar.html"></div>
+    <div class="container mt-1 py-2 pb-3 ">
+        <form action="/admin/insertEvent" method="post" enctype="multipart/form-data">
+            <div class="px-5">
+                <!--                    <h3 class="text-center fw-bold mb-5 title">이벤트 입력</h3>-->
+                <div class="my-3">
+                    <label for="event_title" class="form-label ">이벤트 제목</label>
+                    <input type="text" class="form-control" id="event_title" name="event_title" value=" ">
                 </div>
-                <div class="mt-4 text-center">
-                    <button class="btn btn-submit" type="submit">제출</button>
-                    <button class="btn btn-reset" type="reset">취소</button>
+                <div class="mb-3">
+                    <label for="event_content" class="form-label">이벤트 내용</label>
+                    <textarea class="form-control" name="event_content" id="event_content" rows="5"></textarea>
                 </div>
-            </form>
-        </section>
+                <div class="mb-5">
+                    <label for="event_upLoadFile" class="form-label">파일 첨부</label>
+                    <input type="file" name="event_upLoadFile" id="event_upLoadFile" multiple class="form-control">
+                </div>
+            </div>
+            <div class="mt-4 text-center">
+                <button class="btn btn-submit" type="submit">제출</button>
+                <button class="btn btn-reset" type="reset">취소</button>
+            </div>
+        </form>
     </div>
 
 </div>
 
-</section>
-<footer th:include="/views/footer"></footer>
+<div th:include="/views/footer"></div>
 
 <script type="text/javascript">
     /* global bootstrap: false */
@@ -108,13 +103,13 @@
         })
     })();
 
-    $ (document).ready(function() {
+    $(document).ready(function () {
         var event_title = $("#event_title");
         var event_content = $("#event_content");
         var event_upLoadFile = $("#event_upLoadFile");
 
         // 제출 버튼을 눌렀을 때
-        $("form").submit(function(event) {
+        $("form").submit(function (event) {
             if (event_title.val().trim().length === 0 || event_title.val().trim().length < 7) {
                 alert('공지 제목을 입력하세요!');
                 event_title.focus();

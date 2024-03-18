@@ -3,137 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>신고내역 확인</title>
     <style>
-        section{
+        body {
             width: 1400px;
-            margin: auto;
-        }
-        .btn-toggle-nav a {
-            padding: .1875rem .5rem;
-            margin-top: .125rem;
-            margin-left: 2.1rem;
-            font-size: 15px;
+            max-width: 1400px;
         }
 
         .main {
-            width: 85%;
+            display: flex;
+            min-height: 80vh;
         }
 
         .title {
             color: #FF7A6B;
+            padding-left: 35%;
         }
 
-        .container {
-            padding: 2vh;
-            width: 100%;
-
-        }
-
-        .form-label {
-            color: #FF7A6B;
-            font-weight: bold;
-        }
-
-        .form-control {
-            box-shadow: 0 0 5px #FF7A6B; /* box-shadow 색상 및 다른 속성 */
+        tr {
+            height: 60px;
         }
 
         .form-control :hover {
             --bs-linked-hover-color: var(--bs-success-border-subtle);
         }
 
-        .btn-submit {
-            outline: 2px solid var(--bs-danger-border-subtle);
-            font-weight: bold;
-            margin-right: 15px;
-            width: 80px;
-        }
-
-        .btn-reset {
-            outline: 2px solid var(--bs-success-border-subtle);
-            font-weight: bold;
-            width: 80px;
-        }
-
         th {
             font-size: 17px;
         }
-        .pagination{
-            color:#FF7A6B;
-            margin: 0 auto;
-        }
-        tr{
+
+        tr {
             height: 60px;
+        }
+
+        #page-link li,
+        #page-link a {
+            background: #fff !important;
+            color: #000 !important;
+            transition: all 0.3s !important;
+            overflow: hidden !important;
+        }
+
+        #page-link li:hover,
+        #page-link a:hover {
+            transition: all 0.3s !important;
+            /*transform: scale(1.03) !important;*/
+            background: #FF7A6B !important;
+            color: #fff !important;
+        }
+
+        .active > .page-link {
+            border-color: #ff7a6b !important;
+            background: #FF7A6B !important;
         }
     </style>
 </head>
 
-<body>
+<body class="mx-auto">
+<div th:include="/views/header"></div>
+<div class="main w-100 ">
+    <div th:include="views/admin/adminSidebar.html"></div>
+    <div class="container mt-4 py-2 pb-3 ">
+        <table class="table align-middle text-center ">
+            <thead class="table-danger">
+            <tr class="align-middle">
+                <th scope="col" class="text-center">신고번호</th>
+                <th scope="col" class="text-center"> 신고제목</th>
+                <th scope="col" class="text-center">회원이름</th>
+                <th scope="col" class="text-center">신고일자</th>
+                <th scope="col" class="text-center">처리여부</th>
 
-<header th:include="/views/header.html"></header>
-<section><br>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="report : ${reportList}">
+                <td class="text-center">
+                    <a th:href="@{/myPage/report/{report_num}(report_num=${report.report_num})}"
+                       th:text="${report.report_num}" class=" text-decoration-none"></a>
+                </td>
+                <td>
+                    <div th:text="${report.report_title}"></div>
+                </td>
+                <td>
+                    <div th:text="${report.report_Uname}"></div>
+                </td>
+                <td>
+                    <div th:text="${#dates.format(report.report_date, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                </td>
+                <td>
+                    <div th:switch="${report.report_state}">
+                        <span th:case="0">처리예정</span>
+                        <span th:case="1" class="text-danger">처리완료</span>
+                    </div>
+                </td>
 
-<div th:include="views/admin/adminSidebar.html"></div>
-<div class="main mx-auto">
-    <header class="py-4 my-4 mb-4 pb-3 border-bottom">
-        <p class="fs-2 fw-bold  text-center title">신고내역 확인</p>
-    </header>
-    <div class="container">
-        <section class="section  mx-auto">
-            <table class="table align-middle">
-                <thead class="table-danger">
-                <tr>
-                    <th scope="col" class="text-center">신고번호</th>
-                    <th scope="col" class="text-center"> 신고제목</th>
-                    <th scope="col" class="text-center">회원이름</th>
-                    <th scope="col" class="text-center">신고일자</th>
-                    <th scope="col" class="text-center">처리여부</th>
+            </tr>
+            </tbody>
+        </table>
+        <!-- 첫번째 페이지로 이동 -->
+        <!-- /board/paging?page=1 -->
+        <ul class="pagination justify-content-center mt-5 " id="page-link">
+            <li class="page-item">
+                <a class="page-link" th:href="@{/admin/reportConfirm/paging(page=1)}" tabindex="-1"
+                   aria-disabled="true">First</a>
+            </li>
 
+            <li class="page-item" th:class="${reportList.number == 0} ? 'disabled' : 'active' ">
+                <a class="page-link" th:href="@{/admin/reportConfirm/paging(page=${reportList.number})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
 
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="report : ${reportList}">
-                    <td class="text-center">
-                        <a th:href="@{/myPage/report/{report_num}(report_num=${report.report_num})}"
-                           th:text="${report.report_num}" class=" text-decoration-none"></a>
-                    </td>
-                    <td>
-                        <div th:text="${report.report_title}"></div>
-                    </td>
-                    <td>
-                        <div th:text="${report.report_Uname}" class="text-center"></div>
-                    </td>
-                    <td>
-                        <div th:text="${#dates.format(report.report_date, 'yyyy-MM-dd HH:mm:ss')}"  class="text-center"></div>
-                    </td>
-                    <td>
-                        <div th:switch="${report.report_state}" class="text-center">
-                            <span th:case="0">처리예정</span>
-                            <span th:case="1" class="text-danger">처리완료</span>
-                        </div>
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-            <!-- 첫번째 페이지로 이동 -->
-            <!-- /board/paging?page=1 -->
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" th:href="@{/admin/reportConfirm/paging(page=1)}" tabindex="-1"
-                       aria-disabled="true">First</a>
-                </li>
-
-                <li class="page-item" th:class="${reportList.number == 0} ? 'disabled' : 'active' ">
-                    <a class="page-link" th:href="@{/admin/reportConfirm/paging(page=${reportList.number})}"
-                       aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-
-                <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+            <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
     <li class="page-item" th:class="${page == reportList.number + 1} ? 'active' : ''">
         <a th:if="${page == reportList.number + 1}" class="page-link">
             <span th:text="${page}"></span>
@@ -142,52 +124,24 @@
            class="page-link" th:text="${page}"></a>
     </li>
 </span>
+            <li class="page-item" th:class="${!reportList.hasNext()} ? 'disabled' : 'active' ">
+                <a class="page-link" th:if="${reportList.hasNext()}"
+                   th:href="@{/myPage/reportConfirm/paging(page=${reportList.number + 2})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <span class="page-link" th:unless="${reportList.hasNext()}">&raquo;</span>
+            </li>
 
-                <li class="page-item" th:class="${!reportList.hasNext()} ? 'disabled' : 'active' ">
-                    <a class="page-link" th:if="${reportList.hasNext()}"
-                       th:href="@{/admin/reportConfirm/paging(page=${reportList.number + 2})}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
+            <li class="page-item">
+                <a class="page-link"
+                   th:href="@{/admin/reportConfirm/paging(page=${reportList.totalPages})}">Last</a>
+            </li>
+        </ul>
 
-                <li class="page-item">
-                    <a class="page-link"
-                       th:href="@{/admin/reportConfirm/paging(page=${reportList.totalPages})}">Last</a>
-                </li>
-            </ul>
-            <!--        </nav>-->
-            <!--            <a th:href="@{/admin/inquiryManage/paging(page=1)}">First</a>-->
-            <!--            &lt;!&ndash; 이전 링크 활성화 비활성화 &ndash;&gt;-->
-            <!--            &lt;!&ndash; boardList.getNumber() 사용자:2페이지 getNumber()=1 &ndash;&gt;-->
-            <!--            <a th:href="${inquiryList.first} ? '#' : @{/admin/inquiryManage/paging(page=${inquiryList.number})}">prev</a>-->
-
-            <!-- 페이지 번호 링크(현재 페이지는 숫자만)
-                    for(int page=startPage; page<=endPage; page++)-->
-            <!--            <span th:each="page: ${#numbers.sequence(startPage, endPage)}">-->
-            <!--&lt;!&ndash; 현재페이지는 링크 없이 숫자만 &ndash;&gt;-->
-            <!--    <span th:if="${page == inquiryList.number + 1}" th:text="${page}"></span>-->
-            <!--                &lt;!&ndash; 현재페이지 번호가 아닌 다른 페이지번호에는 링크를 보여줌 &ndash;&gt;-->
-            <!--    <span th:unless="${page == inquiryList.number + 1}">-->
-            <!--        <a th:href="@{/admin/inquiryManage/paging(page=${page})}" th:text="${page}"></a>-->
-            <!--    </span>-->
-            <!--</span>-->
-
-            <!--            &lt;!&ndash; 다음 링크 활성화 비활성화-->
-            <!--                사용자: 2페이지, getNumber: 1, 3페이지&ndash;&gt;-->
-            <!--            <a th:href="${inquiryList.last} ? '#' : @{/admin/inquiryManage/paging(page=${inquiryList.number + 2})}">next</a>-->
-            <!--            &lt;!&ndash; 마지막 페이지로 이동 &ndash;&gt;-->
-            <!--            <a th:href="@{/admin/inquiryManage/paging(page=${inquiryList.totalPages})}">Last</a>-->
-            <!--            &lt;!&ndash;<div th:include="footer.html"></div>&ndash;&gt;-->
-
-        </section>
     </div>
 
 </div>
-
-</section>
-<footer th:include="/views/footer"></footer>
-
-
+<div th:include="/views/footer"></div>
 <script type="text/javascript">
 
 </script>

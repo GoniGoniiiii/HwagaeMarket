@@ -3,21 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>공지사항</title>
     <style>
-        html,
-        body {
-            height: 100%;
-            width: 100%;
-            padding: 0;
-            margin: 0;
-        }
-
-        .section {
-            /*헤더 밑 푸터 전체 구역 */
-            min-height: calc(100% - (100px + 500px));
-            max-width: 1024px;
-            padding: 0 35px 0 35px;
+        section{
+            width: 1400px;
+            margin: auto;
         }
 
         .title {
@@ -46,8 +36,8 @@
     </style>
 </head>
 <body>
-<div th:include="/views/header.html"></div>
-<section class="section mt-5 mx-auto mb-5 text-center">
+<div th:include="/views/header"></div>
+<section>
     <div class="fs-3 fw-bold text-center py-4 pb-5 title">공지사항</div>
 
     <div th:each="notice, noticeList : ${noticeList}" class="accordion">

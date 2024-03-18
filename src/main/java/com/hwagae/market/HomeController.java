@@ -8,6 +8,7 @@ import com.hwagae.market.notice.NoticeDTO;
 import com.hwagae.market.notice.NoticeService;
 import com.hwagae.market.post.PostDTO;
 import com.hwagae.market.post.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
 
@@ -22,13 +24,6 @@ public class HomeController {
     private final EventService eventService;
     private final NoticeService noticeService;
     private final InquiryService inquiryService;
-
-    public HomeController(PostService postService, EventService eventService, NoticeService noticeService, InquiryService inquiryService) {
-        this.postService = postService;
-        this.eventService = eventService;
-        this.noticeService = noticeService;
-        this.inquiryService = inquiryService;
-    }
 
 
     @GetMapping("/")

@@ -9,6 +9,8 @@ import com.hwagae.market.notice.NoticeDTO;
 import com.hwagae.market.notice.NoticeService;
 import com.hwagae.market.report.ReportDTO;
 import com.hwagae.market.report.ReportService;
+import com.hwagae.market.user.UserDTO;
+import com.hwagae.market.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,8 @@ public class AdminController {
     private InquiryService inquiryService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/admin/adminMenu")
     public String adminMenu(Model model) {
@@ -55,13 +59,13 @@ public class AdminController {
     @GetMapping("admin/userList")
     public String userList() {
         System.out.println("회원 목록 리스트~");
-        return "/views/admin/userList";
+        return "views/admin/userList";
     }
 
     @GetMapping("admin/reportUserList")
     public String reportUserList() {
         System.out.println("제재 회원 리스트~");
-        return "views/admin/reportUserList";
+        return "resUserList";
     }
 
     /* 관리자 컨트롤러*/
@@ -107,10 +111,11 @@ public class AdminController {
         model.addAttribute("endPage", endPage);
         return "views/admin/inquiryAllManage";
     }
+
     @GetMapping("admin/inquiryManage/paging")
     public String inquiryManage(@PageableDefault(page = 1) Pageable pageable, Model model) {
         System.out.println("관리자 - 1:1 문의 확인할게요~");
-        Page<InquiryDTO> inquiryList = inquiryService.paging(pageable);
+        Page<InquiryDTO> inquiryList = inquiryService.pagingbyQnaStatus(pageable);
 
         System.out.println("inquiryList: " + inquiryList);
         System.out.println("Total Pages: " + inquiryList.getTotalPages());
@@ -128,7 +133,6 @@ public class AdminController {
         model.addAttribute("endPage", endPage);
         return "views/admin/inquiryManage";
     }
-
 
 
     @GetMapping("/admin/board/eventList")
@@ -149,7 +153,7 @@ public class AdminController {
     @GetMapping("admin/reportConfirm/paging")
     public String reportConfirm(@PageableDefault(page = 1) Pageable pageable, Model model) {
         System.out.println("관리자 - 신고 확인할게요~");
-        Page<ReportDTO> reportList = reportService.paging(pageable);
+        Page<ReportDTO> reportList = reportService.pagingByReportState(pageable);
 
         System.out.println("reportList: " + reportList);
         System.out.println("Total Pages: " + reportList.getTotalPages());
@@ -167,6 +171,7 @@ public class AdminController {
         model.addAttribute("endPage", endPage);
         return "/views/admin/reportConfirm";
     }
+
     @GetMapping("admin/reportAllConfirm/paging")
     public String reportAllConfirm(@PageableDefault(page = 1) Pageable pageable, Model model) {
         System.out.println("관리자 - 신고 확인할게요~");
@@ -187,5 +192,40 @@ public class AdminController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         return "/views/admin/reportAllConfirm";
+    }
+
+    @GetMapping("/admin/userList/paging")
+    public String userList(@PageableDefault(page = 1) Pageable pageable, Model model) {
+        System.out.println("관리자 - 회원 목록 확인할게요~");
+        Page<UserDTO> userList = userService.paging(pageable);
+
+        System.out.println("userList :  " + userList);
+        System.out.println("Total Pages: " + userList.getTotalPages());
+        System.out.println("Page Number: " + pageable.getPageNumber());
+        //보여지는 페이지갯수를 처리하기 위한 변수
+        int blockLimit = 10;
+        int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = ((startPage + blockLimit - 1) < userList.getTotalPages()) ? startPage + blockLimit - 1 : userList.getTotalPages();
+        // 디버깅 메시지 출력
+        System.out.println("Start Page: " + startPage);
+        System.out.println("End Page: " + endPage);
+
+        model.addAttribute("userList", userList);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        return "/views/admin/userList";
+    }
+
+    @GetMapping("board/cheatSearch")
+    public String cheatSearch() {
+        System.out.println("사기조회하러 가자~");
+        return "views/board/cheatSearch";
+    }
+
+
+    @GetMapping("myPage/faq")
+    public String faq() {
+        System.out.println("자주묻는 질문 보자~");
+        return "views/myPage/faq";
     }
 }

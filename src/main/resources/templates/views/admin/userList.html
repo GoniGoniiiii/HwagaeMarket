@@ -3,12 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>회원 목록</title>
     <style>
-        section{
+        body {
             width: 1400px;
-            margin: auto;
-        }}
+            max-width: 1400px;
+        }
+
+        .main {
+            display: flex;
+            min-height: 80vh;
+        }
+
+        .title {
+            color: #FF7A6B;
+            padding-left: 35%;
+        }
+
+        th {
+            font-size: 16px;
+
+        }
+
+        tr {
+            height: 60px;
+        }
 
         .btn-toggle-nav a {
             padding: .1875rem .5rem;
@@ -17,103 +36,113 @@
             font-size: 15px;
         }
 
-        .main{
-            width:85%;
+        #page-link li,
+        #page-link a {
+            background: #fff !important;
+            color: #000 !important;
+            transition: all 0.3s !important;
+            overflow: hidden !important;
         }
 
-        .title {
-            color: #FF7A6B;
+        #page-link li:hover,
+        #page-link a:hover {
+            transition: all 0.3s !important;
+            /*transform: scale(1.03) !important;*/
+            background: #FF7A6B !important;
+            color: #fff !important;
         }
-        .container{
-            padding:2vh;
-            width:100%;
 
-        }
-
-        th{
-            font-size:16px;
-
+        .active > .page-link {
+            border-color: #ff7a6b !important;
+            background: #FF7A6B !important;
         }
     </style>
 </head>
-<body>
+<body class="mx-auto">
+<div th:include="/views/header"></div>
+<div class="main w-100 ">
+    <div th:include="/views/admin/adminSidebar.html"></div>
+    <div class="container mt-4 py-2 pb-3 ">
+        <table class="table align-middle">
+            <thead class="table-danger align-middle text-center">
+            <tr>
+                <th scope="col">회원<br>일련번호</th>
+                <th scope="col">회원 ID</th>
+                <th scope="col">회원 닉네임</th>
+                <th scope="col">회원 전화번호</th>
+                <th scope="col">회원 Email</th>
+                <th scope="col">회원 이름</th>
+                <th scope="col">회원 주소</th>
+                <th scope="col">회원 구분</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user:${userList}">
+                <td>
+                    <div th:text="${user.user_num}"></div>
+                </td>
+                <td>
+                    <div th:text="${user.user_id}"></div>
+                </td>
+                <td>
+                    <div th:text="${user.user_nick}"></div>
+                </td>
+                <td>
+                    <div th:text="${user.user_phone}"></div>
+                </td>
+                <td>
+                    <div th:text="${user.user_email}"></div>
+                </td>
+                <td>
+                    <div th:text="${user.user_name}"></div>
+                </td>
+                <td>
+                    <div th:text="${user.user_location2}"></div>
+                </td>
+                <td>
+                    <div th:text="${user.user_role}"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ul class="pagination justify-content-center mt-5" id="page-link">
+            <li class="page-item">
+                <a class="page-link" th:href="@{/admin/userList/paging(page=1)}" tabindex="-1"
+                   aria-disabled="true">First</a>
+            </li>
 
-<header th:include="/views/header.html"></header>
+            <li class="page-item" th:class="${userList.number == 0} ? 'disabled' : 'active' ">
+                <a class="page-link" th:href="@{/admin/userList/paging(page=${userList.number})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
 
-<section><br>
+            <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+    <li class="page-item" th:class="${page == userList.number + 1} ? 'active' : ''">
+        <a th:if="${page == userList.number + 1}" class="page-link">
+            <span th:text="${page}"></span>
+        </a>
+        <a th:unless="${page == userList.number + 1}" th:href="@{/admin/userList/paging(page=${page})}"
+           class="page-link" th:text="${page}"></a>
+    </li>
+</span>
+            <li class="page-item" th:class="${!userList.hasNext()} ? 'disabled' : 'active' ">
+                <a class="page-link" th:if="${userList.hasNext()}"
+                   th:href="@{/myPage/userList/paging(page=${userList.number + 2})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <span class="page-link" th:unless="${userList.hasNext()}">&raquo;</span>
+            </li>
 
-<div th:include="views/admin/adminSidebar.html"></div>
-<div class="main mx-auto">
-    <header class="py-4 my-4 mb-4 pb-3 border-bottom">
-        <p class="fs-2 fw-bold  text-center title">회원 리스트 </p>
-    </header>
-    <div class="container">
-        <section class="section  mx-auto">
-            <table class="table">
-                <thead class="table-danger">
-                <tr>
-                    <th scope="col">회원 일련번호</th>
-                    <th scope="col">회원 ID</th>
-                    <th scope="col">회원 비밀번호</th>
-                    <th scope="col">회원 닉네임</th>
-                    <th scope="col">회원 전화번호</th>
-                    <th scope="col">회원 Email</th>
-                    <th scope="col">회원 생일</th>
-                    <th scope="col">회원 이름</th>
-                    <th scope="col">회원 가입일</th>
-                    <th scope="col">회원 프로필</th>
-                    <th scope="col">회원 주소</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
+            <li class="page-item">
+                <a class="page-link"
+                   th:href="@{/admin/userList/paging(page=${userList.totalPages})}">Last</a>
+            </li>
+        </ul>
     </div>
-
 </div>
-
-</section>
-<header th:include="/views/footer.html"></header>
+<div th:include="/views/footer"></div>
 
 <script type="text/javascript">
     /* global bootstrap: false */

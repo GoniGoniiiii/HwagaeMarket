@@ -22,4 +22,7 @@ public interface ReportRepository extends JpaRepository<ReportEntity, Integer> {
     @Query("SELECT r FROM ReportEntity r WHERE r.reportSphone = :reportSphone OR r.reportSaccount = :reportSaccount OR r.reportSnick = :reportSnick")
     List<ReportEntity> findReportsByConditions(String reportSphone, String reportSaccount, String reportSnick);
 
+    @Query("SELECT r FROM ReportEntity r WHERE r.reportState = 0")
+    Page<ReportEntity> findAllByReportState(Pageable pageable);
+
 }

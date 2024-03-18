@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신고입력</title>
+    <style>
+        section {
+            width: 1400px;
+            margin: auto;
+        }
+
+        .title {
+            /* 1:1문의 */
+            border-bottom: 1px solid #FF7A6B;
+            color:#FF7A6B;
+        }
+        .custom-grid .col-2 {
+            margin-left: 13%; /* 사용자 정의 간격 설정 */
+            padding-left:5%;
+        }
+        .footer{
+            height:500px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div th:include="/views/header"></div>
+<section>
+    <div class="text-center py-4 pb-3 mb-5 title">
+        <p class="fs-3 fw-bold">신고 접수</p>
+        <div >
+            <div class="text-secondary"><small>관리자 확인 후 신속히 제재예정이오니, 양해 부탁드립니다.</small></div>
+        </div>
+    </div>
+    <form action="/myPage/insertReport" method="post"  enctype="multipart/form-data">
+        <div class="container py-4"><!--신고내용 container-->
+            <div class="row my-4 custom-grid"><!--이름-->
+                <div class="col-2 text-start col-form-label">신고자명</div>
+                <div class="col-7">
+                    <input type="text" class="form-control" name="report_Uname" th:value="${session.user.user_name}" >
+                </div>
+                <input type="hidden" name="report_Unick" th:value="${session.user.user_nick}">
+            </div><!--신고할 닉네임 끝-->
+            <div class="row my-4 custom-grid"><!--신고 제목-->
+                <div class="col-2 text-start col-form-label" >유저 이메일</div>
+                <div class="col-7">
+                    <input type="text" class="form-control" name="report_Uemail" placeholder="본인의 이메일을 작성해주세요"></input>
+                </div>
+            </div><!--신고 제목 끝-->
+            <div class="row my-4 custom-grid"><!--신고 제목-->
+                <div class="col-2 text-start col-form-label" >신고 제목</div>
+                <div class="col-7">
+                    <input type="text" class="form-control" name="report_title" placeholder="신고 제목을 입력해주세요"></input>
+                </div>
+            </div><!--신고 제목 끝-->
+            <div class="row my-4 custom-grid"><!--신고닉네임-->
+                <div class="col-2 text-start col-form-label" >신고닉네임</div>
+                <div class="col-7">
+                    <input class="form-control" name="report_Snick" placeholder="신고할 유저의 닉네임을 적어주세요"></input>
+                </div>
+            </div><!--신고할 닉네임 끝-->
+            <div class="row my-4 custom-grid"><!--신고계좌-->
+                <div class="col-2 text-start col-form-label" >신고계좌</div>
+                <div class="col-7">
+                    <input class="form-control" name="report_Saccount" placeholder="신고할 유저의 계좌를 적어주세요"></input>
+                </div>
+            </div><!--신고할 닉네임 끝-->
+            <div class="row my-4 custom-grid"><!--이름-->
+                <div class="col-2 text-start col-form-label" >신고전화번호</div>
+                <div class="col-7">
+                    <input type="text"  class="form-control" name="report_Sphone" placeholder="신고할 유저의 전화번호를 적어주세요"></input>
+                </div>
+            </div><!--신고할 닉네임 끝-->
+            <div class="row my-4 custom-grid"><!--문의 내용-->
+                <div class="col-2 text-start col-form-label" >신고 내용</div>
+                <div class="col-7">
+                    <textarea class="form-control" name="report_content" placeholder="신고 내용을 입력해주세요" rows="7"></textarea>
+                </div>
+            </div><!--문의 내용 끝-->
+            <div class="mb-5">
+                <label for="report_upLoadFile" class="form-label">파일 첨부</label>
+                <input type="file" name="report_upLoadFile" id="report_upLoadFile" multiple class="form-control">
+            </div>
+            <label>
+                <input type="hidden" name="user_num" th:value="${session.user.user_num}">
+            </label>
+            <div class="d-flex justify-content-center py-3">
+                <button type="submit" class="btn btn-secondary btn-lg mx-3">신고접수</button>
+                <button type="button" class="btn btn-outline-secondary btn-lg">목록보기</button>
+            </div>
+
+        </div><!--container끝(신고내용container)-->
+    </form>
+
+
+</section>
+<div th:include="/views/footer"></div>
+
+
+</body>
+
+</html>

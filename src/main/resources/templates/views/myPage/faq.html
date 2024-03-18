@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자주 묻는 질문</title>
+    <style>
+        section {
+            width: 1400px;
+            margin: auto;
+        }
+
+        .title {
+            /* 공지사항 */
+            color: #ff7a6b;
+        }
+
+        /* 활성화된 아코디언 헤더의 배경 색상을 변경하지 않음 */
+        .accordion-item:not(.active) .accordion-button {
+            background-color: inherit;
+            color: inherit;
+        }
+
+        .accordion {
+            padding: 0px 25px 0px 25px;
+        }
+
+        .accordion-item {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+    </style>
+</head>
+<body>
+<div th:include="/views/header"></div>
+<section>
+    <div class="fs-3 fw-bold text-center py-4 pb-3 mb-3 title">자주 묻는 질문 FAQ</a></div>
+    <div class="FAQ py-3 px-1">
+        <div class="d-flex px-5 mb-3 justify-content-center">
+            <button class="btn btn-light  btn-lg mx-3 " onclick="showAllAccordions()"> 전 체</button>
+            <button class="btn btn-light  btn-lg mx-3" onclick="showMemberAccordions('transaction')">거래문의</button>
+            <button class="btn btn-light  btn-lg mx-3" onclick="showMemberAccordions('service')">이용문의</button>
+            <button class="btn btn-light  btn-lg mx-3" onclick="showMemberAccordions('member')">회원/계정</button>
+            <button class="btn btn-light  btn-lg mx-3" onclick="showMemberAccordions('policy')">운영정책</button>
+            <button class="btn btn-light  btn-lg mx-3" onclick="showMemberAccordions('other')">기 타</button>
+        </div>
+        <div class="container w-100 py-4">
+            <div class="accordion"><!--아코디언 전체 클래스-->
+                <div class="accordion-item" id="transaction1">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button  collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            <p class="my-2">[판매자]82페이로 물건을 판매했는데 판매대금은 언제 입금되나요?</p>
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            판매대금은 구매자의 구매확정 이후, 평균 1시간 내 등록된 대표 계좌로 즉시 입금됩니다.<br>
+                            단, 이용 정책에 따라 1영업일 이상의 소요시간이 발생될 수 있으며, 추가적으로 관리자가 실 거래 여부를 확인할 수 있는 증빙 자료를 요청할 수 있습니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" id="policy1"><!--faq2 -->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <p class="my-2">신고한 내역을 취소하고 싶어요.</p>
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            회원님들께서 신고해주신 사항에 대해서는 화개장터 운영진이 모두 꼼꼼하게 확인을 한 후 조치를 진행합니다.<br>
+                            실수로 인해 신고가 접수되었다 하더라도 운영정책이나 법률 위반이 아닌 경우에는 처리를 하지 않고 있으므로 걱정하지 않으셔도 됩니다.<br>
+                            아래 경로로 상대 회원의 닉네임과 함께 취소 문의를 남겨주세요.<br><br>
+
+                            - 화개장터 페이지 > 마이페이지 > 1:1 문의 > ex) 신고 취소합니다~~~
+                        </div>
+                    </div>
+                </div><!--faq2 끝-->
+
+                <div class="accordion-item" id="other1"><!-- faq3-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            <p class="my-2">I'am 신뢰에요~ 에 대해 궁금해요</p>
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            전청조 혼인빙자 사기 사건 중 공개된 전청조의 메신저 내용 창에서 비롯된 밈으로, 유튜버 '로알남'이 JTBC에 공개한 카톡 내역에서 전청조가 카톡에서 한국어와
+                            영어를 동시에 만들고 조합하여 써서 올린 카톡 대화록에서 유래했다. 로알남이 또 다른 유튜버인 카라큘라#에게 밝힌 바에 따르면 전청조와 처음 만난 그날의 대화
+                            내역이라고 한다.
+
+                            자칭 “미국 뉴욕 출신”이라고 밝힌 전청조의 말투이지만, 자세히 보면 한국계 미국인 출신이라 하기에는 어설프고, 엉성한 단어 선정에 있어 특정한 묘사들이나,
+                            문법적으로도 오류투성이라서, 사기 의혹에 더욱 불을 지폈다. 한편으론 그저 엉성하고, 알맞지 않은 듯한 표현으로 인하여, 결국엔 비웃음거리로 충분히 자아내면서, 각종
+                            많은 밈이나 짤방요소들이 디시인사이드나 에펨코리아와 같은 커뮤니티 사이트 등을 통해 널리 퍼지며 쓰이기도 하였다.
+                        </div>
+                    </div>
+                </div><!--faq3 끝-->
+
+                <div class="accordion-item" id="service1"><!-- faq4-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+                            <p class="my-2">등록된 휴대폰 번호를 변경하고 싶어요.</p>
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            휴대폰 번호 변경은 회원정보 수정에서 가능합니다.<br><br>
+                            [휴대폰 번호 변경 방법]<br>
+                            - 화개장터 페이지 > 마이페이지 > 회원정보 수정 > 휴대폰 번호 (변경하기) 클릭<br>
+                            <br>
+                            단, 최초 인증받은 명의와 동일한 명의자의 번호로만 변경 가능합니다.<br>
+                            휴대폰 번호 변경을 위해서는 본인인증이 필수로 진행되어야 하며 본인인증이 불가할 경우 변경이 불가하니 함께 참고해주세요.
+                        </div>
+                    </div>
+                </div><!--faq4 끝-->
+
+                <div class="accordion-item" id="member1"><!-- faq5-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseThree">
+                            <p class="my-2">상대방을 차단하고 싶어요</p>
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            [차단방법]<br>
+                            - 채팅, 이용후기(아쉬워요), 상대방가게, 상품상세등에서 '차단하기' 버튼을 통해 가능합니다.<br><br>
+
+                            [차단정책]<br>
+                            - 차단을 하게 되면 상대방의 상품 및 가게를 확인할 수 없습니다.<br>
+                            - 기존에 등록한 단골가게 및 찜 내역은 모두 삭제됩니다.<br>
+                            - 한 사람이 차단을 한 경우 양쪽 모두가 차단 제재를 받게 됩니다.<br>
+                            - 차단 해제는 차단한 사용자가 해제를 해야 양쪽 모두 차단 해제 됩니다.<br>
+                            - 거래가 진행 중인 상태에서는 차단이 불가능하며, 거래완료 또는 거래취소 후 차단이 가능합니다.<br>
+                            - 차단 범위는 중고나라 정책상 변경 및 공개되지 않을 수 있습니다.<br>
+                            - 개선 전 버전을 사용자는 채팅 차단만 가능합니다.<br>
+                            중고나라는 회원분들 간의 차단을 임의로 해제하거나 조회할 수 없습니다.<br>
+                            만약 사기 피해 후 상대방에게 차단을 당했다면, 사기 증빙자료를 첨부하여 고객센터 1:1문의하기로 확인 부탁드립니다.<br>
+                        </div>
+                    </div>
+                </div><!--faq5 끝-->
+
+                <div class="accordion-item" id="other2"><!-- faq6-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseThree">
+                            <p class="my-2">콩떡이 손잡기 올렸는데 왜 제재죠?심지어 무료나눔인데요</p>
+                        </button>
+                    </h2>
+                    <div id="collapseSix" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            화개장터는 사기 피해 예방을 위해 거래 시 가입정보와 다른 개인정보를 전달하거나 상품 게시글에 기재하는 경우 거래 안전성을 판단하기 어려워 사기/아이디 도용 의심
+                            모니터링의 대상이 될 수 있습니다.<br>
+                            정상적인 앱 이용 정황 확인을 위해 아래 요청하는 정보 기재하여 앱 고객센터 1:1문의로 문의해 주시기를 바랍니다.<br><br>
+                            [가입 정보 확인 요청]<br><br>
+                            1. 성명<br><br>
+                            2. 생년월일<br><br>
+                            3. 현재 사용하고 계신 연락처(본인 명의)<br><br>
+                        </div>
+                    </div>
+                </div><!--faq6 끝-->
+
+                <div class="accordion-item" id="transaction2"><!-- faq7-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseThree">
+                            <p class="my-2">거래를 취소하고 싶어요. 어떻게하나요?</p>
+                        </button>
+                    </h2>
+                    <div id="collapseSeven" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            판/구매자의 거래 단계에 따라 아래 경로에서 가능합니다.<br><br>
+                            [구매취소 방법]<br>
+                            중고나라 앱 > 마이 > 구매내역<br>
+                            - 결제완료 단계 : '구매 취소' <br>
+                            - 주문확인/배송준비 단계 : '구매취소 요청'<br><br>
+                            * 구매취소 요청 시, 판매자에게 취소 요청이 전달되며 판매자의 요청 수락 시 취소 처리됩니다.<br>
+                            * 판매자가 취소 요청을 확인하지 않은 경우에는 48시간 후 자동 취소됩니다.<br><br>
+                            [판매취소 방법]<br>
+                            중고나라 앱 > 마이 > 판매내역<br>
+                            - 결제완료/배송준비 : '판매 취소'<br>
+                            * 배송 전에는 취소가 가능하지만 배송이 시작된 이후에는 즉시 취소가 불가합니다.<br>
+                            * 택배 예약중 상태에서는 택배 예약취소 후 판매 취소가 가능합니다.<br>
+                            * 판/구매회원 간의 취소 협의 완료된 대화내용을 캡처하여 고객센터 1:1문의하기로 첨부해 주시면 취소 가능한 상태로 변경 도움드리겠습니다.<br>
+                        </div>
+                    </div>
+                </div><!--faq7 끝-->
+
+                <div class="accordion-item" id="service2"><!-- faq8-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseThree">
+                            <p class="my-2">상품을 안전하게 구매하고 싶어요.</p>
+                        </button>
+                    </h2>
+                    <div id="collapseEight" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            중고나라는 안전한 거래를 위하여 상품에 안전거래가 가능하도록 자동 설정되어있습니다.<br>
+                            안전거래로 구매하고자 하는 상품의 상세페이지 하단의 [안전거래] 버튼을 눌러 진행하시면 됩니다.<br>
+                            중고나라 페이 (카카오페이/ 네이버페이/ 카드결제/ 무통장입금/ 휴대폰 결제) 방법을 통하여 안전하게 거래하세요.<br>
+                            안전결제와 관련하여 자세한 내용은 82 페이란?을 참고해주세요!<br>
+                        </div>
+                    </div>
+                </div><!--faq8 끝-->
+
+
+                <div class="accordion-item" id="member2"><!-- faq9-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseThree">
+                            <p class="my-2">휴면 상태 해제하려면 어떻게 하나요?</p>
+                        </button>
+                    </h2>
+                    <div id="collapseNine" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            화개장터는 개인정보 보호법 제 39조의 6에 따라 회원님의 소중한 개인정보 보호를 위해 화개장터 서비스를 1년간 이용하지 않은 계정을 휴면상태로 전환하고
+                            있습니다.<br>
+                            휴면상태로 전환되기 1개월 전에 이메일로 휴면 안내를 드리고 있습니다. 휴면계정 전환 후 60개월(5년)이 경과된 후에는 고객님의 정보보호를 위해 회원정보를 파기하고
+                            있으며 정보가 파기된 후에는 중고나라 서비스 이용이 불가한 점 참고 부탁드립니다.<br>
+                            휴면 전환 예정 메일 안내를 받고 1개월 이내 로그인하면 휴면계정으로 전환되지 않습니다.<br>
+                            휴면해제 동선은 아래의 경로에서 확인 가능합니다.<br>
+                            1. 최초 가입하신 연동 계정으로 로그인하기 <br>
+                            (네이버/ 카카오/ 휴대폰 번호/ Apple로 시작하기) 클릭 - 휴면회원입니다. 얼럿 노출<br>
+                            2. 얼럿 확인 - 로그인 후 휴면 해제 안내 페이지 노출 - 본인인증<br>
+                            3. 본인인증 절차 완료시, 휴면 해제 진행<br>
+                            만약 휴면 계정을 잊으셨거나 탈퇴하여 휴면 해제에 어려움이 있을 경우 고객센터 1:1문의하기를 통해 남겨주시면 신속하게 대응해 드리겠습니다.<br>
+                        </div>
+                    </div>
+                </div><!--faq9 끝-->
+
+
+                <div class="accordion-item" id="policy2"><!-- faq10-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseThree">
+                            <p class="my-2">경고를 받았어요</p>
+                        </button>
+                    </h2>
+                    <div id="collapseTen" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            중고나라에서는 회원님들의 안전하고 쾌적한 중고거래 환경을 위해 거래 제한 상품 등록 및 이용정책 위반하는 경우, 경고가 진행됩니다.<br><br>
+                            [거래 제한 상품 거래 행위]<br>
+                            중고나라 앱 거래 제한 상품 목록<br>
+                            거래 제한 상품을 거래 시, 20회까지 경고 진행되며 경고 회수가 초과될 경우 서비스 이용이 제한됩니다.<br><br>
+                            [이용정책 위반]<br>
+                            - 비매너 이용<br>
+                            - 무료나눔 판/구매글 작성<br>
+                            - 무료나눔 이용 정책 위반<br>
+                            - 타사이트 링크 이용<br>
+                            - 타사 이미지 이용<br>
+                            - 스팸성 상품 등록<br>
+                            - 제목 이모티콘/특수문자 사용<br>
+                            - 1일 상품 등록 30개 초과<br>
+                            - 1일 중복 상품 등록 3개 초과<br>
+                            - 제목/본문 내용 상이<br>
+                            - 제목/본문 작성 정책 위반<br>
+                            - 기타 이용 정책 위반<br>
+                            사회적 이슈, 다수 이용자의 피해, 기재되지 않은 정책 악용, 개인 간 분쟁 야기 또는 분쟁으로 확인되는 경우 상품(게시글)과 댓글은 사전 안내없이 삭제 및 이용
+                            제재 처리될 수 있습니다.<br>
+                            경고에 대한 자세한 내용 확인이 필요할 경우 고객센터 1:1문의하기 부탁드립니다.<br>
+                        </div>
+                    </div>
+                </div><!--faq10 끝-->
+
+                <div class="accordion-item" id="other3"><!-- faq11-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseThree">
+                            <p class="my-2">상대방의 정보(전화번호 등)을 알고싶어요.</p>
+                        </button>
+                    </h2>
+                    <div id="collapseEleven" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">일반적인 경우, 개인정보 보호법에 의해 개인의 정보는 제3자에게 제공이 불가합니다.<br>
+                            만약 사기피해로 인해 상대 회원의 정보 요청 시 사이버 수사국 또는 관할 경찰서를 통해 담당 수사관님이 중고나라로 수사 협조 공문(압수수색검증영장)을 요청해 주시는
+                            경우<br>
+                            담당 수사관님을 통해 상대 회원의 정보 제공해드리고 있으며 상대 회원의 정보 제공 절차는 아래와 같습니다.<br><br>
+                            중고나라 판매자 회원 정보 제공 절차><br>
+                            회원님의 사기 피해 신고<br>
+                            ↓<br>
+                            수사기관 사건접수<br>
+                            ↓<br>
+                            수사기관 담당자가 중고나라에 압수수색영장 공문과 공무원증 사본 발송<br>
+                            ↓<br>
+                            중고나라에서 수신을 받은 날로부터 영업일 기준 2~3일 이내 수사기관 측에 정보를 제공<br><br>
+                            ※ 사기피해 신고 방법 참고: 사기를 당했어요.<br>
+                            상품 구매 전 사기 조회를 꼭 확인하여 안전한 거래를 진행해 주세요.<br>
+                            [사기 통합 조회] 하러 가기<br>
+                        </div>
+                    </div>
+                </div><!--faq11 끝-->
+
+                <div class="accordion-item" id="service3"><!-- faq12-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse12" aria-expanded="false" aria-controls="collapse12">
+                            <p class="my-2">물건을 구매하기전 상대방과 연락하고 싶어요!</p>
+                        </button>
+                    </h2>
+                    <div id="collapse12" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            상품 구매 전 판매자와 연락하고 싶으신가요?<br><br>
+                            상품 페이지 접속 > 하단의 '채팅하기' 버튼 클릭<br>
+                            순서로 접속하여 판매자 회원에게 연락이 가능합니다.<br><br>
+                            구매 전으로 상대방과 연락하여 안전한 거래되세요!<br>
+                        </div>
+                    </div>
+                </div><!--faq12 끝-->
+
+                <div class="accordion-item" id="service4"><!-- faq13-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse13" aria-expanded="false" aria-controls="collapse13">
+                            <p class="my-2">계좌번호를 알려주면 제재되는건가요?</p>
+                        </button>
+                    </h2>
+                    <div id="collapse13" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+                            화개장터는 사기 피해 예방을 위해 거래 시 가입정보와 다른 개인정보를 전달하거나 상품 게시글에 기재하는 경우, 거래 과정에 직접송금 유도하여 안전결제를 거부하는 경우
+                            거래 안전성을 판단하기 어려워 사기/아이디 도용 의심 모니터링의 대상이 될 수 있습니다.<br>
+                            정상적인 앱 이용 정황 확인을 위해 앱 고객센터 1:1문의로 문의해 주시기를 바랍니다.
+                        </div>
+                    </div>
+                </div><!--faq13 끝-->
+
+
+                <div class="accordion-item" id="other5"><!-- faq14-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse14" aria-expanded="false" aria-controls="collapse13">
+                            <p class="my-2"></p>
+                        </button>
+                    </h2>
+                    <div id="collapse14" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+
+                        </div>
+                    </div>
+                </div><!--faq14 끝-->
+
+
+                <div class="accordion-item" id="other6"><!-- faq15-->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse15" aria-expanded="false" aria-controls="collapse13">
+                            <p class="my-2"></p>
+                        </button>
+                    </h2>
+                    <div id="collapse15" class="accordion-collapse collapse bg-light py-4">
+                        <div class="accordion-body">
+
+                        </div>
+                    </div>
+                </div><!--faq15 끝-->
+
+
+            </div>
+        </div><!-- section안에 w-100 container선언 끝-->
+    </div>
+</section>
+<div th:include="/views/footer"></div>
+<script type="text/javascript">
+    function showAllAccordions() {
+        var allAccordions = document.querySelectorAll('.accordion-item');
+
+        allAccordions.forEach(function (accordion) {
+            accordion.style.display = 'block';
+        });
+    }
+
+
+    function showMemberAccordions(memberPrefix) {
+        var allAccordions = document.querySelectorAll('.accordion-item');
+
+        allAccordions.forEach(function (accordion) {
+            // 멤버 프리픽스를 가진 아코디언만 보이게 함
+            if (accordion.id.startsWith(memberPrefix)) {
+                accordion.style.display = 'block';  // 화면에 보이게 함
+            } else {
+                accordion.style.display = 'none';   // 화면에 감춤
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

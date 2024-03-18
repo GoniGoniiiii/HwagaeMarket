@@ -8,56 +8,145 @@
 
     </script>
     <style>
-        section{
+        section {
             width: 1400px;
             margin: auto;
         }
+
         .title {
             /* 공지사항 */
             border-bottom: 1px solid #FF7A6B;
             color: #FF7A6B;
         }
-        .btn-submit {
+
+        .btn-modal {
             outline: 2px solid var(--bs-danger-border-subtle);
             font-weight: bold;
             margin-right: 15px;
             width: 80px;
         }
 
+        .modal-body {
+            min-height: 230px;
+        }
+
+        .modal-title {
+            color: #ff7a6b;
+        }
+
+
     </style>
 </head>
 
 <body>
+<div th:include="/views/header.html"></div>
+<section>
+    <div class="fs-3 fw-bold mt-3 py-3 px-3 title">화개장터 제재회원 조회</div>
+    <p class="my-4  px-3">판매자의 휴대폰번호,계좌번호, 메신저ID,이메일로<br>제재회원여부를 조회를 이용해보세요! </p>
+    <div class="container pb-5">
+        <select class="form-select" name="select">
+            <option value="resUphone" selected>휴대폰번호</option>
+            <option value="resAccount">계좌번호</option>
+            <option value="resUid">ID</option>
+        </select>
 
-<header th:include="/views/header.html"></header>
+        <div class="row g-3 my-1">
+            <div class="col">
+                <!-- input 요소에 th:field 추가 -->
+                <input type="text" class="form-control" id="inputValue" placeholder="-를 포함해서 입력해주세요!">
+            </div>
+            <div class="col-auto">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-modal" data-bs-toggle="modal" data-bs-target="#selectResUser"
+                        onclick="select()">
+                    조회
+                </button>
 
-<section><br>
-
-    <div class="fs-3 fw-bold mt-5 py-3 px-3 title">화개장터 사기 조회</div>
-    <p class="small my-5">판매자의 휴대폰번호,계좌번호, 메신저ID,이메일로<br>피해 사례 조회를 이용해보세요! </p>
-    <form action="" method="post">
-        <div class="container pb-5">
-            <select class="form-select" name="select">
-                <option value="phone">휴대폰번호</option>
-                <option value="account">계좌번호</option>
-                <option value="id">ID</option>
-            </select>
-            <div class="row g-3 my-1">
-                <div class="col">
-                    <label for="search" class="visually-hidden">search</label>
-                    <!-- input 요소에 th:field 추가 -->
-                    <input type="text" class="form-control"  name="" id="search" placeholder="-는 빼고 입력해주세요.">
-
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                     tabindex="-1" aria-labelledby="selectResUserResult" aria-hidden="true">
+                    <div class="modal-dialog  modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-bold" id="selectResUserResult">제재회원 조회결과</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body mx-auto d-flex justify-content-center align-items-center"
+                                 id="modalContent">
+                                <p class="fs-4">화개장터 내 신고건수는<br>
+                                    " <span id="reportCount" class="fw-bold fs-3 text-success"></span>" 건 입니다.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-success" onclick="redirect()">다시 조회하기
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-submit mb-3">&nbsp;&nbsp;&nbsp;조회&nbsp;&nbsp;&nbsp;</button>
-                </div>
+
             </div>
         </div>
-    </form>
+    </div>
 </section>
-<header th:include="/views/footer.html"></header>
+<div th:include="/views/header"></div>
 
+<script th:inline="javascript">
+    const redirect = () => {
+        location.href = "/board/cheatSearch";
+    }
+    const select = () => {
+        const selectValue = document.querySelector('select[name="select"]').value;
+        const inputValue = document.getElementById("inputValue").value;
+
+        if (inputValue === null || inputValue === '') {
+            alert("조회 값을 입력해주세요!");
+            document.getElementById("inputValue").focus();
+            return;
+        }
+        if (inputValue !== '') { // 이 부분에서 입력값이 비어있지 않은 경우에만 확인 메시지를 표시하도록 수정
+            if (confirm("입력하신 값이 " + inputValue + "인가요?")) {
+                console.log("사용자가 확인을 클릭했습니다.");
+            } else {
+                console.log("사용자가 취소를 클릭했습니다.");
+            }
+        }
+        console.log(selectValue);
+        console.log(inputValue);
+
+        fetch('/board/selectResUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({selectValue, inputValue})
+
+        })
+            .then(response => {
+                console.log(response);
+                // JSON 형태로 응답을 파싱합니다.
+                return response.json();
+            })
+            .then(data => {
+                // 받은 데이터가 비어 있는지 확인하고 처리합니다.
+                const ont = parseInt(data);
+                if (ont) {
+                    document.getElementById('reportCount').innerText = data;
+                } else {
+                    document.getElementById('reportCount').innerText = 0;
+                }
+
+
+                // 모달 열기
+                const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+                modal.show();
+            })
+            .catch(error => {
+                console.error('Error : ', error);
+            });
+    }
+</script>
 </body>
 </html>
 

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제재 회원 리스트</title>
+    <style>
+        body {
+            width: 1400px;
+            max-width: 1400px;
+        }
+
+        .main {
+            display: flex;
+            min-height: 80vh;
+        }
+
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 2.1rem;
+            font-size: 15px;
+        }
+        .form-label {
+            color: #FF7A6B;
+            font-weight: bold;
+        }
+
+        .form-control {
+            box-shadow: 0 0 5px #FF7A6B; /* box-shadow 색상 및 다른 속성 */
+        }
+
+        .form-control :hover {
+            --bs-linked-hover-color: var(--bs-success-border-subtle);
+        }
+
+        .btn-submit {
+            outline: 2px solid var(--bs-danger-border-subtle);
+            font-weight: bold;
+            margin-right: 15px;
+            width: 80px;
+        }
+
+        .btn-reset {
+            outline: 2px solid var(--bs-success-border-subtle);
+            font-weight: bold;
+            width: 80px;
+        }
+
+        th {
+            font-size: 17px;
+
+        }
+
+        tr {
+            height: 60px;
+        }
+
+        .title {
+            color: #FF7A6B;
+            padding-left: 35%;
+        }
+
+        #page-link li,
+        #page-link a {
+            background: #fff !important;
+            color: #000 !important;
+            transition: all 0.3s !important;
+            overflow: hidden !important;
+        }
+
+        #page-link li:hover,
+        #page-link a:hover {
+            transition: all 0.3s !important;
+            /*transform: scale(1.03) !important;*/
+            background: #FF7A6B !important;
+            color: #fff !important;
+        }
+
+        .active > .page-link {
+            border-color: #ff7a6b !important;
+            background: #FF7A6B !important;
+        }
+    </style>
+</head>
+
+<body class="mx-auto">
+<div th:include="/views/header"></div>
+<div class="main w-100 ">
+    <div th:include="views/admin/adminSidebar.html"></div>
+    <div class="container mt-4 py-2 pb-3 ">
+        <table class="table align-middle">
+            <thead class="table-danger text-center">
+            <tr class="align-middle">
+                <th scope="col">제재회원 일련번호</th>
+                <th scope="col">제재회원 ID</th>
+                <th scope="col">제재회원 이름</th>
+                <th scope="col">제재회원 전화번호</th>
+                <th scope="col">제재회원 계좌번호</th>
+                <th scope="col">제재사유</th>
+                <th scope="col">신고횟수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="res :${resUserList}">
+                <td>
+                    <div th:text="${res.res_num}"></div>
+                </td>
+                <td>
+                    <div th:text="${res.res_uid}"></div>
+                </td>
+                <td>
+                    <div th:text="${res.res_uname}"></div>
+                </td>
+                <td>
+                    <div th:text="${res.res_uphone}"></div>
+                </td>
+                <td>
+                    <div th:text="${res.res_account}"></div>
+                </td>
+                <td>
+                    <div th:text="${res.res_reason}"></div>
+                </td>
+                <td>
+                    <div th:text="${res.report_count}"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ul class="pagination justify-content-center mt-4" id="page-link">
+            <li class="page-item">
+                <a class="page-link" th:href="@{/admin/resUserList/paging(page=1)}" tabindex="-1"
+                   aria-disabled="true">First</a>
+            </li>
+
+            <li class="page-item" th:class="${resUserList.number == 0} ? 'disabled' : 'active' ">
+                <a class="page-link" th:href="@{/admin/resUserList/paging(page=${resUserList.number})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+    <li class="page-item" th:class="${page == resUserList.number + 1} ? 'active' : ''">
+        <a th:if="${page == resUserList.number + 1}" class="page-link">
+            <span th:text="${page}"></span>
+        </a>
+        <a th:unless="${page == resUserList.number + 1}" th:href="@{/admin/resUserList/paging(page=${page})}"
+           class="page-link" th:text="${page}"></a>
+    </li>
+</span>
+            <li class="page-item" th:class="${!resUserList.hasNext()} ? 'disabled' : 'active' ">
+                <a class="page-link" th:if="${resUserList.hasNext()}"
+                   th:href="@{/myPage/resUserList/paging(page=${resUserList.number + 2})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <span class="page-link" th:unless="${resUserList.hasNext()}">&raquo;</span>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link"
+                   th:href="@{/admin/resUserList/paging(page=${resUserList.totalPages})}">Last</a>
+            </li>
+        </ul>
+
+    </div>
+
+</div>
+<div th:include="/views/footer"></div>
+</body>
+</html>

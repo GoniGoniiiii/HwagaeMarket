@@ -24,21 +24,22 @@
             color: #FF7A6B;
         }
 
-        .btn-update{
-            outline: 2px solid var(	--bs-danger-border-subtle);
+        .btn-update {
+            outline: 2px solid var(--bs-danger-border-subtle);
             font-weight: bold;
-            margin-right:15px;
-            width:80px;
+            margin-right: 15px;
+            width: 80px;
         }
-        .btn-delete{
+
+        .btn-delete {
             outline: 2px solid var(--bs-success-border-subtle);
             font-weight: bold;
-            width:80px;
+            width: 80px;
         }
     </style>
 </head>
 <body>
-<div th:include="/views/header.html"></div>
+<div th:include="/views/header"></div>
 <section>
     <div class="fs-3 fw-bold text-center py-4 pb-5 title">EVENT</div>
     <div th:each="event: ${event}">
@@ -48,15 +49,17 @@
                 <!-- 파일 이름이 여러개라 반복문 돌려서 storedFileName에 하나씩 접근할 수 있는 변수 -->
                 <img th:src="@{|/upload/${fileName}|}" alt="" style="width:100%; height:500px;">
             </div>
-            <p th:text="${event.event_content}" ></p>
+            <p th:text="${event.event_content}"></p>
         </div>
     </div>
-    <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-update" th:attr="data-updateNum=${event.event_num}" onclick="updateEvent(this)">수정</button>
-    <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-delete" th:attr="data-deleteNum=${event.event_num}" onclick="deleteEvent(this)">삭제</button>
+    <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-update"
+            th:attr="data-updateNum=${event.event_num}" onclick="updateEvent(this)">수정
+    </button>
+    <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-delete"
+            th:attr="data-deleteNum=${event.event_num}" onclick="deleteEvent(this)">삭제
+    </button>
 </section>
-<footer th:include="/views/footer"></footer>
-
-
+<div th:include="/views/footer"></div>
 <script th:inline="javascript">
     const updateEvent = (button) => {
         const num = button.getAttribute('data-updateNum');

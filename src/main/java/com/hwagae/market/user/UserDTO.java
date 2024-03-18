@@ -25,7 +25,17 @@ public class UserDTO {
     private String user_location;
     private String user_location2;
 
+    public UserDTO(Integer userNum, String userId, String userNick, String userPhone, String userEmail, String userName, String userLocation2, String userRole) {
+        this.user_num=userNum;
+        this.user_id=userId;
+        this.user_nick=userNick;
+        this.user_phone=userPhone;
+        this.user_email=userEmail;
+        this.user_name=userName;
+        this.user_location2=userLocation2;
+        this.user_role=userRole;
 
+    }
 
 
     public static UserDTO toUserDTO(UserEntity userEntity) {
@@ -42,6 +52,7 @@ public class UserDTO {
         userDTO.setUser_joindate(userEntity.getUserJoindate());
         userDTO.setUser_location(userEntity.getUserLocation());
         userDTO.setUser_location2(userEntity.getUserLocation2());
+        userDTO.setUser_role(userEntity.getUserRole());
         return userDTO;
     }
 

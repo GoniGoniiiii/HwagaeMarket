@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>문의리스트</title>
     <style>
-        section{
+        section {
             width: 1400px;
             margin: auto;
         }
@@ -23,19 +23,11 @@
             height:200px;
             line-height: 200px;
         }
-
-
-        .footer{
-            height:500px;
-        }
-
     </style>
-
 </head>
 <body>
-<header th:include="/views/header.html"></header>
-<section><br>
-
+<div th:include="/views/header"></div>
+<section>
     <div class="text-center py-4 pb-3 mb-5 title">
         <p class="fs-3 fw-bold">1:1문의</p>
         <div class="d-flex justify-content-center align-items-center">
@@ -62,7 +54,6 @@
     </div>
 
 </section>
-<footer th:include="/views/footer"></footer>
-
+<div th:include="/views/footer"></div>
 </body>
 </html>

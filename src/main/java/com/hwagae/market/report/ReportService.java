@@ -25,6 +25,7 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
+
     @Transactional
     public void save(ReportDTO reportDTO) throws IOException {
         if (reportDTO.getReport_upLoadFile().isEmpty()) {
@@ -166,4 +167,42 @@ public class ReportService {
         }
         return reportDTOList;
     }
+
+
+    @Transactional
+    public Page<ReportDTO> pagingByReportState(Pageable pageable) {
+
+        int page = pageable.getPageNumber()-1;
+        int pageLimit = 10;
+
+        Page<ReportEntity> reportEntities = reportRepository.findAllByReportState(
+                PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "reportNum"))
+        );
+
+        System.out.println("reportEntities.getContent() = " + reportEntities.getContent()); // 요청 페이지에 해당하는 글
+        System.out.println("reportEntities.getTotalElements() = " + reportEntities.getTotalElements()); // 전체 글 갯수
+        System.out.println("reportEntities.getNumber() = " + reportEntities.getNumber()); // DB로 요청한 페이지 번호
+        System.out.println("reportEntities.getTotalPages() = " + reportEntities.getTotalPages()); // 전체 페이지 갯수
+        System.out.println("reportEntities.getSize() = " + reportEntities.getSize()); // 한 페이지에 보여지는 글 갯수
+        System.out.println("reportEntities.hasPrevious() = " + reportEntities.hasPrevious()); // 이전 페이지 존재 여부
+        System.out.println("reportEntities.isFirst() = " + reportEntities.isFirst()); // 첫 페이지 여부
+        System.out.println("reportEntities.isLast() = " + reportEntities.isLast()); // 마지막 페이지 여부
+
+        // 목록: id, writer, title, hits, createdTime
+        Page<ReportDTO> reportDTOS = reportEntities.map(report -> new ReportDTO(
+                report.getReportNum(),
+                report.getReportTitle(),
+                report.getReportState(),
+                report.getReportDate()
+        ));
+        return reportDTOS;
+    }
 }
+
+
+
+
+
+
+
+

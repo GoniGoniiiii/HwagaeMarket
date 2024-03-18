@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제재회원 입력</title>
+    <style>
+
+        body {
+            width: 1400px;
+            max-width: 1400px;
+        }
+
+        .main {
+            display: flex;
+            min-height: 80vh;
+        }
+
+        .title {
+            color: #FF7A6B;
+            padding-left: 35%;
+        }
+
+        tr {
+            height: 60px;
+        }
+
+        .form-label {
+            color: #FF7A6B;
+            font-weight: bold;
+        }
+
+        .form-control {
+            box-shadow: 0 0 5px #FF7A6B; /* box-shadow 색상 및 다른 속성 */
+        }
+
+        .form-control :hover {
+            --bs-linked-hover-color: var(--bs-success-border-subtle);
+        }
+
+        .btn-submit {
+            outline: 2px solid var(--bs-danger-border-subtle);
+            font-weight: bold;
+            margin-right: 15px;
+            width: 80px;
+        }
+
+        .btn-reset {
+            outline: 2px solid var(--bs-success-border-subtle);
+            font-weight: bold;
+            width: 80px;
+        }
+    </style>
+</head>
+
+<body class="mx-auto">
+<div th:include="/views/header"></div>
+
+<div class="main w-100 ">
+    <div th:include="views/admin/adminSidebar.html"></div>
+    <div class="container mt-4 py-2 pb-3 ">
+        <form action="/admin/insertResUser" method="post">
+            <div class="px-5">
+                <div class="my-3">
+                    <label for="res_uid" class="form-label ">제재회원 ID</label>
+                    <input type="text" class="form-control" name="res_uid" id="res_uid"
+                           th:value="${resUserDTO.res_uid}">
+                </div>
+                <div class="mb-3">
+                    <label for="res_uname" class="form-label">제재회원 이름</label>
+                    <input type="text" class="form-control" name="res_uname" id="res_uname"
+                           th:value="${resUserDTO.res_uname}">
+                </div>
+                <div class="mb-3">
+                    <label for="res_uphone" class="form-label">제재회원 전화번호</label>
+                    <input type="text" class="form-control" name="res_uphone" id="res_uphone"
+                           th:value="${resUserDTO.res_uphone}">
+                </div>
+                <div class="mb-3">
+                    <label for="res_account" class="form-label">제재회원 계좌번호</label>
+                    <input type="text" class="form-control" name="res_account" id="res_account"
+                           th:value="${resUserDTO.res_account}">
+                </div>
+                <div class="mb-3">
+                    <label for="res_reason" class="form-label">제재 사유</label>
+                    <input type="text" class="form-control" name="res_reason" id="res_reason">
+                </div>
+                <input type="hidden" name="user_num" th:value="${resUserDTO.user_num}">
+            </div>
+            <div class="mt-4 text-center">
+                <button class="btn btn-submit" type="submit">입력</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<div th:include="/views/footer"></div>
+</body>
+</html>

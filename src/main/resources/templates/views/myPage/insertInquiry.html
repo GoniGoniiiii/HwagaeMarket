@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>문의입력</title>
     <style>
-        section{
+        section {
             width: 1400px;
             margin: auto;
         }
@@ -20,14 +20,12 @@
             margin-left: 13%;
             padding-left:5%;
         }
-
     </style>
 
 </head>
 <body>
-<header th:include="/views/header.html"></header>
-<section><br>
-
+<div th:include="/views/header"></div>
+<section>
     <div class="text-center py-4 pb-3 mb-5 title">
         <p class="fs-3 fw-bold">1:1문의</p>
         <div class="">
@@ -56,7 +54,7 @@
                 <div class="col-7">
                     <textarea class="form-control" name="qna_content" placeholder="문의 내용을 입력해주세요" rows="7"></textarea>
                 </div>
-                <input type="text"  th:value="${session.user.user_num}" name="user_num">
+                <input type="hidden"  th:value="${session.user.user_num}" name="user_num">
             </div><!--문의 내용 끝-->
             <div class="d-flex justify-content-center py-3">
                 <button type="submit" class="btn btn-secondary btn-lg mx-3">문의하기</button>
@@ -65,10 +63,8 @@
 
         </div><!--container끝(신고내용container)-->
     </form>
-
 </section>
-<footer th:include="/views/footer"></footer>
-
+<div th:include="footer"></div>
 <script type="text/javascript">
     const List=()=>{
         location.href="/myPage/inquiryList";

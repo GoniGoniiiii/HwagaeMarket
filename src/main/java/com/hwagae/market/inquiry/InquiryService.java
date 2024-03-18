@@ -37,7 +37,7 @@ public class InquiryService {
     public List<InquiryDTO> findAllByUserNum(Integer user_num) {
         UserEntity userEntity = userRepository.findById(user_num).orElse(null);
         if (userEntity != null) {
-            List<InquiryEntity> inquiryEntityList = inquiryRepository.findAllByUserEntity(userEntity);
+            List<InquiryEntity> inquiryEntityList = inquiryRepository.findAllByUserEntityOrderByQnaNumDesc(userEntity);
             List<InquiryDTO> inquiryDTOList = new ArrayList<>();
             for (InquiryEntity inquiryEntity : inquiryEntityList) {
                 inquiryDTOList.add(InquiryDTO.toInquiryDTO(inquiryEntity));
@@ -68,13 +68,37 @@ public class InquiryService {
                 inquiryRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "qnaNum")));
 
         System.out.println("inquiryEntities.getContent() = " + inquiryEntities.getContent()); // 요청 페이지에 해당하는 글
-        System.out.println("boardEntities.getTotalElements() = " + inquiryEntities.getTotalElements()); // 전체 글갯수
-        System.out.println("boardEntities.getNumber() = " + inquiryEntities.getNumber()); // DB로 요청한 페이지 번호
-        System.out.println("boardEntities.getTotalPages() = " + inquiryEntities.getTotalPages()); // 전체 페이지 갯수
-        System.out.println("boardEntities.getSize() = " + inquiryEntities.getSize()); // 한 페이지에 보여지는 글 갯수
-        System.out.println("boardEntities.hasPrevious() = " + inquiryEntities.hasPrevious()); // 이전 페이지 존재 여부
-        System.out.println("boardEntities.isFirst() = " + inquiryEntities.isFirst()); // 첫 페이지 여부
-        System.out.println("boardEntities.isLast() = " + inquiryEntities.isLast()); // 마지막 페이지 여부
+        System.out.println("inquiryEntities.getTotalElements() = " + inquiryEntities.getTotalElements()); // 전체 글갯수
+        System.out.println("inquiryEntities.getNumber() = " + inquiryEntities.getNumber()); // DB로 요청한 페이지 번호
+        System.out.println("inquiryEntities.getTotalPages() = " + inquiryEntities.getTotalPages()); // 전체 페이지 갯수
+        System.out.println("inquiryEntities.getSize() = " + inquiryEntities.getSize()); // 한 페이지에 보여지는 글 갯수
+        System.out.println("inquiryEntities.hasPrevious() = " + inquiryEntities.hasPrevious()); // 이전 페이지 존재 여부
+        System.out.println("inquiryEntities.isFirst() = " + inquiryEntities.isFirst()); // 첫 페이지 여부
+        System.out.println("inquiryEntities.isLast() = " + inquiryEntities.isLast()); // 마지막 페이지 여부
+
+        // 목록: id, writer, title, hits, createdTime
+        Page<InquiryDTO> inquiryDTOS = inquiryEntities.map(inquiry -> new InquiryDTO(inquiry.getQnaNum(),
+                inquiry.getQnaTitle(),inquiry.getUserEntity().getUserId(), inquiry.getUserEntity().getUserName(), inquiry.getUserEntity().getUserPhone(),inquiry.getQnaStatus()));
+        return inquiryDTOS;
+    }
+
+    @Transactional
+    public Page<InquiryDTO> pagingbyQnaStatus(Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        int pageLimit = 10; //한 페이지에 보여줄 글 갯수
+        //한 페이지당 3개씩 글을 보여주고 정렬 기준은 id 기준으로 내림차순 정렬
+        //page 위치에 있는 값은 0부터 시작
+        Page<InquiryEntity> inquiryEntities =
+                inquiryRepository.findAllByReportState(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "qnaNum")));
+
+        System.out.println("inquiryEntities.getContent() = " + inquiryEntities.getContent()); // 요청 페이지에 해당하는 글
+        System.out.println("inquiryEntities.getTotalElements() = " + inquiryEntities.getTotalElements()); // 전체 글갯수
+        System.out.println("inquiryEntities.getNumber() = " + inquiryEntities.getNumber()); // DB로 요청한 페이지 번호
+        System.out.println("inquiryEntities.getTotalPages() = " + inquiryEntities.getTotalPages()); // 전체 페이지 갯수
+        System.out.println("inquiryEntities.getSize() = " + inquiryEntities.getSize()); // 한 페이지에 보여지는 글 갯수
+        System.out.println("inquiryEntities.hasPrevious() = " + inquiryEntities.hasPrevious()); // 이전 페이지 존재 여부
+        System.out.println("inquiryEntities.isFirst() = " + inquiryEntities.isFirst()); // 첫 페이지 여부
+        System.out.println("inquiryEntities.isLast() = " + inquiryEntities.isLast()); // 마지막 페이지 여부
 
         // 목록: id, writer, title, hits, createdTime
         Page<InquiryDTO> inquiryDTOS = inquiryEntities.map(inquiry -> new InquiryDTO(inquiry.getQnaNum(),
@@ -94,3 +118,5 @@ public class InquiryService {
     }
 
 }
+
+
