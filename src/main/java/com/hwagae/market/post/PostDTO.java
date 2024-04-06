@@ -126,14 +126,4 @@ public class PostDTO {
     }
 
 
-    /////////////////포스트랑 유저 엮은 부분//////////////
-/*    public void setUserNick(String user_nick) {
-        this.user_nick = user_nick;
-    }
-    public void setUserPhoto(String user_photo) {
-        this.user_photo = user_photo;
-    }*/
-
-/*    public void setUserDTO(UserDTO userDTO) {
-    }*/
 }

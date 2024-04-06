@@ -18,13 +18,14 @@ public class ResUserDTO {
     private Integer report_count;
     private Integer user_num;
 
-    public ResUserDTO(Integer resNum, String resUid, String resUname, String resUphone, String resAccount, String resReason) {
+    public ResUserDTO(Integer resNum, String resUid, String resUname, String resUphone, String resAccount, String resReason,Integer reportCount) {
         this.res_num=resNum;
         this.res_uid=resUid;
         this.res_uname=resUname;
         this.res_uphone=resUphone;
         this.res_account=resAccount;
         this.res_reason=resReason;
+        this.report_count=reportCount;
     }
 
     private static ResUserDTO toResUserDTO(ResUserEntity resUserEntity){

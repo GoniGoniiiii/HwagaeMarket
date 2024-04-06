@@ -17,7 +17,6 @@
 
         .title {
             color: #FF7A6B;
-            padding-left: 35%;
         }
 
         .btn-toggle-nav a {
@@ -65,7 +64,8 @@
 
 <div class="main w-100 ">
     <div th:include="views/admin/adminSidebar.html"></div>
-    <div class="container mt-1 py-2 pb-3 ">
+    <div class="container">
+        <p class="fw-bold text-center mb-3 fs-4  title ">이벤트 입력</p>
         <form action="/admin/insertEvent" method="post" enctype="multipart/form-data">
             <div class="px-5">
                 <!--                    <h3 class="text-center fw-bold mb-5 title">이벤트 입력</h3>-->
@@ -111,22 +111,16 @@
         // 제출 버튼을 눌렀을 때
         $("form").submit(function (event) {
             if (event_title.val().trim().length === 0 || event_title.val().trim().length < 7) {
-                alert('공지 제목을 입력하세요!');
+                alert('이벤트 제목을 입력하세요!');
                 event_title.focus();
-                event.preventDefault(); // 기본 제출 동작을 막음
-            } else if (event_content.val().trim().length === 0) {
-                alert("공지 내용을 입력해주세요!");
-                event_content.focus();
                 event.preventDefault(); // 기본 제출 동작을 막음
             } else if (event_upLoadFile.val().trim().length === 0) {
                 var confirmUpload = confirm("파일을 첨부하지 않으시겠습니까?");
                 if (!confirmUpload) {
-                    // 파일 첨부를 원하면 추가적인 처리를 수행할 수 있습니다.
-                    // 여기에 파일 첨부 처리 코드를 추가하세요.
+                    alert("파일이 첨부되지않아 업로드에 실패했습니다!");
                     event.preventDefault(); // 기본 제출 동작을 막음
                 }
             }
-            // 여기에 제출 버튼을 눌렀을 때의 처리 코드를 추가하세요.
         });
     });
 

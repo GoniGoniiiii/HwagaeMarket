@@ -46,7 +46,7 @@ public class PostService {
 
                 if (originalFilename != null && !originalFilename.isEmpty()) {
                     String file_url = System.currentTimeMillis() + "_" + originalFilename;
-                    String savePath = "C:/image/" + file_url;
+                    String savePath = "Y:/HDD1/image/" + file_url;
                     postFile.transferTo(new File(savePath));
                     FileEntity fileEntity = FileEntity.toFileEntity(post, file_url);
                     fileRepository.save(fileEntity);
@@ -58,7 +58,124 @@ public class PostService {
     }
 
 
-    public void update(PostDTO postDTO) throws IOException {
+    public PostDTO update(PostDTO postDTO) throws Exception {
+        if (postDTO.getPost_num() != null) {
+            PostEntity postEntity = postRepository.findById(postDTO.getPost_num()).orElse(null);
+
+            if(postEntity != null){
+                deleteOldFiles(postEntity);
+
+                postEntity.setPostTitle(postDTO.getPost_title());
+                postEntity.setPostContent(postDTO.getPost_content());
+                postEntity.setPostPrice(postDTO.getPost_price());
+                postEntity.setPostRegdate(postDTO.getPost_regdate());
+                postEntity.setPostUpdate(postDTO.getPost_update());
+                postEntity.setPostLocation(postDTO.getPost_location());
+                postEntity.setPostLocation2(postDTO.getPost_location2());
+                postEntity.setPostHits(postDTO.getPost_hits());
+                postEntity.setPostLike(postDTO.getPost_like());
+                postEntity.setPostSaleState(postDTO.getPost_saleState());
+                postEntity.setPostProductState(postDTO.getPost_productState());
+
+                postEntity.getFileEntityList().clear();
+
+                if (!postDTO.getPost_upLoadFile().isEmpty()){
+                    for (MultipartFile postFile : postDTO.getPost_upLoadFile()){
+                        String originalFilename = postFile.getOriginalFilename();
+
+                        if (originalFilename != null && !originalFilename.isEmpty()){
+                            String file_url = System.currentTimeMillis() + "_" + originalFilename;
+                            String savePath = "Y:/HDD1/image/" + file_url;
+                            postFile.transferTo(new File(savePath));
+
+                            FileEntity fileEntity = FileEntity.toFileEntity(postEntity, file_url);
+                            fileEntity.updateFileUrl(file_url);
+                            fileRepository.save(fileEntity);
+                        }else{
+                            System.out.println("파일이 입력되지 않았어요!"+originalFilename);
+                        }
+                    }
+                }
+                // Save updated NoticeEntity
+                postRepository.save(postEntity);
+                return findByNum(postDTO.getPost_num());
+            } else {
+                throw new Exception("해당 번호로 된 공지사항이 존재하지 않습니다: " + postDTO.getPost_num());
+            }
+        } else {
+            throw new IllegalArgumentException("공지사항 번호가 필요합니다.");
+        }
+    }
+
+    public PostDTO findByNum(Integer post_num) {
+        Optional<PostEntity> optionalPostEntity = postRepository.findById(post_num);
+        if (optionalPostEntity.isPresent()) {
+            PostEntity postEntity = optionalPostEntity.get();
+            PostDTO postDTO = PostDTO.toPostDTO(postEntity);
+            return postDTO;
+        }
+        return null;
+    }
+    private void deleteOldFiles(PostEntity postEntity) {
+        for (FileEntity fileEntity : postEntity.getFileEntityList()) {
+            // Delete file from storage (you need to implement this method)
+            deleteFileFromStorage(fileEntity.getFileUrl());
+
+            // Delete file entity from database
+            fileRepository.delete(fileEntity);
+        }
+    }
+
+    private void deleteFileFromStorage(String fileUrl) {
+        // 파일이 저장된 경로
+        String storagePath = "Y:/HDD1/image/";
+
+        // 파일 객체 생성
+        File file = new File(storagePath + fileUrl);
+
+        // 파일이 존재하면 삭제
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("파일 삭제 성공: " + file.getAbsolutePath());
+            } else {
+                System.err.println("파일 삭제 실패: " + file.getAbsolutePath());
+            }
+        } else {
+            System.err.println("파일이 존재하지 않습니다: " + file.getAbsolutePath());
+        }
+    }
+
+
+    public void updatee(PostDTO postDTO) throws IOException {
+        if (postDTO.getPost_upLoadFile().isEmpty()) {
+            PostEntity postEntity = PostEntity.toSaveEntity(postDTO);
+            postRepository.save(postEntity);
+
+
+        } else {
+            PostEntity postEntity = PostEntity.toSaveFileEntity(postDTO);
+            Integer postNum = postRepository.save(postEntity).getPostNum();
+            PostEntity post = postRepository.findById(postNum).get();
+
+            for (MultipartFile postFile : postDTO.getPost_upLoadFile()) {
+                String originalFilename = postFile.getOriginalFilename();
+
+                if (originalFilename != null && !originalFilename.isEmpty()) {
+                    String file_url = System.currentTimeMillis() + "_" + originalFilename;
+                    String savePath = "Y:/HDD1/image/" + file_url;
+                    postFile.transferTo(new File(savePath));
+                    FileEntity fileEntity = FileEntity.toFileEntity(post, file_url);
+                    fileRepository.save(fileEntity);
+                } else {
+                    System.out.println("파일이 입력되지않았습니다~" + originalFilename);
+                }
+            }
+        }
+    }
+
+    
+    //상태만 변경
+    public void stateUpdate(PostDTO postDTO) throws IOException {
         if (postDTO.getPost_upLoadFile().isEmpty()) {
             PostEntity postEntity = PostEntity.toSaveEntity(postDTO);
             postRepository.save(postEntity);
@@ -75,7 +192,7 @@ public class PostService {
 
                 if (originalFilename != null && !originalFilename.isEmpty()) {
                     String file_url = System.currentTimeMillis() + "_" + originalFilename;
-                    String savePath = "C:/image/" + file_url;
+                    String savePath = "Y:/HDD1/image/" + file_url;
                     postFile.transferTo(new File(savePath));
                     FileEntity fileEntity = FileEntity.toFileEntity(post, file_url);
                     fileRepository.save(fileEntity);
@@ -86,7 +203,8 @@ public class PostService {
         }
     }
 
-
+/*
+    //상태만 변경
     public long stateEdit(PostDTO postDTO) throws IOException {
         if (postDTO.getPost_upLoadFile().isEmpty()) {
             PostEntity postEntity = PostEntity.toSaveEntity(postDTO);
@@ -101,7 +219,7 @@ public class PostService {
 
                 if (originalFilename != null && !originalFilename.isEmpty()) {
                     String file_url = System.currentTimeMillis() + "_" + originalFilename;
-                    String savePath = "C:/image/" + file_url;
+                    String savePath = "Y:/HDD1/image/" + file_url;
                     postFile.transferTo(new File(savePath));
                     FileEntity fileEntity = FileEntity.toFileEntity(post, file_url);
                     fileRepository.save(fileEntity);
@@ -111,7 +229,7 @@ public class PostService {
             }
         }
         return postDTO.getPost_num();
-    }
+    }*/
 
 
 

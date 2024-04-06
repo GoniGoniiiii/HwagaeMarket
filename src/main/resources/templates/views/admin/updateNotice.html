@@ -28,7 +28,6 @@
 
         .title {
             color: #FF7A6B;
-            padding-left: 35%;
         }
 
         .form-label {
@@ -61,7 +60,8 @@
 <div th:include="/views/header"></div>
 <div class="main w-100 ">
     <div th:include="views/admin/adminSidebar.html"></div>
-    <div class="container mt-4 py-2 pb-3 ">
+    <div class="container">
+        <p class="fw-bold text-center mb-3 fs-4  title ">공지사항 수정</p>
         <form action="/admin/updateNotice" method="post" enctype="multipart/form-data">
             <div class="px-5">
                 <div class="my-3">

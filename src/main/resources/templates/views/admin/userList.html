@@ -17,7 +17,6 @@
 
         .title {
             color: #FF7A6B;
-            padding-left: 35%;
         }
 
         th {
@@ -62,14 +61,15 @@
 <div th:include="/views/header"></div>
 <div class="main w-100 ">
     <div th:include="/views/admin/adminSidebar.html"></div>
-    <div class="container mt-4 py-2 pb-3 ">
-        <table class="table align-middle">
+    <div class="container">
+        <p class="fw-bold text-center mb-3  title fs-4">회원 리스트</p>
+        <table class="table align-middle text-center">
             <thead class="table-danger align-middle text-center">
             <tr>
-                <th scope="col">회원<br>일련번호</th>
+                <th scope="col">회원 일련번호</th>
                 <th scope="col">회원 ID</th>
                 <th scope="col">회원 닉네임</th>
-                <th scope="col">회원 전화번호</th>
+                <th scope="col">회원전화번호</th>
                 <th scope="col">회원 Email</th>
                 <th scope="col">회원 이름</th>
                 <th scope="col">회원 주소</th>
@@ -129,7 +129,7 @@
 </span>
             <li class="page-item" th:class="${!userList.hasNext()} ? 'disabled' : 'active' ">
                 <a class="page-link" th:if="${userList.hasNext()}"
-                   th:href="@{/myPage/userList/paging(page=${userList.number + 2})}" aria-label="Next">
+                   th:href="@{/admin/userList/paging(page=${userList.number + 2})}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
                 <span class="page-link" th:unless="${userList.hasNext()}">&raquo;</span>

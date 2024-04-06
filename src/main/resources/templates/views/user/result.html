@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>조회결과</title>
     <style>
-        section{
+        section {
             width: 1400px;
             margin: auto;
             display: flex;
@@ -16,15 +16,20 @@
 
 <div th:include="/views/header.html"></div>
 <section>
-
     <th:block th:choose>
         <th:block th:if="${not #strings.isEmpty(findID)}">
-            <p th:text="${findID}"></p>
+            <div>
+                <span>조회하신 아이디는</span><br>
+                "<span th:text="${findID}"></span>"입니다.
+            </div>
         </th:block>
         <th:block th:if="${not #strings.isEmpty(findPW)}">
-            <p th:text="${findPW}"></p>
+            <div>
+                <span>조회하신 패스워드는</span>
+                "<span th:text="${findPW}"></span>"입니다.
+            </div>
         </th:block>
     </th:block>
-
-</section><br><br><br><br><br><br><br><br>
+</section>
+<br><br><br><br><br><br><br><br>
 <footer th:include="/views/footer"></footer>

@@ -33,7 +33,7 @@ public class EventService {
 
                 if (originalFileName != null && !originalFileName.isEmpty()) {
                     String file_url = System.currentTimeMillis() + originalFileName;
-                    String savePath = "C:/image/" + file_url;
+                    String savePath = "Y:/HDD1/image/" + file_url;
                     eventFile.transferTo(new File(savePath));
                     FileEntity fileEntity = FileEntity.toFileEntity(event, file_url);
                     fileRepository.save(fileEntity);
@@ -45,7 +45,7 @@ public class EventService {
     }
 
     public List<EventDTO> findAll () {
-        List<EventEntity> eventEntityList = eventRepository.findAll();
+        List<EventEntity> eventEntityList = eventRepository.findAllByOrderByEventNumDesc();
         List<EventDTO> eventDTOList = new ArrayList<>();
         for (EventEntity eventEntity : eventEntityList) {
             eventDTOList.add(EventDTO.toEventDTO(eventEntity));
@@ -78,7 +78,7 @@ public class EventService {
                         String originalFileName = eventFile.getOriginalFilename();
                         if (originalFileName != null && !originalFileName.isEmpty()) {
                             String file_url = System.currentTimeMillis() + "_" + originalFileName;
-                            String savePath = "C:/image/" + file_url;
+                            String savePath = "Y:/HDD1/image/" + file_url;
                             eventFile.transferTo(new File(savePath));
 
                             FileEntity fileEntity = FileEntity.toFileEntity(exsitingEvent, file_url);

@@ -112,77 +112,60 @@
             </div>
 
             <div style="text-align: center; font-size: 26px; float: right; display: flex" th:with="totalChatCount=${#lists.size(postList)}">
-                    <div style="margin: 30px 30px 30px 30px;">
-                        <span>닉네임</span><br>
-                        <span style="font-size: 24px; font-weight: 900;"
-                              th:text="${userInfo.user_nick}"></span>
-                    </div>
-                    <div style="margin: 30px 30px 30px 30px;">
-                        <span>활동지역</span><br>
-                        <span style="font-size: 24px; font-weight: 900;"
-                              th:text="${userInfo.user_location2}"></span>
-                    </div>
-                    <div style="margin: 30px 30px 30px 30px;">
-                        <span>판매내역</span><br>
-                        <a><span style="font-size: 24px; font-weight: 900; color: red"
-                                 th:text="${totalChatCount}"></span> 개</a>
-                    </div>
+                <div style="margin: 30px 30px 30px 30px;">
+                    <span>닉네임</span><br>
+                    <span style="font-size: 24px; font-weight: 900;"
+                          th:text="${userInfo.user_nick}"></span>
+                </div>
+                <div style="margin: 30px 30px 30px 30px;">
+                    <span>활동지역</span><br>
+                    <span style="font-size: 24px; font-weight: 900;"
+                          th:text="${userInfo.user_location2}"></span>
+                </div>
+                <div style="margin: 30px 30px 30px 30px;">
+                    <span>판매내역</span><br>
+                    <a><span style="font-size: 24px; font-weight: 900; color: red"
+                             th:text="${totalChatCount}"></span> 개</a>
+                </div>
             </div>
         </div>
 
 
-            <div style="width:1400px; height: 800px;">
-                <div class="container px-4 mt-5 px-lg-5">
-                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-start">
-                        <div class="mb-5 col" th:each="post:${postList}">
-                            <div class="card h-100 card_wrap">
+        <div style="width:1400px; height: 800px;">
+            <div class="container px-4 mt-5 px-lg-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-start">
+                    <div class="mb-5 col" th:each="post:${postList}">
+                        <div class="card h-100 card_wrap">
+                            <!-- Product image-->
+                            <a th:href="@{/post/{postNum}(postNum=${post.post_num})}">
                                 <!-- Product image-->
-                                <a th:href="@{/post/{postNum}(postNum=${post.post_num})}">
-                                    <!-- Product image-->
-                                    <div class="img_wrap" th:if="${not #lists.isEmpty(post.file_url)}">
-                                        <img class="card-img-top" th:src="@{|/upload/${post.file_url[0]}|}" height="200"
-                                             alt="..."/>
-                                    </div>
-
-                                    <!-- like svg -->
-                                    <input type="hidden" class="postNum" th:value="${post.post_num}">
-
-                                    <!-- Product details-->
-                                    <div class="p-4 card-body">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 th:text="${post.post_title}"></h5>
-                                            <!-- Product price-->
-                                            <h6 th:text="'가격 : '+${post.post_price}" class="fw-bolder"></h6>
-                                            <span id="location2" th:text="${post.post_location2}"></span>
-                                            <span>|</span>
-                                            <span id="regdate" th:text="${post.post_regdate}"></span>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <!-- 드롭박스 -->
-                                <div class="condition-dropbox" style="display: none;">
-                                    <ul>
-                                        <li><a href="#">상품수정</a></li>
-                                        <li><a href="#">상태변경</a></li>
-                                        <li><a th:href="@{'/post/delete/'+${post.post_num}}">상품삭제</a></li>
-                                    </ul>
+                                <div class="img_wrap" th:if="${not #lists.isEmpty(post.file_url)}">
+                                    <img class="card-img-top" th:src="@{|/upload/${post.file_url[0]}|}" height="200"
+                                         alt="..."/>
                                 </div>
-                                <!--dot svg -->
-                                <div class="svg_wrap">
-                                    <svg id="dots_svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         fill="#ccc"
-                                         class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                                        <path
-                                                d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-                                    </svg>
+
+                                <!-- like svg -->
+                                <input type="hidden" class="postNum" th:value="${post.post_num}">
+
+                                <!-- Product details-->
+                                <div class="p-4 card-body">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 th:text="${post.post_title}"></h5>
+                                        <!-- Product price-->
+                                        <h6 th:text="'가격 : '+${post.post_price}" class="fw-bolder"></h6>
+                                        <span id="location2" th:text="${post.post_location2}"></span>
+                                        <span>|</span>
+                                        <span id="regdate" th:text="${post.post_regdate}"></span>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
+
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </section>
 <!--

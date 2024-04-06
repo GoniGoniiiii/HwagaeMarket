@@ -22,7 +22,7 @@ public class NoticeEntity {
     @Column(nullable=false)
     private String noticeTitle;
 
-    @Column(nullable = false)
+    @Column(nullable = false , length=1000)
     private String noticeContent;
 
     @CreationTimestamp

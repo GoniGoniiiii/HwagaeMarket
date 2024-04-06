@@ -1,7 +1,13 @@
 package com.hwagae.market.user;
 
 import com.hwagae.market.email.EmailController;
+import com.hwagae.market.event.EventDTO;
+import com.hwagae.market.event.EventService;
+import com.hwagae.market.inquiry.InquiryDTO;
+import com.hwagae.market.inquiry.InquiryService;
 import com.hwagae.market.like.LikeService;
+import com.hwagae.market.notice.NoticeDTO;
+import com.hwagae.market.notice.NoticeService;
 import com.hwagae.market.post.PostDTO;
 import com.hwagae.market.post.PostService;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +16,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
@@ -30,6 +38,9 @@ public class UserController {
     private final EmailController emailController;
     private final PostService postService;
     private final LikeService likeService;
+    private final EventService eventService;
+    private final NoticeService noticeService;
+    private final InquiryService inquiryService;
 
     @GetMapping("/user/join")
     public String joinForm(){
@@ -38,11 +49,10 @@ public class UserController {
     }
 
     @PostMapping("/user/join")
-    public String join(@ModelAttribute UserDTO userDTO){
+    public String join(@ModelAttribute UserDTO userDTO, @RequestParam("user_id") String userId){
+        System.out.println("입력한 값 먼뎅"+userId);
+
         if ("ok".equals(emailController.getEmailAuthResult())) {
-            System.out.println("후에엥"+emailController.getEmailAuthResult());
-            System.out.println("UserController.save");
-            System.out.println("userDTO = " + userDTO);
             userService.save(userDTO);
             System.out.println("회원가입 완료");
             return "redirect:/user/login?success=true"; // 회원가입 성공 시 login 페이지로 리다이렉트하고 success=true 파라미터를 전달
@@ -78,14 +88,25 @@ public class UserController {
         List<PostDTO> postDTOList = postService.findAll();
         model.addAttribute("postList", postDTOList);
 
+        List<EventDTO> eventDTOList = eventService.findAll();
+        model.addAttribute("eventList", eventDTOList);
+
+        List<NoticeDTO> noticeDTOList = noticeService.findAll();
+        model.addAttribute("noticeList", noticeDTOList);
+
+        List<InquiryDTO> inquiryDTOList = inquiryService.findAll();
+        model.addAttribute("inquiryList", inquiryDTOList);
+
         UserDTO result = userService.login(userDTO);
         if(result != null){
             session.setAttribute("user", result);
             if(result.getUser_id().equals("admin")){
                 return  "redirect:/admin/adminMenu";
+            }else if(result.getUser_role().equals("제재회원")){
+                return "views/error";
             }
             System.out.println("로그인 성공");
-            return "/views/user/index";
+            return "/views/index";
         }else{
             return "redirect:/user/login?loginFailed=true";
         }
@@ -187,32 +208,34 @@ public class UserController {
         }
     }
 
-
-
     @GetMapping("/user/find")
     public String Find(){
         System.out.println("아이디 비밀번호 찾기");
         return "views/user/find";
     }
 
-    @PostMapping("/user/findID")
-    public String findID(@ModelAttribute UserDTO userDTO, Model model) {
-        String result = userService.findID(userDTO); // 반환 타입을 String으로 변경
-        System.out.println("ID 찾기 = " + result);
-        System.out.println("ID 정보 = " + userDTO);
-        model.addAttribute("findID", result); // Thymeleaf에서 사용할 수 있도록 모델에 추가
-        return "views/user/result";
+    @PostMapping("/user/findId")
+    public ResponseEntity<String> findId(@RequestBody UserDTO userDTO) {
+        String findUserId = userService.findID(userDTO);
+        System.out.println("찾아온 user id : " + findUserId);
+        if (findUserId != null) {
+            return ResponseEntity.ok().body(findUserId);
+        } else {
+            return ResponseEntity.ok().body("없음");
+        }
     }
 
-    @PostMapping("/user/findPW")
-    public String findPW(@ModelAttribute UserDTO userDTO, Model model) {
-        UserDTO result = userService.findPW(userDTO); // findPW 메서드 호출로 변경
-        System.out.println("PW 찾기 = " + result);
-        System.out.println("PW 정보 = " + userDTO);
-        model.addAttribute("findPW", result.getUser_pw()); // Thymeleaf에서 사용할 수 있도록 모델에 추가
-        return "views/user/result";
-    }
+    @PostMapping("/user/findPw")
+    public ResponseEntity<String> findPw (@RequestBody UserDTO userDTO){
+        String findUserPw=userService.findPW(userDTO);
+        System.out.println(findUserPw);
+        if(findUserPw !=null){
+            return ResponseEntity.ok().body(findUserPw);
+        }else{
+            return ResponseEntity.ok().body("null");
+        }
 
+    }
 
     @GetMapping("/myPage/userUpdate")
     public String Update(HttpSession session, Model model){
@@ -289,7 +312,7 @@ public class UserController {
             System.out.println("Uploaded file name: " + fileName);
 
             // 파일을 서버에 저장
-            upLoadFile.transferTo(new File("C:/image/" + fileName));
+            upLoadFile.transferTo(new File("Y:/HDD1/image/" + fileName));
 
             // 사용자 정보 업데이트
             userDTO.setUser_photo(fileName);

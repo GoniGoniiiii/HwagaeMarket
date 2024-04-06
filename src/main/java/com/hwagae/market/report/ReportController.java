@@ -26,13 +26,13 @@ public class ReportController {
     private final CommentService commentService;
     private final UserService userService;
 
-    @GetMapping("myPage/insertReport")
+    @GetMapping("/myPage/insertReport")
     public String reportForm(){
         System.out.println("신고하러 가겠읍니다.");
-        return "views/myPage/insertReport";
+        return "/views/myPage/insertReport";
     }
 
-    @PostMapping("myPage/insertReport")
+    @PostMapping("/myPage/insertReport")
     public String insertReport(@ModelAttribute ReportDTO reportDTO, Model model) throws IOException {
         System.out.println("값이 있는거니?"+reportDTO.getReport_Uname());
         System.out.println("reportDTO = " + reportDTO + ", model = " + model);
@@ -41,7 +41,7 @@ public class ReportController {
         return "redirect:/myPage/reportList/paging";
     }
 
-    @GetMapping("myPage/reportList/paging")
+    @GetMapping("/myPage/reportList/paging")
     public String reportList(@PageableDefault(page=1) Pageable pageable,HttpSession session, Model model){
         System.out.println("나의 문의 목록이에요~");
 
@@ -66,7 +66,7 @@ public class ReportController {
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
 
-            return "views/myPage/reportList";
+            return "/views/myPage/reportList";
         } else {
             // 유저가 로그인되어 있지 않은 경우에 대한 처리
             return null;
@@ -99,14 +99,14 @@ public class ReportController {
 //        }
 //    }
 
-    @GetMapping("myPage/report/{report_num}")
+    @GetMapping("/myPage/report/{report_num}")
     public String findByNum(@PathVariable Integer report_num,Model model){
         ReportDTO reportDTO=reportService.findByNum(report_num);
 
         List<CommentDTO> commentDTOList=commentService.report_findAll(report_num);
         model.addAttribute("commentList",commentDTOList);
         model.addAttribute("report",reportDTO);
-        return "views/myPage/report";
+        return "/views/myPage/report";
     }
 
     @GetMapping("/admin/deleteReport/{report_num}")

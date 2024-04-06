@@ -40,7 +40,8 @@ public class ResUserService {
                 resUser.getResUname(),
                 resUser.getResUphone(),
                 resUser.getResAccount(),
-                resUser.getResReason()
+                resUser.getResReason(),
+                resUser.getReportCount()
         ));
         return resUserDTOS;
     }

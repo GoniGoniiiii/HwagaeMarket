@@ -4,7 +4,6 @@ import com.hwagae.market.category.CategoryEntity;
 import com.hwagae.market.category.CategoryService;
 import com.hwagae.market.event.EventDTO;
 import com.hwagae.market.event.EventService;
-import com.hwagae.market.file.FileEntity;
 import com.hwagae.market.inquiry.InquiryDTO;
 import com.hwagae.market.inquiry.InquiryService;
 import com.hwagae.market.like.LikeDTO;
@@ -15,7 +14,6 @@ import com.hwagae.market.user.UserDTO;
 import com.hwagae.market.user.UserEntity;
 import com.hwagae.market.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,7 +29,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -70,32 +67,30 @@ public class PostController {
         return "redirect:/post/" + firstPostNum;
     }
 
+    //상태만 변경
     @PostMapping("/post/stateEdit")
-    public String edit(@ModelAttribute PostDTO postDTO, HttpSession session) throws IOException {
+    public String edit(@ModelAttribute PostDTO postDTO, HttpSession session) throws Exception {
         ///상태만 변경하는 매핑
 
         // 게시물 저장
-        postService.update(postDTO);
+        postService.stateUpdate(postDTO);
         //세이브 된 글 번호로 리다이렉트하기
-        String post_num = String.valueOf(postService.stateEdit(postDTO));
-        System.out.println("받아오니....? " + post_num);
-        return "redirect:/post/"+post_num;
-    }
-
-
-    @PostMapping("/post/update")
-    public String postUpdate(@ModelAttribute PostDTO postDTO, HttpSession session) throws IOException {
-
-        // 게시물 저장
-        postService.update(postDTO);
-        System.out.println("저장됐나.....? " + postDTO);
         Integer postNum = postDTO.getPost_num();
-        //세이브 된 글 번호로 리다이렉트하기
+        System.out.println("받아오니....? " + postNum);
         return "redirect:/post/"+postNum;
     }
 
 
+    @PostMapping("/post/update")
+    public String postUpdate(@ModelAttribute PostDTO postDTO, HttpSession session) throws Exception {
 
+        // 게시물 저장
+        postService.updatee(postDTO);
+
+        Integer postNum = postDTO.getPost_num();
+        //세이브 된 글 번호로 리다이렉트하기
+        return "redirect:/post/"+postNum;
+    }
 
 
 
@@ -307,7 +302,6 @@ public class PostController {
     private String postDelete(@PathVariable String postNum, Model model){
         postService.deletePost(postNum);
 
-
         List<PostDTO> postDTOList = postService.findAll();
         model.addAttribute("postList", postDTOList);
 
@@ -319,7 +313,7 @@ public class PostController {
 
         List<InquiryDTO> inquiryDTOList = inquiryService.findAll();
         model.addAttribute("inquiryList", inquiryDTOList);
-        return "/views/user/index";
+        return "/views/index";
     }
 
 }

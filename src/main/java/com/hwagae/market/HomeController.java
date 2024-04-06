@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
 
-
     private  final PostService postService;
     private final EventService eventService;
     private final NoticeService noticeService;
@@ -42,7 +41,7 @@ public class HomeController {
 
         System.out.println("홈페이지");
 
-        return "/views/user/index";
+        return "/views/index";
     }
 
     @GetMapping("/index")
@@ -60,7 +59,7 @@ public class HomeController {
         model.addAttribute("inquiryList", inquiryDTOList);
 
         System.out.println("홈페이지");
-        return "views/user/index";
+        return "/views/index";
     }
 
 

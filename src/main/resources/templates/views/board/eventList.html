@@ -9,11 +9,11 @@
         section{
             width: 1400px;
             margin: auto;
+            min-height:70vh;
         }
 
         .title {
             /* 자주 묻는 질문 faq */
-            border-bottom: 1px solid #FF7A6B;
             color: #FF7A6B;
         }
 
@@ -34,9 +34,8 @@
 </head>
 <body>
 <div th:include="/views/header"></div>
-<section><br>
-
-    <div class="fs-1 fw-bold text-center mt-5 py-3 pb-5 px-3 mb-5 title">EVENT</div>
+<section>
+    <div class="fs-2 fw-bold text-center py-4 pb-5 title">EVENT</div>
     <div class="container">
         <div th:each="event, eventStat : ${eventList}" class="row my-5 pb-5" th:if="${eventStat.index % 2 == 0}">
             <!-- 첫 번째 열 -->
@@ -49,8 +48,7 @@
                         </a>
                     </div>
                     <h5 class="my-2 mt-4 fw-bold" th:text="${event.event_title}"></h5>
-                    <small class="fw-bold text-secondary" th:text="${event.event_regdate}"> ~ </small>
-                    <small class="fw-bold text-secondary" th:text="${event.event_regdate}"></small>
+                    <small class="fw-bold text-secondary" th:text="${#dates.format(event.event_regdate, 'yyyy-MM-dd')}"></small>
                 </div>
             </div>
             <!-- 두 번째 열 -->
@@ -63,8 +61,7 @@
                         </a>
                     </div>
                     <h5 class="my-2 mt-4 fw-bold" th:text="${eventList[eventStat.index + 1].event_title}"></h5>
-                    <small class="fw-bold text-secondary" th:text="${eventList[eventStat.index + 1].event_regdate}"> ~ </small>
-                    <small class="fw-bold text-secondary" th:text="${eventList[eventStat.index + 1].event_regdate}"></small>
+                    <small class="fw-bold text-secondary" th:text="${#dates.format(event.event_regdate, 'yyyy-MM-dd')}"></small>
                 </div>
             </div>
         </div>

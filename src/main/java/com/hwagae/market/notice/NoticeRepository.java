@@ -2,6 +2,8 @@ package com.hwagae.market.notice;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NoticeRepository extends JpaRepository<NoticeEntity, Integer> {
+import java.util.List;
 
+public interface NoticeRepository extends JpaRepository<NoticeEntity, Integer> {
+    public List<NoticeEntity> findAllByOrderByNoticeNumDesc();
 }

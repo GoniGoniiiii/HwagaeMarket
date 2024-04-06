@@ -37,3 +37,13 @@ out/
 .vscode/
 
 src/main/resources/application.properties
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.gradle
+build

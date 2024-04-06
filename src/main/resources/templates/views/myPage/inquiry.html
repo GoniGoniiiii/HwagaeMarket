@@ -16,27 +16,24 @@
             color: #FF7A6B;
         }
 
-        .custom-grid .col-2 { /* grid간격(이름, 문의제목 ,문의내용 오른쪽 간격 조절한거임)**/
-            margin-left: 13%;
-            padding-left: 5%;
-        }
+        /*.custom-grid .col-2 { !* grid간격(이름, 문의제목 ,문의내용 오른쪽 간격 조절한거임)**!*/
+        /*    margin-left: 13%;*/
+        /*    padding-left: 5%;*/
+        /*}*/
 
-        tr {
-            margin-left: 30px;
-            height: 100px;
+        .qnaTable tr{
+            height:100px;
         }
-
-        th {
-            padding-left: 100px;
-            width: 200px;
+        .qnaTable th{
+            width:320px;
         }
-
-        tr:nth-child(3) {
+        .qnaTable tr:nth-child(4) {
             height: 200px;
         }
 
-        .comment {
-            border-top: 1px solid #FF7A6B;
+        .commentTable tr{
+            margin-left:30px;
+            height: 80px;
         }
     </style>
 
@@ -54,13 +51,13 @@
     </div>
 
     <table class="table align-middle my-2 mb-5 qnaTable">
-        <tbody>
-        <tr>
-            <th scope="row" class="pl-5">문의번호</th>
+        <tbody class="custom-grid">
+        <tr scope="row">
+            <th>문의번호</th>
             <td name="qna_num" th:text="${inquiry.qna_num}"></td>
         </tr>
         <tr>
-            <th scope="row" class="pl-5">이름</th>
+            <th scope="row">이름</th>
             <td name="user_name" th:text="${inquiry.user_name}"></td>
         </tr>
         <tr>
@@ -87,7 +84,7 @@
     <!--    </div>-->
     <!--댓글 출력-->
     <div id="comment-list">
-        <table class="table align-middle w-100">
+        <table class="table align-middle w-100 commentTable">
             <tr th:each="comment:${commentList}">
                 <td th:text="${comment.comment_num}"></td>
                 <td th:text="${comment.comment_writer}"></td>
@@ -129,7 +126,7 @@
                     let output = "<table>";
                     for (let i in res) {
                         output += "<tr>";
-                        output += "<td>" + res[i].comment_num + "</td>";
+                        output += "<td>" + i+ "</td>";
                         output += "<td>" + res[i].comment_writer + "</td>";
                         output += "<td>" + res[i].comment_content + "</td>";
                         // 날짜 포맷 변경
@@ -143,7 +140,7 @@
                     document.getElementById('comment-list').innerHTML = output;
                     document.getElementById('commentWriter').value = '';
                     document.getElementById('commentContents').value = '';
-
+                    location.reload();
                 },
                 error: function (err) {
                     console.log("요청실패", err);

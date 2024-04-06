@@ -1,6 +1,7 @@
 package com.hwagae.market.email;
 
 import com.hwagae.market.user.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.SecureRandom;
 
 @RestController
+@RequiredArgsConstructor
+
 public class EmailController {
 
     private final EmailService emailService;
@@ -17,11 +20,6 @@ public class EmailController {
     private String emailAuthResult; // 이메일 인증 결과를 저장할 변수
 
 
-    @Autowired
-    public EmailController(EmailService emailService, UserService userService) {
-        this.emailService = emailService;
-        this.userService = userService;
-    }
 
     // 랜덤 문자열 생성 메서드는 EmailService 클래스에 구현하거나 별도의 Util 클래스에 구현할 수 있음
     private String generateRandomString(int length) {

@@ -6,6 +6,7 @@
     <style>
         section{
             width: 1400px;
+            height: 700px;
             margin: auto;
         }
         a{
@@ -20,44 +21,45 @@
     <div th:include="/views/sidebar.html"></div>
 
     <div style="width: 1100px; height: auto; float: right;">
-    <h1 class="text-center mb-2">회원탈퇴</h1>
-    <div style="width:560px; height: auto; margin: 0 auto;">
-        <form action="/myPage/unRegister" method="post">
-            <div class="form-group" style="position: relative;">
-                <label class="form-label">이름</label>
-                <input type="text" class="form-control" th:value="${session.user.user_name}" readonly>
-            </div><br>
+        <h1 class="text-center mb-2">회원탈퇴</h1>
+        <div style="width:560px; height: auto; margin: 0 auto;">
+            <form action="/myPage/unRegister" method="post">
+                <div class="form-group" style="position: relative;">
+                    <label class="form-label">이름</label>
+                    <input type="text" class="form-control" th:value="${session.user.user_name}" readonly>
+                </div><br>
 
-            <div class="form-group" style="position: relative;">
-                <label class="form-label">아이디</label>
-                <input type="text" name="user_id" class="form-control" >
-            </div><br>
+                <div class="form-group" style="position: relative;">
+                    <label class="form-label">아이디</label>
+                    <input type="text" name="user_id" class="form-control" >
+                </div><br>
 
-            <div class="form-group">
-                <label class="form-label">비밀번호</label>
-                <input type="password" name="user_pw" class="form-control" >
-            </div><br>
+                <div class="form-group">
+                    <label class="form-label">비밀번호</label>
+                    <input type="password" name="user_pw" class="form-control" >
+                </div><br>
 
-            <div class="form-group">
-                <label class="form-label">비밀번호 확인</label>
-                <input type="password" class="form-control" >
-            </div><br>
+                <div class="form-group">
+                    <label class="form-label">비밀번호 확인</label>
+                    <input type="password" class="form-control" >
+                </div><br>
 
-            <div class="form-group">
-                <label class="form-label">이메일</label>
-                <input type="email" class="form-control" th:value="${session.user.user_email}" readonly>
-            </div><br>
+                <div class="form-group">
+                    <label class="form-label">이메일</label>
+                    <input type="email" class="form-control" th:value="${session.user.user_email}" readonly>
+                </div><br>
 
-            <div class="form-group" style="position: relative;">
-                <label class="form-label">전화번호</label>
-                <input type="text" class="form-control" th:value="${session.user.user_phone}" readonly>
-            </div><br><br>
+                <div class="form-group" style="position: relative;">
+                    <label class="form-label">전화번호</label>
+                    <input type="text" class="form-control" th:value="${session.user.user_phone}" readonly>
+                </div><br><br>
 
-            <button type="submit" class="btn btn-outline-danger">회원탈퇴</button>
-        </form>
+                <button type="submit" class="btn btn-outline-danger">회원탈퇴</button>
+            </form>
+        </div>
     </div>
-    </div>
-</section>
+</section><br><br>
+<div th:include="/views/footer.html"></div>
 
 
 <script type="text/javascript">

@@ -65,7 +65,7 @@
             <!-- 글내용 -->
             <div>
                 <textarea id="post_content" name="post_content" class="form-control"
-                          placeholder="- 상품명(브랜드)&#10;- 구매 시기&#10;- 사용 기간&#10;- 하자 여부&#10;* 실제 촬영한 사진과 함께 상세 정보를 입력해주세요.&#10;* 카카오톡 아이디 첨부 시 게시물 삭제 및 이용제재 처리될 수 있어요.&#10;안전하고 건전한 거래환경을 위해 과학기술정보통신부, 한국인터넷진흥원, 중고나라가 함께합니다."
+                          placeholder="- 상품명(브랜드)&#10;- 구매 시기&#10;- 사용 기간&#10;- 하자 여부&#10;* 실제 촬영한 사진과 함께 상세 정보를 입력해주세요.&#10;* 카카오톡 아이디 첨부 시 게시물 삭제 및 이용제재 처리될 수 있어요.&#10;안전하고 건전한 거래환경을 위해 과학기술정보통신부, 한국인터넷진흥원, 화개장터가 함께합니다."
                           style="width: 768px; height: 200px;" maxlength="1000" required></textarea>
             </div><br><br>
 
@@ -115,7 +115,7 @@
             </div>
 
             <div style="display: flex; justify-content: center">
-                <button type="submit" class="btn btn-outline-primary" onclick="return confirm('등록하시겠습니까?')">등록하기</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" class="btn btn-outline-primary" onclick="validateForm()">등록하기</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a class="btn btn-outline-danger" href="#" onclick="confirmed()">취소</a>
             </div><br><br>
         </div>
@@ -134,8 +134,8 @@
         var minutes = String(now.getMinutes()).padStart(2, '0');
         var seconds = String(now.getSeconds()).padStart(2, '0');
         // return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-
         document.getElementById("post_regdate").value = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+        convertNewlineToBr()
     }
 </script>
 
@@ -145,6 +145,27 @@
     window.onload = function () {
         initializeMap();
     };
+
+    //\n을 <br>로
+    function convertNewlineToBr() {
+        var postContent = document.getElementById("post_content").value; // 텍스트 에어리어에서 입력된 내용 가져오기
+        var convertedContent = postContent.replace(/\n/g, "<br>"); // \n을 <br>로 변환하기
+
+        document.getElementById("post_content").value = convertedContent; // 변환된 내용을 다시 텍스트 에어리어에 설정하기
+    }
+
+
+    function validateForm() {
+        var fileInput = document.getElementById('post_upLoadFile');
+        if (fileInput.files.length === 0) {
+            alert('사진을 한 장 이상 첨부해주세요');
+            return false; // 폼 제출을 막음
+        }
+        alert('등록하시겠습니까?');
+        return true; // 폼 제출을 허용
+    }
+
+
     // 지도 관련 함수
     var map; // 지도 객체를 저장하는 변수
     var marker; // 마커 객체를 저장하는 변수

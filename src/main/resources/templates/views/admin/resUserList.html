@@ -21,35 +21,13 @@
             margin-left: 2.1rem;
             font-size: 15px;
         }
-        .form-label {
-            color: #FF7A6B;
-            font-weight: bold;
-        }
-
-        .form-control {
-            box-shadow: 0 0 5px #FF7A6B; /* box-shadow 색상 및 다른 속성 */
-        }
 
         .form-control :hover {
             --bs-linked-hover-color: var(--bs-success-border-subtle);
         }
 
-        .btn-submit {
-            outline: 2px solid var(--bs-danger-border-subtle);
-            font-weight: bold;
-            margin-right: 15px;
-            width: 80px;
-        }
-
-        .btn-reset {
-            outline: 2px solid var(--bs-success-border-subtle);
-            font-weight: bold;
-            width: 80px;
-        }
-
         th {
             font-size: 17px;
-
         }
 
         tr {
@@ -58,7 +36,6 @@
 
         .title {
             color: #FF7A6B;
-            padding-left: 35%;
         }
 
         #page-link li,
@@ -88,9 +65,10 @@
 <div th:include="/views/header"></div>
 <div class="main w-100 ">
     <div th:include="views/admin/adminSidebar.html"></div>
-    <div class="container mt-4 py-2 pb-3 ">
-        <table class="table align-middle">
-            <thead class="table-danger text-center">
+    <div class="container">
+        <p class="fw-bold text-center mb-3 fs-4  title ">제재회원 리스트</p>
+        <table class="table align-middle text-center">
+            <thead class="table-danger align-middle text-center">
             <tr class="align-middle">
                 <th scope="col">제재회원 일련번호</th>
                 <th scope="col">제재회원 ID</th>
@@ -139,14 +117,15 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-
             <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-    <li class="page-item" th:class="${page == resUserList.number + 1} ? 'active' : ''">
-        <a th:if="${page == resUserList.number + 1}" class="page-link">
-            <span th:text="${page}"></span>
+    <li class="page-item">
+        <a th:if="${resUserList.number != null}" th:class="${page == resUserList.number + 1} ? 'active' : ''">
+            <a th:if="${page == resUserList.number + 1}" class="page-link">
+                <span th:text="${page}"></span>
+            </a>
+            <a th:unless="${page == resUserList.number + 1}" th:href="@{/admin/resUserList/paging(page=${page})}"
+               class="page-link" th:text="${page}"></a>
         </a>
-        <a th:unless="${page == resUserList.number + 1}" th:href="@{/admin/resUserList/paging(page=${page})}"
-           class="page-link" th:text="${page}"></a>
     </li>
 </span>
             <li class="page-item" th:class="${!resUserList.hasNext()} ? 'disabled' : 'active' ">

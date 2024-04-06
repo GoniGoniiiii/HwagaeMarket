@@ -56,26 +56,26 @@ public class AdminController {
         //userController에 admin id로 로그인해서 로그인 되면 adminMenu로 올수있게 설정해놔야됨
     }
 
-    @GetMapping("admin/userList")
+    @GetMapping("/admin/userList")
     public String userList() {
         System.out.println("회원 목록 리스트~");
         return "views/admin/userList";
     }
 
-    @GetMapping("admin/reportUserList")
+    @GetMapping("/admin/reportUserList")
     public String reportUserList() {
         System.out.println("제재 회원 리스트~");
-        return "resUserList";
+        return "/views/admin/resUserList";
     }
 
     /* 관리자 컨트롤러*/
-    @GetMapping("admin/insertNotice")
+    @GetMapping("/admin/insertNotice")
     public String insertNotice() {
         System.out.println(" 관리자 - 공지사항을 입력해보세요~");
         return "views/admin/insertNotice";
     }
 
-    @GetMapping("admin/board/notice")
+    @GetMapping("/admin/board/notice")
     public String noticeList(Model model) {
         List<NoticeDTO> noticeDTOList = noticeService.findAll();
         model.addAttribute("noticeList", noticeDTOList);
@@ -84,13 +84,13 @@ public class AdminController {
         return "views/board/notice";
     }
 
-    @GetMapping("admin/updateNotice")
+    @GetMapping("/admin/updateNotice")
     public String updateNotice() {
         System.out.println("관리자 - 공지사항 수정해보세용");
         return "views/admin/updateNotice";
     }
 
-    @GetMapping("admin/inquiryAllManage/paging")
+    @GetMapping("/admin/inquiryAllManage/paging")
     public String inquiryAllManage(@PageableDefault(page = 1) Pageable pageable, Model model) {
         System.out.println("관리자 - 1:1 문의 확인할게요~");
         Page<InquiryDTO> inquiryList = inquiryService.paging(pageable);
@@ -112,7 +112,7 @@ public class AdminController {
         return "views/admin/inquiryAllManage";
     }
 
-    @GetMapping("admin/inquiryManage/paging")
+    @GetMapping("/admin/inquiryManage/paging")
     public String inquiryManage(@PageableDefault(page = 1) Pageable pageable, Model model) {
         System.out.println("관리자 - 1:1 문의 확인할게요~");
         Page<InquiryDTO> inquiryList = inquiryService.pagingbyQnaStatus(pageable);
@@ -144,13 +144,13 @@ public class AdminController {
         return "views/board/eventList";
     }
 
-    @GetMapping("admin/insertEvent")
+    @GetMapping("/admin/insertEvent")
     public String insertEvent() {
         System.out.println("관리자 - 이벤트 입력할게요~");
         return "views/admin/insertEvent";
     }
 
-    @GetMapping("admin/reportConfirm/paging")
+    @GetMapping("/admin/reportConfirm/paging")
     public String reportConfirm(@PageableDefault(page = 1) Pageable pageable, Model model) {
         System.out.println("관리자 - 신고 확인할게요~");
         Page<ReportDTO> reportList = reportService.pagingByReportState(pageable);
@@ -172,7 +172,7 @@ public class AdminController {
         return "/views/admin/reportConfirm";
     }
 
-    @GetMapping("admin/reportAllConfirm/paging")
+    @GetMapping("/admin/reportAllConfirm/paging")
     public String reportAllConfirm(@PageableDefault(page = 1) Pageable pageable, Model model) {
         System.out.println("관리자 - 신고 확인할게요~");
         Page<ReportDTO> reportList = reportService.paging(pageable);
@@ -216,14 +216,14 @@ public class AdminController {
         return "/views/admin/userList";
     }
 
-    @GetMapping("board/cheatSearch")
+    @GetMapping("/board/cheatSearch")
     public String cheatSearch() {
         System.out.println("사기조회하러 가자~");
         return "views/board/cheatSearch";
     }
 
 
-    @GetMapping("myPage/faq")
+    @GetMapping("/myPage/faq")
     public String faq() {
         System.out.println("자주묻는 질문 보자~");
         return "views/myPage/faq";

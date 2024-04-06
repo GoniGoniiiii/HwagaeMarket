@@ -53,6 +53,8 @@
 <body>
 <div th:include="/views/header.html"></div>
 <section>
+    <h3 style="margin-left: 80px" th:text="${keyword}+' 의 검색결과'"></h3>
+
     <div style="display: flex; justify-content: end;" th:if="${searchList.totalPages}>0"> <!-- style : 오른쪽에 정렬하기 위함 -->
         <select class="form-select" aria-label="Default select example" style="width: 150px;">
             <option value="1" selected>최신순</option>
@@ -113,10 +115,6 @@
             </div>
         </div>
     </div>
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body" style="border: 1.5px solid #FF7A6B">
-        </div>
-    </div>
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation example" th:if="${searchList.totalPages}>0">
         <ul class="pagination justify-content-center" id="page-link">
@@ -142,6 +140,12 @@
             </li>
         </ul>
     </nav>
+
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body text-center" style="background-color: rgba(0, 0, 0, 0.7); color: white;">
+        </div>
+    </div>
+
     <h1 th:unless="${searchList.totalPages}>0" th:text="${keyword}+'의 검색 결과가 없습니다.'"></h1>
 </section>
 

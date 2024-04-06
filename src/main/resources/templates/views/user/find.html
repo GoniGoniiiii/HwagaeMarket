@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>아이디/비밀번호 찾기</title>
     <style>
-        section{
+        section {
             width: 1400px;
             margin: auto;
         }
-        #submit{
+
+        .submit {
             background: #FF7A6B;
             color: white;
             font-size: 18px;
@@ -17,93 +18,169 @@
             border-radius: 0.375rem;
             border: 1px solid #FF7A6B;
         }
-        #submit:hover{
+
+        .submit:hover {
             background-color: #FF7A6B;
             color: white;
         }
+
         .form-control {
             height: 50px;
         }
+
+        .modal-body {
+            min-height: 230px;
+        }
+
+        .modal-title {
+            color: #ff7a6b;
+        }
+
+
     </style>
 </head>
 <body>
 <div th:include="/views/header.html"></div>
-<section ><br><br><br><br>
+<section><br><br><br><br>
 
     <div style="width:560px; height: auto; margin: 0 auto; background-color: white;"><br>
 
         <div style="text-align: center;">
-            <input class="btn-check" type="radio" name="searchOption" id="findIdCheckbox" autocomplete="off" onclick="search_check(2)" checked>
+            <input class="btn-check" type="radio" name="searchOption" id="findIdCheckbox" autocomplete="off"
+                   onclick="search_check(2)" checked>
             <label class="btn btn-outline-secondary" for="findIdCheckbox" style="padding: 10px 50px;">ID 찾기</label>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input class="btn-check" type="radio" name="searchOption" id="findPwCheckbox" autocomplete="off" onclick="search_check(1)" >
+            <input class="btn-check" type="radio" name="searchOption" id="findPwCheckbox" autocomplete="off"
+                   onclick="search_check(1)">
             <label class="btn btn-outline-secondary" for="findPwCheckbox" style="padding: 10px 50px;">PW 찾기</label>
-        </div><br><br>
+        </div>
+        <br><br>
 
 
         <form action="/user/findID" method="post" id="findIdForm">
-
             <div class="form-group" style="position: relative;">
                 <label class="form-label">이름</label>
-                <input type="text" name="user_name" class="form-control" placeholder="이름을 입력해주세요." required>
-            </div><br>
+                <input type="text" name="user_name" id="i_name" class="form-control" placeholder="이름을 입력해주세요." required>
+            </div>
+            <br>
 
             <div class="form-group">
                 <label class="form-label">이메일</label>
-                <input type="email" name="user_email" class="form-control" placeholder="이메일을 입력해주세요." required>
-            </div><br>
+                <input type="email" name="user_email" id="i_email" class="form-control" placeholder="이메일을 입력해주세요."
+                       required>
+            </div>
+            <br>
 
             <div class="form-group">
                 <label class="form-label">전화번호</label>
-                <input type="tel" name="user_phone" id="tel" class="form-control" onkeyup="test(this);" oninput="changeFocus(), formatPhoneNumber(this)" placeholder="휴대폰 번호를 입력해주세요." maxlength="13" required>
-            </div><br>
+                <input type="tel" name="user_phone" id="i_tel" class="form-control" onkeyup="test(this);"
+                       oninput="changeFocus(), formatPhoneNumber(this)" placeholder="휴대폰 번호를 입력해주세요." maxlength="13"
+                       required>
+            </div>
+            <br>
 
             <div class="d-grid">
-                <input id="submit" type="submit" value="아이디 찾기"><br>
+                <button type="button" value="아이디 찾기" onclick="findId()" class="submit"
+                        data-bs-toggle="modal" data-bs-target="#findId">아이디찾기<br>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" aria-labelledby="findIdResult" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="findIdResult">ID 찾기</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body mx-auto d-flex justify-content-center align-items-center"
+                             id="modalContent">
+                            <p class="fs-4">당신의 id는 <br>
+                                " <span id="myId" class="fw-bold fs-3 text-success"></span>"<br></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-success" onclick="redirect()">다시 조회하기
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <p style="text-align: center;">
                 <span style="float: left;"><a href="/user/login" style="color: #999;"> 로그인하러 가기</a></span>
-                <span style="float: right; color: #999;">아직 계정이 없다면? <a href="/user/join" style="color: #FF7A6B;"> 회원가입</a></span>
+                <span style="float: right; color: #999;">아직 계정이 없다면? <a href="/user/join"
+                                                                        style="color: #FF7A6B;"> 회원가입</a></span>
             </p><br>
 
         </form>
 
         <form action="/user/findPW" method="post" id="findPwForm" style="display: none;">
-
             <div class="form-group">
                 <label class="form-label">아이디</label>
-                <input type="text" name="user_id" class="form-control" placeholder="아이디를 입력해주세요." required>
-            </div><br>
+                <input type="text" name="user_id" id="p_id" class="form-control" placeholder="아이디를 입력해주세요." required>
+            </div>
+            <br>
 
             <div class="form-group" style="position: relative;">
                 <label class="form-label">이름</label>
-                <input type="text" name="user_name" class="form-control" placeholder="이름을 입력해주세요." required>
-            </div><br>
+                <input type="text" name="user_name" id="p_name" class="form-control" placeholder="이름을 입력해주세요." required>
+            </div>
+            <br>
 
             <div class="form-group">
                 <label class="form-label">이메일</label>
-                <input type="email" name="user_email" class="form-control" placeholder="이메일을 입력해주세요." required>
-            </div><br>
+                <input type="email" name="user_email" id="p_email" class="form-control" placeholder="이메일을 입력해주세요."
+                       required>
+            </div>
+            <br>
 
             <div class="form-group">
                 <label class="form-label">전화번호</label>
-                <input type="tel" name="user_phone" id="tel" class="form-control" onkeyup="test(this);" oninput="changeFocus(), formatPhoneNumber(this)" placeholder="휴대폰 번호를 입력해주세요." maxlength="13" required>
-            </div><br>
+                <input type="tel" name="user_phone" id="p_tel" class="form-control" onkeyup="test(this);"
+                       oninput="changeFocus(), formatPhoneNumber(this)" placeholder="휴대폰 번호를 입력해주세요." maxlength="13"
+                       required>
+            </div>
+            <br>
 
             <div class="d-grid">
-                <input id="submit" type="submit" value="비밀번호 찾기"><br>
+                <button type="button" value="비밀번호 찾기" onclick="findPw()" class="submit"
+                        data-bs-toggle="modal" data-bs-target="#findPw">비밀번호찾기<br>
             </div>
-
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" aria-labelledby="findPwResult" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="findPwResult">ID 찾기</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body mx-auto d-flex justify-content-center align-items-center"
+                             id="modalContent2">
+                            <p class="fs-4">당신의 비밀번호는 <br>
+                                " <span id="myPw" class="fw-bold fs-3 text-success"></span>"<br></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-success" onclick="redirect()">다시 조회하기
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <p style="text-align: center;">
                 <span style="float: left;"><a href="/user/login" style="color: #999;"> 로그인하러 가기</a></span>
-                <span style="float: right; color: #999;">아직 계정이 없다면? <a href="/user/join" style="color: #FF7A6B;"> 회원가입</a></span>
+                <span style="float: right; color: #999;">아직 계정이 없다면? <a href="/user/join"
+                                                                        style="color: #FF7A6B;"> 회원가입</a></span>
             </p><br>
 
         </form>
 
     </div>
-</section><br><br><br><br><br><br><br><br><br>
+</section>
+<br><br><br><br><br><br><br><br><br>
 <footer th:include="/views/footer"></footer>
 
 
@@ -144,6 +221,138 @@
             document.getElementById("findPwCheckbox").checked = false;
         }
     }
+
+
+    //아이디찾기 모달 쑈쑈쑈 시작
+    //아이디찾기 모달 쑈쑈쑈 시작
+    const findId = () => {
+        const name = document.getElementById("i_name").value;
+        const email = document.getElementById("i_email").value;
+        const tel = document.getElementById("i_tel").value;
+        if (!name) {
+            alert("이름을 입력해주세요.");
+            document.getElementById("i_name").focus();
+            return;
+        }
+
+        if (!email) {
+            alert("이메일을 입력해주세요.");
+            document.getElementById("i_email").focus();
+            return;
+        }
+
+        if (!tel) {
+            alert("전화번호를 입력해주세요.");
+            document.getElementById("i_tel").focus();
+            return;
+        }
+        console.log(name);
+        console.log(email);
+        console.log(tel);
+
+        const data = {
+            user_name: name,
+            user_email: email,
+            user_phone: tel
+        };
+
+        fetch('/user/findId', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data) {
+                    console.log(data);
+                    document.getElementById("myId").innerText = data;
+                } else {
+                    document.getElementById("myId").value = '없음';
+                }
+                const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+                modal.show();
+            })
+            .catch(error => {
+                console.error('Error : ' + error);
+            })
+    }; // 함수 닫기
+
+    const redirect = () => {
+        location.href = "/user/find";
+    };
+
+    //비밀번호찾기 모달 쑈쑈쑈 시작
+    const findPw = () => {
+        const id = document.getElementById("p_id").value;
+        const name = document.getElementById("p_name").value;
+        const email = document.getElementById("p_email").value;
+        const tel = document.getElementById("p_tel").value;
+
+
+        if (!id) {
+            alert("아이디를 입력해주세요.");
+            document.getElementById("p_id").focus();
+            event.preventDefault(); // 기본 동작 막기
+            return;
+        }
+
+        if (!name) {
+            alert("이름을 입력해주세요.");
+            document.getElementById("p_name").focus();
+            event.preventDefault(); // 기본 동작 막기
+            return;
+        }
+
+        if (!email) {
+            alert("이메일을 입력해주세요.");
+            document.getElementById("p_email").focus();
+            event.preventDefault(); // 기본 동작 막기
+            return;
+        }
+
+        if (!tel) {
+            alert("전화번호를 입력해주세요.");
+            document.getElementById("p_tel").focus();
+            event.preventDefault(); // 기본 동작 막기
+            return;
+        }
+        console.log(id);
+        console.log(name);
+        console.log(email);
+        console.log(tel);
+
+        const data = {
+            user_id: id,
+            user_name: name,
+            user_email: email,
+            user_phone: tel
+        };
+
+        fetch('/user/findPw', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data==null) {
+                    document.getElementById("myPw").value = '없음';
+                } else {
+                    console.log(data);
+                    document.getElementById("myPw").innerText = data;
+                }
+                const modal = new bootstrap.Modal(document.getElementById('staticBackdrop2'));
+                modal.show();
+            })
+            .catch(error => {
+                console.error('Error : ' + error);
+            })
+    }; // 함수 닫기
+
 </script>
 </body>
 </html>

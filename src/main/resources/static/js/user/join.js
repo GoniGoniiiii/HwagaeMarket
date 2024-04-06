@@ -26,8 +26,41 @@ function phone(e) {
     e.value = phone;
 }
 
+function checkPasswordMatch() {
+    var pw = document.getElementById("pw").value;
+    var repw = document.getElementById("repw").value;
+    var pwCheckMsg = document.getElementById("pw_check");
+
+    if (pw !== repw) {
+        pwCheckMsg.innerText = "비밀번호가 일치하지 않습니다.";
+        pwCheckMsg.style.color = "red";
+        pwCheckMsg.style.fontSize = "13px"
+
+    } else {
+        pwCheckMsg.innerText = ""; // 일치할 경우 메시지를 지움
+    }
+}
+
+// repw 입력 필드의 입력 이벤트에 함수 연결
+document.getElementById("repw").addEventListener("input", function() {
+    checkPasswordMatch();
+});
+
+
+function pwCheck() {
+    var pw = document.getElementById("pw").value;
+    var repw = document.getElementById("repw").value;
+
+    if (pw !== repw) {
+        alert("비밀번호를 확인해주세요.");
+        return false; // 폼 제출을 막음
+    }
+    return true; // 폼 제출을 허용
+}
+
+
 function checkJoinButton() {
-    if (isAuthCompleted) {
+    if (emailAuthFinish) {
         // 인증이 완료되었을 때
         document.getElementById("joinButton").disabled = false; // 회원가입 버튼 활성화
         document.getElementById("joinButton").classList.remove("btn-outline-secondary"); // btn-outline-secondary 클래스 제거
@@ -256,11 +289,6 @@ function emailAuthFinish() {
     checkJoinButton(); // 회원가입 버튼 상태를 확인하여 변경
 
 }
-
-
-
-
-
 
 
 //지도

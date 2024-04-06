@@ -32,13 +32,6 @@ public class ReportDTO {
     private List<String> storedFileName;
     private List<String> file_url;
 
-    public ReportDTO(Integer reportNum, String reportTitle, Integer reportState, Timestamp reportDate) {
-        this.report_num = reportNum;
-        this.report_title = reportTitle;
-        this.report_state = reportState;
-        this.report_date = reportDate;
-    }
-
     public ReportDTO(Integer reportNum, String reportTitle, String reportUname, Timestamp reportDate,Integer reportState ) {
         this.report_num=reportNum;
         this.report_title=reportTitle;

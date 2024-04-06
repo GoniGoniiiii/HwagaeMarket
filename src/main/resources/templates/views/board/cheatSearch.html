@@ -11,11 +11,11 @@
         section {
             width: 1400px;
             margin: auto;
+            min-height:50vh;
         }
 
         .title {
             /* 공지사항 */
-            border-bottom: 1px solid #FF7A6B;
             color: #FF7A6B;
         }
 
@@ -41,9 +41,9 @@
 <body>
 <div th:include="/views/header.html"></div>
 <section>
-    <div class="fs-3 fw-bold mt-3 py-3 px-3 title">화개장터 제재회원 조회</div>
-    <p class="my-4  px-3">판매자의 휴대폰번호,계좌번호, 메신저ID,이메일로<br>제재회원여부를 조회를 이용해보세요! </p>
-    <div class="container pb-5">
+    <div class="fs-3 fw-bold text-center py-4 pb-3 mb-3 title">화개장터 제재회원 조회</div>
+    <p class="my-2  mb-5 px-3 text-center">판매자의 휴대폰번호,계좌번호, 메신저ID,이메일로 제재회원여부를 조회를 이용해보세요! </p>
+    <div class="container w-75  py-3 pb-5">
         <select class="form-select" name="select">
             <option value="resUphone" selected>휴대폰번호</option>
             <option value="resAccount">계좌번호</option>
@@ -90,7 +90,7 @@
         </div>
     </div>
 </section>
-<div th:include="/views/header"></div>
+<div th:include="/views/footer"></div>
 
 <script th:inline="javascript">
     const redirect = () => {
@@ -149,5 +149,3 @@
 </script>
 </body>
 </html>
-
-<!--cheatSeacr 조회누르면 modal 뜨게???-->

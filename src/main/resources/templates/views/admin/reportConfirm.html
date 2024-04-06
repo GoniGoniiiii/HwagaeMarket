@@ -17,7 +17,6 @@
 
         .title {
             color: #FF7A6B;
-            padding-left: 35%;
         }
 
         tr {
@@ -63,9 +62,10 @@
 <div th:include="/views/header"></div>
 <div class="main w-100 ">
     <div th:include="views/admin/adminSidebar.html"></div>
-    <div class="container mt-4 py-2 pb-3 ">
-        <table class="table align-middle text-center ">
-            <thead class="table-danger">
+    <div class="container">
+        <p class="fw-bold text-center mb-3  title fs-4">미답변 신고내역</p>
+        <table class="table align-middle text-center">
+            <thead class="table-danger align-middle text-center">
             <tr class="align-middle">
                 <th scope="col" class="text-center">신고번호</th>
                 <th scope="col" class="text-center"> 신고제목</th>
@@ -78,11 +78,10 @@
             <tbody>
             <tr th:each="report : ${reportList}">
                 <td class="text-center">
-                    <a th:href="@{/myPage/report/{report_num}(report_num=${report.report_num})}"
-                       th:text="${report.report_num}" class=" text-decoration-none"></a>
+                    <div th:text="${report.report_num}"> </div>
                 </td>
-                <td>
-                    <div th:text="${report.report_title}"></div>
+                <td class="text-center fw-bold text-decoration-underline">
+                    <a th:href="@{/myPage/report/{report_num}(report_num=${report.report_num})}" th:text="${report.report_title}"></a>
                 </td>
                 <td>
                     <div th:text="${report.report_Uname}"></div>

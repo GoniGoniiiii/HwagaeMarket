@@ -8,11 +8,11 @@
         section{
             width: 1400px;
             margin: auto;
+            min-height:70vh;
         }
 
         .title {
             /* 공지사항 */
-            border-bottom: 1px solid #FF7A6B;
             color: #FF7A6B;
         }
 
@@ -48,24 +48,21 @@
                         th:attr="data-bs-toggle='collapse', data-bs-target='#collapse' + ${noticeList.index}, aria-expanded='false', aria-controls='collapse' + ${noticeList.index}">
                     <p class="my-2" th:text="${notice.notice_title}"></p></button>
             </h2>
-            <div th:id="'collapse' + ${noticeList.index}" class="accordion-collapse collapse bg-light py-4">
-                <div class="accordion-body">
-                    <div class="container w-100 mx-auto" style="display: block">
+            <div th:id="'collapse' + ${noticeList.index}" class="accordion-collapse collapse bg-light    py-4">
+                    <div class="container w-100 mx-auto text-center" >
                         <div th:each="fileName: ${notice.file_url}">
                             <!-- 파일 이름이 여러개라 반복문 돌려서 storedFileName에 하나씩 접근할 수 있는 변수 -->
                             <img th:src="@{|/upload/${fileName}|}" alt="" style="width:85%; height:400px;">
                         </div>
                         <div class="row py-5 px-5 ">
-                            <div class="col-12 px-5 "
-                                 th:utext="${#strings.replace(notice.notice_content, '\n', '<br>')}"></div>
-                            <br><br><br>
-                            <small> (작성일 : <span th:text="${#dates.format(notice.notice_regdate, 'yyyy-MM-dd')}"></span>)</small>
+                            <div class="col-12 px-5  mx-auto text-start  mb-3"
+                                 th:utext="${#strings.replace(notice.notice_content, '\n', '<br>')}">
+                            </div>
+                            <small class="text-start mx-4 px-4"> (작성일 : <span th:text="${#dates.format(notice.notice_regdate, 'yyyy-MM-dd')}" ></span>)</small>
                         </div>
                         <input type="hidden" id="notice_num" th:value="${notice.notice_num}">
                         <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-update" th:attr="data-updateNum=${notice.notice_num}" onclick="updateEvent(this)">수정</button>
                         <button th:if="${session.user != null and session.user.user_id == 'admin'}" class="btn btn-delete"  th:attr="data-deleteNum=${notice.notice_num}" onclick="deleteEvent(this)">삭제</button>
-
-
                     </div>
                 </div>
             </div>

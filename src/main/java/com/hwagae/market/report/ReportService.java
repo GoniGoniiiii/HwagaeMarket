@@ -135,8 +135,9 @@ public class ReportService {
         Page<ReportDTO> reportDTOS = reportEntities.map(report -> new ReportDTO(
                 report.getReportNum(),
                 report.getReportTitle(),
-                report.getReportState(),
-                report.getReportDate()
+                report.getReportUname(),
+                report.getReportDate(),
+                report.getReportState()
         ));
         return reportDTOS;
     }
@@ -192,8 +193,9 @@ public class ReportService {
         Page<ReportDTO> reportDTOS = reportEntities.map(report -> new ReportDTO(
                 report.getReportNum(),
                 report.getReportTitle(),
-                report.getReportState(),
-                report.getReportDate()
+                report.getReportUname(),
+                report.getReportDate(),
+                report.getReportState()
         ));
         return reportDTOS;
     }

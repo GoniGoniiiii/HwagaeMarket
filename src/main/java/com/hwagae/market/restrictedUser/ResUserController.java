@@ -38,7 +38,7 @@ public class ResUserController {
         UserEntity userEntity=userService.findByNum(resUserDTO.getUser_num());
         resUserService.save(resUserDTO,userEntity);
         model.addAttribute("resUserDTO",resUserDTO);
-        return "/views/admin/adminMenu";
+        return "redirect:/admin/resUserList/paging";
     }
 
     @GetMapping("/admin/resUserList/paging")

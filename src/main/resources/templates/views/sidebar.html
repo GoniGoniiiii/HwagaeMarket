@@ -2,58 +2,122 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Side bar</title>
-    <style type="text/css">
-        #sidebar{
-            display: flex;
-            flex-direction: column;
-            float: left;
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 사이드바</title>
+    <style>
+
+        .flex-shrink-0 {
+            width: 230px;
+            min-height: 100%;
+            margin-right:30px;
         }
 
-        /* bottomeaderMenu  h o v e r    기   능 */
-        #menu{
-            font-size: 20px;
-            text-decoration: none; /* 초기에는 밑줄이 없도록 설정 */
-            position: relative; /* 포지션을 상대적으로 설정 */
-            z-index: 1;
-            margin-bottom: 15px;
-            max-width: max-content;
+        .btn-toggle {
+            padding: .25rem .5rem;
+            background-color: transparent;
+            font-size: 22px;
+            letter-spacing: 5px;
+            font-weight: bold;
         }
 
-        #menu::after {
-            content: ""; /* 가상 요소를 생성하여 밑줄 역할을 수행 */
-            display: block;
-            position: absolute;
-            width: 0;
-            height: 2px; /* 밑줄의 두께 설정 */
-            background-color: #FF7A6B; /* 밑줄 색상 설정 */
-            transition: width 0.3s ease-in-out; /* 트랜지션 효과 추가 */
+        .btn-toggle:hover,
+        .btn-toggle:focus {
+            color: rgba(var(--bs-emphasis-color-rgb), .85);
+            background-color: var(--bs-tertiary-bg);
         }
 
-        #menu:hover::after {
-            width: 100%; /* 마우스 호버 시 밑줄이 전체 폭으로 나타나도록 설정 */
+        .btn-toggle::before {
+            width: 1.25em;
+            line-height: 0;
+            content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+            transition: transform .35s ease;
+            transform-origin: .5em 50%;
+            margin-right: 5px;
         }
-        a{
-            text-decoration: none;
-            color: black;
+
+        [data-bs-theme="dark"] .btn-toggle::before {
+            content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
         }
+
+        .btn-toggle[aria-expanded="true"] {
+            color: #FF7A6B;
+        }
+
+        .btn-toggle[aria-expanded="true"]::before {
+            transform: rotate(90deg);
+        }
+
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 2.25rem;
+            font-size: 19px;
+        }
+
     </style>
 </head>
 <body>
-
-    <nav id="sidebar">
-        <h1 class="mb-3 font-semibold"><a href="/myPage">마이 페이지</a></h1>
-        <h2 class="mb-3 font-semibold">쇼핑 정보</h2>
-            <a th:href="@{'/myPage/purchaseList/' + ${session.user.user_nick}}" id="menu">구매내역</a>
-            <a th:href="@{'/post/saleList'}" id="menu">판매내역</a>
-            <a th:href="@{'/myPage/like'}" id="menu">찜한 상품</a>
-        <h2 class="mb-3 font-semibold">내 정보</h2>
-            <a href="/myPage/userUpdate" id="menu">수정하기</a>
-        <h2 class="mb-3 font-semibold">고객센터</h2>
-            <a href="/myPage/inquiryList" id="menu">문의하기</a>
-            <a href="/myPage/insertReport" id="menu">신고하기</a>
-            <a href="/myPage/reportList/paging" id="menu">나의 신고내역</a>
-    </nav>
-
+<div class="flex-shrink-0 ">
+    <ul class="list-unstyled  ps-0">
+        <li class="mb-4 ">
+               <h3 class="fw-bold"> <a href="/myPage">마이 페이지</a></h3>
+        </li>
+        <li class="my-2 mb-4">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#member-collapse" aria-expanded="false">
+                쇼핑정보
+            </button>
+            <div class="collapse" id="member-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li> <a th:href="@{'/myPage/purchaseList/' + ${session.user.user_nick}}"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">구매내역</a></li>
+                    <li> <a th:href="@{'/post/saleList'}"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">판매내역</a></li>
+                    <li> <a th:href="@{'/myPage/like'}"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">찜한상품</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="my-4 ">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#notice-collapse" aria-expanded="false">
+                내 정보
+            </button>
+            <div class="collapse" id="notice-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/myPage/userUpdate"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">내 정보 수정</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="my-4">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#event-collapse" aria-expanded="false">
+                고객센터
+            </button>
+            <div class="collapse" id="event-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/myPage/inquiryList"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">문의하기</a></li>
+                    <li><a href="/myPage/insertReport"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">신고하기</a></li>
+                    <li><a href="/myPage/reportList/paging"
+                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">나의 신고내역</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
 </body>
+<script type="text/javascript">
+    /* global bootstrap: false */
+    (() => {
+        'use strict'
+        const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.forEach(tooltipTriggerEl => {
+            new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    })()
+
+</script>
 </html>

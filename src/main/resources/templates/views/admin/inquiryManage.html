@@ -9,6 +9,7 @@
         body {
             width: 1400px;
             max-width: 1400px;
+            min-height: 70vh;
         }
 
         .main {
@@ -18,7 +19,6 @@
 
         .title {
             color: #FF7A6B;
-            padding-left: 35%;
         }
 
         tr {
@@ -67,10 +67,11 @@
 <div th:include="/views/header"></div>
 <div class="main w-100 ">
     <div th:include="views/admin/adminSidebar.html"></div>
-    <div class="container mt-4 py-2 pb-3 ">
+    <div class="container">
+        <p class="fw-bold text-center mb-3  title fs-4">미답변 문의</p>
         <table class="table align-middle text-center">
-            <thead class="table-danger align-middle">
-            <tr>
+            <thead class="table-danger align-middle text-center">
+            <tr class="text-center">
                 <th scope="col">문의번호</th>
                 <th scope="col">문의제목</th>
                 <th scope="col">회원아이디</th>
@@ -82,12 +83,11 @@
             </thead>
             <tbody>
             <tr th:each="inquiry : ${inquiryList}">
-                <td>
-                    <a th:href="@{/myPage/inquiry/{qna_num}(qna_num=${inquiry.qna_num})}"
-                       th:text="${inquiry.qna_num}"></a>
+                <td class="text-center">
+                    <div th:text="${inquiry.qna_num}"></div>
                 </td>
-                <td>
-                    <div th:text="${inquiry.qna_title}"></div>
+                <td class="text-center fw-bold text-decoration-underline">
+                    <a th:href="@{/myPage/inquiry/{qna_num}(qna_num=${inquiry.qna_num})}"  th:text="${inquiry.qna_title}"></a>
                 </td>
                 <td>
                     <div th:text="${inquiry.user_id}"></div>

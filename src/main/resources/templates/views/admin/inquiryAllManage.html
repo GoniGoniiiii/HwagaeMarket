@@ -12,12 +12,11 @@
 
         .main {
             display: flex;
-            min-height: 80vh;
+            min-height:70vh;
         }
 
         .title {
             color: #FF7A6B;
-            padding-left: 35%;
         }
 
         tr {
@@ -59,20 +58,17 @@
             border-color: #ff7a6b !important;
             background: #FF7A6B !important;
         }
-
-        .table {
-            min-height: 460px;
-        }
     </style>
 </head>
 <body class="mx-auto">
 <div th:include="/views/header"></div>
 <div class="main w-100 ">
     <div th:include="views/admin/adminSidebar.html"></div>
-    <div class="container mt-4 py-2 pb-3 ">
+    <div class="container">
+        <p class="fw-bold text-center mb-3  title fs-4">전체문의</p>
         <table class="table align-middle text-center">
-            <thead class="table-danger align-middle">
-            <tr class="text-center">
+            <thead class="table-danger align-middle text-center">
+            <tr>
                 <th scope="col">문의번호</th>
                 <th scope="col">문의제목</th>
                 <th scope="col">회원아이디</th>
@@ -85,11 +81,10 @@
             <tbody>
             <tr th:each="inquiry : ${inquiryList}">
                 <td class="text-center">
-                    <a th:href="@{/myPage/inquiry/{qna_num}(qna_num=${inquiry.qna_num})}"
-                       th:text="${inquiry.qna_num}"></a>
+                    <div th:text="${inquiry.qna_num}"></div>
                 </td>
-                <td class="text-center">
-                    <div th:text="${inquiry.qna_title}"></div>
+                <td class="text-center fw-bold text-decoration-underline">
+                    <a th:href="@{/myPage/inquiry/{qna_num}(qna_num=${inquiry.qna_num})}"  th:text="${inquiry.qna_title}"></a>
                 </td>
                 <td class="text-center">
                     <div th:text="${inquiry.user_id}"></div>
@@ -109,7 +104,7 @@
         </table>
         <!-- 첫번째 페이지로 이동 -->
         <!-- /board/paging?page=1 -->
-        <ul class="pagination justify-content-center" id="page-link">
+        <ul class="pagination justify-content-center mt-5" id="page-link">
             <li class="page-item">
                 <a class="page-link" th:href="@{/admin/inquiryAllManage/paging(page=1)}" tabindex="-1"
                    aria-disabled="true">First</a>

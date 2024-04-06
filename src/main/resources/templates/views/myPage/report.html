@@ -35,6 +35,11 @@
 
         input {
             border: none;
+            width: 50%;
+            height:30px;
+        }
+        input :nth-child(4){
+            width:75%;
         }
     </style>
 </head>
@@ -72,16 +77,15 @@
                 <span th:case="1">처리완료</span>
             </div>
         </div><!--제목 한 줄 끝-->
-        <form action="/admin/reportManage" method="post"
-              th:if="${session.user != null and session.user.user_id == 'admin'}">
+        <form action="/admin/reportManage" method="post">
             <div class="content py-5 mx-4"><!--내용 -->
-                <p class="py-3">신고한 유저 닉네임 : <input type="text" th:value="${r.report_Snick}" name="report_Snick"></p>
-                <p class="py-3">신고한 유저 계좌번호 : <input type="text" th:value="${r.report_Saccount}" name="report_Saccount">
+                <p class="py-3">신고한 유저 닉네임 : <input type="text" th:value="${r.report_Snick}" name="report_Snick" readonly></p>
+                <p class="py-3">신고한 유저 계좌번호 : <input type="text" th:value="${r.report_Saccount}" name="report_Saccount" readonly>
                 </p>
-                <p class="py-3">신고한 유저 전화번호 : <input type="text" th:value="${r.report_Sphone}" name="report_Sphone"></p>
-                <p class="py-3">신고 내용 : <input type="text" th:value="${r.report_content}"></p>
+                <p class="py-3">신고한 유저 전화번호 : <input type="text" th:value="${r.report_Sphone}" name="report_Sphone" readonly></p>
+                <p class="py-3 " >신고내용 : <input type="text" th:value="${r.report_content}"style="line-height: 2;"> </p>
             </div><!--내용 -->
-            <button type="submit" class="btn btn-outline-secondary">신고회원조회</button>
+            <button type="submit"  th:if="${session.user != null && session.user.user_id=='admin'}" class="btn btn-outline-secondary">신고회원조회</button>
         </form>
         <div th:each="fileName: ${r.file_url}">
             <img th:src="@{|/upload/${fileName}|}" alt="" style="height:500px;" class="px-4 w-100">
@@ -107,10 +111,10 @@
         <div th:text="${comment.comment_content}" class="mx-4 my-1"></div>
     </div>
     <div class="d-flex justify-content-between">
-        <button class="btn btn-outline-secondary btn-delete mx-4" th:attr="data-deleteNum=${report.report_num}"
+        <button class="btn btn-outline-danger btn-delete mx-4" th:attr="data-deleteNum=${report.report_num}"
                 onclick="deleteReport(this)">신고삭제
         </button>
-        <button class="btn btn-danger btn-list mx-4"><a href="/myPage/reportList/paging">목록</a></button>
+        <button class="btn btn-outline-secondary btn-list mx-4"><a href="/myPage/reportList/paging">목록</a></button>
     </div>
 
 </section>

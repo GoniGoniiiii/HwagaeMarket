@@ -186,6 +186,9 @@
     }
 
     function addChat(chatName, chatContent, chatTime){
+        /*<![CDATA[*/
+        var toNick = /*[[${toNick}]]*/ {};
+
         if(chatName == '나') {
             $('#chatMessages').append(
                 '<div class="send">'+
@@ -205,7 +208,7 @@
                 chatContent +
                 '</p>'+
                 '<span class="time_date">' +
-                chatName + ' | ' + chatTime +
+                toNick + ' | ' + chatTime +
                 '</span>'+
                 '</div>'
             );
@@ -222,6 +225,7 @@
     $(document).ready(function (){
         loadChatRecord();
         findLastMessage();
+        getList();
     })
 
     const findLastMessage = () => {

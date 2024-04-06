@@ -80,9 +80,11 @@
                     <textarea class="form-control" name="report_content" placeholder="신고 내용을 입력해주세요" rows="7"></textarea>
                 </div>
             </div><!--문의 내용 끝-->
-            <div class="mb-5">
-                <label for="report_upLoadFile" class="form-label">파일 첨부</label>
-                <input type="file" name="report_upLoadFile" id="report_upLoadFile" multiple class="form-control">
+            <div class="row mb-5 custom-grid">
+                <div class="col-2 text-start col-form-label" >파일첨부</div>
+                <div class="col-7">
+                    <input type="file" name="report_upLoadFile" id="report_upLoadFile" multiple class="form-control">
+                </div>
             </div>
             <label>
                 <input type="hidden" name="user_num" th:value="${session.user.user_num}">

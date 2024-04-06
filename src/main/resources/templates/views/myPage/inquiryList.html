@@ -12,7 +12,6 @@
 
         .title {
             /* 1:1문의 */
-            border-bottom: 1px solid #FF7A6B;
             color:#FF7A6B;
         }
         .inquiryBox{
@@ -28,13 +27,11 @@
 <body>
 <div th:include="/views/header"></div>
 <section>
-    <div class="text-center py-4 pb-3 mb-5 title">
-        <p class="fs-3 fw-bold">1:1문의</p>
-        <div class="d-flex justify-content-center align-items-center">
+    <div class="fs-3 fw-bold text-center py-4 pb-3 mb-3 title">문의하기</div>
+        <div class="d-flex justify-content-center align-items-center mb-5 pb-4 border-bottom">
             <div class="text-secondary"><small>AM 09:30 ~ PM 18:20 (점심시간 1:20 ~ 2:30)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;DAY OFF(토/일/공휴일 휴무)</small></div>
             <button type="button" class="btn btn-light border mx-3"><a href="/myPage/insertInquiry" class="text-decoration-none"> 1:1문의</a></button>
         </div>
-    </div>
     <div class="border text-center fw-bold inquiryBox" th:if="${inquiryList.isEmpty()}">
         등록된 1:1문의가 없습니다.
     </div>

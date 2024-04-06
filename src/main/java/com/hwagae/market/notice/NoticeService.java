@@ -33,7 +33,7 @@ public class NoticeService {
 
                 if (originalFilename != null && !originalFilename.isEmpty()) {
                     String file_url = System.currentTimeMillis() + "_" + originalFilename;
-                    String savePath = "C:/image/" + file_url;
+                    String savePath = "Y:/HDD1/image/" + file_url;
                     noticeFile.transferTo(new File(savePath));
                     FileEntity fileEntity = FileEntity.toFileEntity(notice, file_url);
                     fileRepository.save(fileEntity);
@@ -46,7 +46,7 @@ public class NoticeService {
 
     public List<NoticeDTO> findAll() {
         //entity로 넘어온 객체를 다시 dto로 담아서 controller로 보내줘야함
-        List<NoticeEntity> noticeEntityList = noticeRepository.findAll();
+        List<NoticeEntity> noticeEntityList = noticeRepository.findAllByOrderByNoticeNumDesc();
         List<NoticeDTO> noticeDTOList = new ArrayList<>();
         for (NoticeEntity noticeEntity : noticeEntityList) {
             noticeDTOList.add(NoticeDTO.toNoticeDTO(noticeEntity));
@@ -110,7 +110,7 @@ public class NoticeService {
 
                         if (originalFilename != null && !originalFilename.isEmpty()) {
                             String file_url = System.currentTimeMillis() + "_" + originalFilename;
-                            String savePath = "C:/image/" + file_url;
+                            String savePath = "Y:/HDD1/image/" + file_url;
                             noticeFile.transferTo(new File(savePath));
 
                             // Create FileEntity and update fileUrl
@@ -144,7 +144,7 @@ public class NoticeService {
     }
     private void deleteFileFromStorage(String fileUrl) {
         // 파일이 저장된 경로
-        String storagePath = "C:/image/";
+        String storagePath = "Y:/HDD1/image/";
 
         // 파일 객체 생성
         File file = new File(storagePath + fileUrl);

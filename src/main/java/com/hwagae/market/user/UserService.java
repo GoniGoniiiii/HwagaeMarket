@@ -7,10 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +67,7 @@ public class UserService {
     }
 
 
-    public UserDTO findPW(UserDTO userDTO) {
+    public String findPW(UserDTO userDTO) {
         Optional<UserEntity> findPW = userRepository.findByUserName(userDTO.getUser_name());
         if (findPW.isPresent()) {
             UserEntity userEntity = findPW.get();
@@ -78,15 +75,22 @@ public class UserService {
                     userEntity.getUserName().equals(userDTO.getUser_name()) &&
                     userEntity.getUserEmail().equals(userDTO.getUser_email()) &&
                     userEntity.getUserPhone().equals(userDTO.getUser_phone())) {
-                UserDTO dto = UserDTO.toUserDTO(userEntity);
-                return dto;
+                return userEntity.getUserPw();
             } else {
-                return null;
+                String message = "일치하는 정보가 없습니다. ";
+                if (!userEntity.getUserEmail().equals(userDTO.getUser_email()) || !userEntity.getUserPhone().equals(userDTO.getUser_phone())) {
+                    message += "이메일주소 혹은 전화번호를 다시 확인하세요. ";
+                }
+                if (!userEntity.getUserName().equals(userDTO.getUser_name())) {
+                    message += "이름 혹은 이메일주소를 다시 확인하세요. ";
+                }
+                return message;
             }
         } else {
-            return null;
+            return "일치하는 정보가 없습니다.";
         }
     }
+
 
 
     public UserDTO updateForm(String myInfo) {
@@ -257,7 +261,7 @@ public class UserService {
         System.out.println("reportEntities.isFirst() = " + userEntities.isFirst()); // 첫 페이지 여부
         System.out.println("reportEntities.isLast() = " + userEntities.isLast()); // 마지막 페이지 여부
 
-// 목록: id, writer, title, hits, createdTime
+        // 목록: id, writer, title, hits, createdTime
         Page<UserDTO> userDTOs = userEntities.map(user -> new UserDTO(
                 user.getUserNum(),
                 user.getUserId(),
@@ -270,4 +274,6 @@ public class UserService {
         ));
         return userDTOs;
     }
+
+
 }
