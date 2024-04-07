@@ -1,4 +1,4 @@
-package com.hwagae.market;
+package com.hwagae.market.notification;
 
 import com.hwagae.market.inquiry.InquiryEntity;
 import com.hwagae.market.report.ReportEntity;

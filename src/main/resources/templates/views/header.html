@@ -198,7 +198,16 @@
     }
 
     function noticeList(){
-
+    $.ajax({
+        type:"GET",
+        url:"/notification/list",
+        success:function(data){
+            $("offcanvas-body").html(data);
+        },
+        error:function(){
+            console.error("알림 목록을 불러오는데 실패했습니다.");
+        }
+    })
     }
 </script>
 
