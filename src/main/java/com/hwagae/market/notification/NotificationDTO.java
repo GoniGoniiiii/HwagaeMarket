@@ -1,7 +1,6 @@
 package com.hwagae.market.notification;
 
 import lombok.*;
-
 import java.sql.Timestamp;
 
 @Getter
