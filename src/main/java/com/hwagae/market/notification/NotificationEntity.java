@@ -25,7 +25,7 @@ public class NotificationEntity {
     private String userId;
 
     @Column//알림 메세지
-    private String message;
+    private String notificationMessage;
 
     @Column //알림을 보낸 시간
     private Timestamp notificationDate;
