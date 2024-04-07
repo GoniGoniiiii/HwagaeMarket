@@ -44,6 +44,13 @@
         </form>
 
         <div style="display: flex">
+            <div style="margin-top: 20px;">
+                <a class="btn m-auto" style="text-decoration: none; color: black; font-size: 23px; border:none; position: relative;" data-bs-toggle="offcanvas"
+                   data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" onclick="chatList();">
+                    <i class="fas bi bi-bell fa-2x m-auto"></i> <!-- 종 모양 아이콘 -->
+                    <span class="badge rounded-circle bg-danger" style="position: absolute; top: 0; right: 0; font-size:10px; ">1</span> <!-- 숫자 -->
+                </a>
+            </div>
             <!-- 세션이 있을 때 채팅리스트 -->
             <div th:if="${session.user != null}" style="margin-top: 20px;">
                 <a class="btn" style="text-decoration: none; color: black; font-size: 18px" data-bs-toggle="offcanvas"
@@ -188,6 +195,10 @@
                 console.error("채팅 목록을 불러오는 데 실패했습니다.");
             }
         });
+    }
+
+    function noticeList(){
+
     }
 </script>
 
