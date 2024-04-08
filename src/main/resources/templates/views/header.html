@@ -46,7 +46,7 @@
         <div style="display: flex">
             <div style="margin-top: 20px;">
                 <a class="btn m-auto" style="text-decoration: none; color: black; font-size: 23px; border:none; position: relative;" data-bs-toggle="offcanvas"
-                   data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" onclick="chatList();">
+                   data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" onclick="noticeList();">
                     <i class="fas bi bi-bell fa-2x m-auto"></i> <!-- 종 모양 아이콘 -->
                     <span class="badge rounded-circle bg-danger" style="position: absolute; top: 0; right: 0; font-size:10px; ">1</span> <!-- 숫자 -->
                 </a>
@@ -70,6 +70,18 @@
 
             <!-- 채팅리스트 불러오는 offcanvas -->
             <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+                 id="offcanvasScrolling2" aria-labelledby="offcanvasScrollingLabel" style="width: 560px;">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel2" style="margin: auto;">알림</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body" id="offcanvas-body2" style="padding: 20px;">
+
+                </div>
+            </div>
+
+            <!-- 채팅리스트 불러오는 offcanvas -->
+            <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
                  id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="width: 560px;">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="offcanvasExampleLabel" style="margin: auto;">채팅</h5>
@@ -79,6 +91,8 @@
 
                 </div>
             </div>
+
+
 
             <!-- 판매하기 (controller에서 세션이 있으면 판매하기로 보내고, 세션이 없으면 로그인으로 보냄) -->
             <div style="margin-top: 20px; ">
@@ -202,7 +216,7 @@
         type:"GET",
         url:"/notification/list",
         success:function(data){
-            $("offcanvas-body").html(data);
+            $("offcanvas-body2").html(data);
         },
         error:function(){
             console.error("알림 목록을 불러오는데 실패했습니다.");

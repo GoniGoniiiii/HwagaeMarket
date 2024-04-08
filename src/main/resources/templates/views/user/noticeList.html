@@ -1,0 +1,16 @@
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
+<!-- 채팅 목록 렌더링 -->
+<th:block th:each="no: ${notificationList}">
+    <a th:href="@{/no/{userNum}(userNum=${no.userNum})}">
+        <div style="box-shadow: 0px 1px 1px -1px; height: 80px;">
+            <div style="margin-bottom: 10px;">
+                <span id="toNum"  th:text="${no.notificationMessage}" style="font-size: 20px;"></span>
+                <span th:text="${no.notificationDate}" style="color: gray; font-size: 12px;"></span>
+            </div>
+        </div>
+    </a><br>
+</th:block>
