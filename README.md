@@ -58,7 +58,7 @@
 
 
 - Java 11
-- Spring Boot 2.7.6
+- Spring Boot 2.7.13
 - Spring Data JPA
 - Lombok
 
@@ -82,7 +82,7 @@
 ### 빌드 툴
 <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white">
 
-- Gradle 8.7
+- Gradle 8.5
 
 ### 데이터베이스
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
